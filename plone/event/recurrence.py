@@ -4,11 +4,7 @@ DSTAUTO   = 'auto'
 
 MAXCOUNT  = 100000 # Maximum number of occurrences
 
-
-# TODO: delta = None seems not to be possible (see code)
-#       DSTADJUST for delta = None makes no sense here (first iteration where no
-#       previous date is known). use then DSTAUTO
-def recurrence_normalize(date, delta=None, dstmode=DSTADJUST):
+def recurrence_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations
     @param date: datetime instance to normalize.
     @param delta: datetime.timedelta instance
@@ -27,12 +23,13 @@ def recurrence_normalize(date, delta=None, dstmode=DSTADJUST):
     except:
         raise TypeError, u'Cannot normalize timezone naive dates'
     assert(dstmode in [DSTADJUST, DSTKEEP, DSTAUTO])
-    if delta: assert(isinstance(delta, datetime.timedelta)) # Easier in Java
-    delta = delta.seconds + delta.days*24*3600 # total delta in seconds
-    if dstmode==DSTAUTO and delta<24*60*60:
-        dstmode = DSTKEEP
-    elif dstmode==DSTAUTO:
-        dstmode = DSTADJUST
+    if delta:
+        assert(isinstance(delta, datetime.timedelta)) # Easier in Java
+        delta = delta.seconds + delta.days*24*3600 # total delta in seconds
+        if dstmode==DSTAUTO and delta<24*60*60:
+            dstmode = DSTKEEP
+        elif dstmode==DSTAUTO:
+            dstmode = DSTADJUST
 
     if dstmode==DSTADJUST:
         return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
