@@ -1,54 +1,48 @@
 import unittest
+import doctest
+from interlude import interact
+import zope.component
 
-from zope.testing import doctestunit
-from zope.component import testing
-from Testing import ZopeTestCase as ztc
+OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+DOCFILES = [
+    '../recurrence.txt',
+]
 
-from Products.Five import zcml
-from Products.Five import fiveconfigure
-from Products.PloneTestCase import PloneTestCase as ptc
-from Products.PloneTestCase.layer import PloneSite
-ptc.setupPloneSite()
-
-import plone.event
-
-class TestCase(ptc.PloneTestCase):
-    class layer(PloneSite):
-        @classmethod
-        def setUp(cls):
-            fiveconfigure.debug_mode = True
-            zcml.load_config('configure.zcml',
-                             plone.event)
-            fiveconfigure.debug_mode = False
-
-        @classmethod
-        def tearDown(cls):
-            pass
-
+from zope.interface import implements
+from plone.app.event.interfaces import IRecurringEvent
+class RecurrenceStub(object):
+    """Basic stub object for testing events.
+    """
+    implements(IRecurringEvent)
+    def __init__(self, recurrence=None, start_date=None, end_date=None):
+        self.recurrence = recurrence
+        self.start_date = start_date
+        self.end_date = end_date
+        self.duration = end_date - start_date
+        #subject
+        #location
+        #wholeDay
+        #startDate
+        #endDate
+        #text
+        #attendees
+        #eventUrl
+        #contactName
+        #contactEmail
+        #contactPhone
+        #recurrence
+        #start_date
+        #end_date
+        #duration
 
 def test_suite():
-    return unittest.TestSuite([
-
-        # Unit tests
-        #doctestunit.DocFileSuite(
-        #    'README.txt', package='plone.event',
-        #    setUp=testing.setUp, tearDown=testing.tearDown),
-
-        #doctestunit.DocTestSuite(
-        #    module='plone.event.mymodule',
-        #    setUp=testing.setUp, tearDown=testing.tearDown),
-
-
-        # Integration tests that use PloneTestCase
-        #ztc.ZopeDocFileSuite(
-        #    'README.txt', package='plone.event',
-        #    test_class=TestCase),
-
-        #ztc.FunctionalDocFileSuite(
-        #    'browser.txt', package='plone.event',
-        #    test_class=TestCase),
-
-        ])
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+    suite = unittest.TestSuite()
+    suite.addTests([
+        doctest.DocFileSuite(
+            docfile,
+            optionflags=OPTIONFLAGS,
+            globs={'interact': interact,},
+            tearDown=zope.component.testing.tearDown
+        ) for docfile in DOCFILES
+    ])
+    return suite
