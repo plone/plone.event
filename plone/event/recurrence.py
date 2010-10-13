@@ -1,8 +1,6 @@
 import datetime
 from dateutil import rrule
-from Products.DateRecurringIndex.utils import (
-    pydt, dt2int, utc
-)
+from Products.DateRecurringIndex.utils import pydt, dt2int, utc
 
 DSTADJUST = 'adjust'
 DSTKEEP   = 'keep'
