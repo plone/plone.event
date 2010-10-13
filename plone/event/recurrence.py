@@ -4,6 +4,7 @@ DSTAUTO   = 'auto'
 
 MAXCOUNT  = 100000 # Maximum number of occurrences
 
+
 def recurrence_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations
     @param date: datetime instance to normalize.
