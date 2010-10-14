@@ -72,7 +72,6 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
 
     rset.rdate(start) # RCF2445: always include start date
 
-    ### Timezone normalizing and returning
     before = None
     tznaive = bool(getattr(start, 'tzinfo', False))
     for cnt, date in enumerate(rset):
@@ -81,9 +80,11 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
         if count and cnt+1 > count: break
         if until and utc(date) > utc(until): break
 
-        # For very first occurence which is the starting date, the timezone
-        # should be correct and timezone normalizing not needed
-        # For timezone naive dates there is also no need for normalizing
+        # Timezone normalizing
+        # For the very first occurence, normalizing should not be needed since
+        # the starting date should be correctly set. For timezone naive dates
+        # there is also no need for normalizing
+        # TODO: check if first occurence should be normalized with DSTADJUST
         if before and not tznaive:
             delta = date - before
             date = recurrence_normalize(date, delta, dst)
