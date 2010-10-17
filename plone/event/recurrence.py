@@ -7,7 +7,7 @@ __author__ = """Jens Klein <jens@bluedynamics.com>,
 
 import datetime
 from dateutil import rrule
-from Products.DateRecurringIndex.utils import pydt, dt2int, utc
+from plone.event.utils import pydt, dt2int, utc
 from plone.event.utils import utcoffset_normalize
 from plone.event.utils import DSTAUTO
 
