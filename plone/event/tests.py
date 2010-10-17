@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+#
+# GNU General Public License (GPL)
+#
+
 import unittest
 import doctest
 from interlude import interact

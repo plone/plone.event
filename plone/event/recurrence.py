@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+#
+# GNU General Public License (GPL)
+#
+__author__ = """Jens Klein <jens@bluedynamics.com>,
+                Johannes Raggam <johannes@raggam.co.at>"""
+
 import datetime
 from dateutil import rrule
 from Products.DateRecurringIndex.utils import pydt, dt2int, utc
