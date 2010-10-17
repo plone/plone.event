@@ -45,7 +45,7 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
     rset.rdate(start) # RCF2445: always include start date
 
     before = None
-    tznaive = bool(getattr(start, 'tzinfo', False))
+    tznaive = not bool(getattr(start, 'tzinfo', False))
     for cnt, date in enumerate(rset):
         # Limit number of recurrences otherwise calculations take too long
         if MAXCOUNT and cnt+1 > MAXCOUNT: break
