@@ -116,6 +116,7 @@ You can mix both until and count. What happens earlier will stop recurrence
 ...MAXCOUNT is important to prevent (unintentional/intentional) abuse. It's
 a constant, is configurable (TODO) or - for this test - set from outside...
     >>> from plone.event import recurrence
+    >>> orig_maxcount = recurrence.MAXCOUNT
     >>> recurrence.MAXCOUNT = 5
     >>> dates = recurrence_sequence_ical(start, rulestr)
     >>> list(dates)
@@ -124,6 +125,7 @@ a constant, is configurable (TODO) or - for this test - set from outside...
         datetime.datetime(2010, 1, 3, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 5, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+    >>> recurrence.MAXCOUNT = orig_maxcount
 
 
 Timezone naive limitations
@@ -210,6 +212,7 @@ Demo on a complex ruleset
 recurrence_sequence_timedelta test
 ==================================
     >>> from plone.event.recurrence import recurrence_sequence_timedelta
+    >>> from datetime import timedelta
 
 The simplest case is to just have a one-time event.
     >>> start = datetime(2008,01,01,0,0,0,0,pytz.timezone('CET'))
@@ -255,7 +258,7 @@ First lets change from winter to summertime (EU rules with CET):
     >>> start = datetime(2008,03,29,21,0,0,0,pytz.timezone('CET'))
     >>> until = datetime(2008,03,30,21,0,0,0,pytz.timezone('CET')) - timedelta(microseconds=1)
 
-    >>> from plone.app.event.utils import utcoffset_normalize, DSTADJUST
+    >>> from plone.event.utils import utcoffset_normalize, DSTADJUST
     >>> until = utcoffset_normalize(until, dstmode=DSTADJUST)
     >>> until
     datetime.datetime(2008, 3, 30, 20, 59, 59, 999999, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)
@@ -419,8 +422,8 @@ First with UTC
     >>> DT = DateTime('2008-08-26 23:59:00 GMT+0')
     >>> dt = datetime(2008, 8, 26, 23, 59, 0, 0, pytz.timezone('utc'))
 
-    >>> seqDT = list(IRecurringIntSequence(RecurConfTimeDelta(DT, 0, None)))
-    >>> seqdt = list(IRecurringIntSequence(RecurConfTimeDelta(dt, 0, None)))
+    >>> seqDT = list(recurrence_int_sequence(recurrence_sequence_timedelta(DT, 0, None)))
+    >>> seqdt = list(recurrence_int_sequence(recurrence_sequence_timedelta(dt, 0, None)))
     >>> seqDT[0] == seqdt[0]
     True
 
@@ -428,13 +431,13 @@ Now with GMT+2 (CET with DST)
 
     >>> DT = DateTime('2008-08-26 23:59:00 GMT+2')
     >>> dt = datetime(2008, 8, 26, 23, 59, 0, 0, pytz.timezone('CET'))
-    >>> seqDT = list(IRecurringSequence(RecurConfTimeDelta(DT, 0, None)))
+    >>> seqDT = list(recurrence_sequence_timedelta(DT, 0, None))
 
 seqDT shows now a hour of 21 because it's converted to UTC
     >>> seqDT
     [datetime.datetime(2008, 8, 26, 21, 59, tzinfo=<UTC>)]
 
-    >>> seqdt = list(IRecurringSequence(RecurConfTimeDelta(dt, 0, None)))
+    >>> seqdt = list(recurrence_sequence_timedelta(dt, 0, None))
     >>> seqdt
     [datetime.datetime(2008, 8, 26, 23, 59, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)]
 
@@ -443,8 +446,8 @@ this fails! mainly zope DateTimes fault
     True
 
 Does integer represenation work?
-    >>> seqDT = list(IRecurringIntSequence(RecurConfTimeDelta(DT, 0, None)))
-    >>> seqdt = list(IRecurringIntSequence(RecurConfTimeDelta(dt, 0, None)))
+    >>> seqDT = list(recurrence_int_sequence(recurrence_sequence_timedelta(DT, 0, None)))
+    >>> seqdt = list(recurrence_int_sequence(recurrence_sequence_timedelta(dt, 0, None)))
 
 this fails too! see above
     >>> seqDT[0] == seqdt[0]
