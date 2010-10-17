@@ -8,7 +8,6 @@ plone.event recurrence tests
 recurrence_sequence_ical - rrulestr test
 ========================================
 
-
 Basic
 -----
 
@@ -156,29 +155,6 @@ Timezone aware parsing regarding RFC2445 does not work
     Traceback (most recent call last):
     ...
     ValueError: unsupported DTSTART parm: TZID=EUROPE/VIENNA
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 recurrence_sequence_ical - rrule test
