@@ -2,3 +2,4 @@ TODO
 ====
 
 * check docstrings for validity
+* utils.txt: guesstz + pydt tests
