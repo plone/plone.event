@@ -1,0 +1,25 @@
+============================
+plone.event recurrence tests
+============================
+
+    >>> interact( locals() )
+
+
+recurrence_normalize test
+=========================
+
+
+recurrence_sequence_ical - rrule test
+=====================================
+
+
+recurrence_sequence_ical - rruleset test
+========================================
+
+
+recurrence_sequence_ical - rrulestring test
+===========================================
+
+
+recurrence_sequence_timedelta test
+==================================

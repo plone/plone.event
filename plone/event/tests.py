@@ -9,7 +9,7 @@ from interlude import interact
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
-    '../recurrence.txt',
+    'recurrence.txt',
 ]
 def test_suite():
     suite = unittest.TestSuite()
