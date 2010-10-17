@@ -38,8 +38,6 @@ The same with the timezone set.
         datetime.datetime(2010, 1, 31, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 2, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
-
-
 Get the integer representations from this recurrence rule
     >>> dates = recurrence_sequence_ical(
     ...     start=at.localize(datetime(2010,01,01,0,0)),
@@ -116,17 +114,17 @@ You can mix both until and count. What happens earlier will stop recurrence
     [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
-#...MAXCOUNT is important to prevent (unintentional/intentional) abuse. It's
-#a constant, is configurable (TODO) or - for this test - set from outside...
-#    >>> from plone.event.recurrence import MAXCOUNT
-#    >>> MAXCOUNT = 5
-#    >>> dates = recurrence_sequence_ical(start, rulestr)
-#    >>> list(dates)
-#    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-#        datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-#        datetime.datetime(2010, 1, 3, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-#        datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-#        datetime.datetime(2010, 1, 5, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+...MAXCOUNT is important to prevent (unintentional/intentional) abuse. It's
+a constant, is configurable (TODO) or - for this test - set from outside...
+    >>> from plone.event import recurrence
+    >>> recurrence.MAXCOUNT = 5
+    >>> dates = recurrence_sequence_ical(start, rulestr)
+    >>> list(dates)
+    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 3, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 5, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
 
 Timezone naive limitations
