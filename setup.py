@@ -26,4 +26,5 @@ setup(name='plone.event',
           'setuptools',
           # -*- Extra requirements: -*-
       ],
+      extras_require={'test': ['interlude',]},
       )
