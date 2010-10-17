@@ -16,7 +16,7 @@ DSTAUTO   = 'auto'
 MAXCOUNT  = 100000 # Maximum number of occurrences
 
 
-def recurrence_normalize(date, delta=None, dstmode=DSTAUTO):
+def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations
     @param date: datetime instance to normalize.
     @param delta: datetime.timedelta instance
@@ -94,7 +94,7 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
         # TODO: check if first occurence should be normalized with DSTADJUST
         if before and not tznaive:
             delta = date - before
-            date = recurrence_normalize(date, delta, dst)
+            date = utcoffset_normalize(date, delta, dst)
         yield date
         before = date
     return
@@ -129,7 +129,7 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
     cnt = 0
     while True:
         after = before + delta
-        after = recurrence_normalize(after, delta, dst)
+        after = utcoffset_normalize(after, delta, dst)
 
         # TODO: can these break conditions be generalized into a function, so
         #       that it can be used with ical code?

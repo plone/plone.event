@@ -5,15 +5,15 @@ plone.event recurrence tests
     >>> interact( locals() )
 
 
-recurrence_normalize tests
-==========================
+utcoffset_normalize tests
+=========================
 
 Imports
     >>> from datetime import datetime
-    >>> from plone.event.recurrence import recurrence_normalize
+    >>> from plone.event.recurrence import utcoffset_normalize
 
 Cannot normalize timezone naive dates.
-    >>> recurrence_normalize(datetime(2010,10,10,0,0))
+    >>> utcoffset_normalize(datetime(2010,10,10,0,0))
     Traceback (most recent call last):
     ...
     TypeError: Cannot normalize timezone naive dates
@@ -27,9 +27,9 @@ Setting a timezoned date
 
 Normalizing a correct date shouldn't change it
     >>> from plone.event.recurrence import DSTKEEP, DSTADJUST
-    >>> recurrence_normalize(date, dstmode=DSTADJUST)
+    >>> utcoffset_normalize(date, dstmode=DSTADJUST)
     datetime.datetime(2010, 10, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
-    >>> recurrence_normalize(date, dstmode=DSTKEEP)
+    >>> utcoffset_normalize(date, dstmode=DSTKEEP)
     datetime.datetime(2010, 10, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vi
 
 Setting a timezoned date with incorrect UTC offset
@@ -43,12 +43,12 @@ boundaries and has to be normalized - see below.
 
 Normalizing it with DSTADJUST should correct the UTC offset and adjusting the
 time in a way, that it's value will be the same as before normalizing.
-    >>> recurrence_normalize(date2, dstmode=DSTADJUST)
+    >>> utcoffset_normalize(date2, dstmode=DSTADJUST)
     datetime.datetime(2010, 11, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
 
 With DSTKEEP, normalizing will also keep the time as originaly set by UTC
 offset - time's value will change.
-    >>> recurrence_normalize(date2, dstmode=DSTKEEP)
+    >>> utcoffset_normalize(date2, dstmode=DSTKEEP)
     datetime.datetime(2010, 11, 9, 23, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
 
 This should have explained the difference between DSTADJUST and DSTKEEP.
@@ -66,13 +66,12 @@ DSTAUTO is the default dstmode, so we don't need to set it here.
 
 If the difference of the previous recurrence and the current date is less than
 a day, DSTKEEP is used
-    >>> recurrence_normalize(date2, delta=timedelta(seconds=3600*24-1))
+    >>> utcoffset_normalize(date2, delta=timedelta(seconds=3600*24-1))
     datetime.datetime(2010, 11, 9, 23, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
 
 Otherwise DSTADJUST is used
-    >>> recurrence_normalize(date2, delta=timedelta(seconds=3600*24))
+    >>> utcoffset_normalize(date2, delta=timedelta(seconds=3600*24))
     datetime.datetime(2010, 11, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
-
 
 
 
