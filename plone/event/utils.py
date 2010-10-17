@@ -95,7 +95,7 @@ def pydt(dt):
     tz = guesstz(dt)
     if tz is None:
         dt = dt.toZone('UTC')
-        tz = utctz
+        tz = utctz()
 
     year, month, day, hour, min, sec = dt.parts()[:6]
     # seconds (parts[6]) is a float, so we map to int
