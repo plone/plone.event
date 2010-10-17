@@ -88,8 +88,9 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
 
     if delta is None or delta < 1 or until is None: return
 
-    before = start
     until = pydt(until)
+
+    before = start
     delta = datetime.timedelta(minutes=delta)
     cnt = 0
     while True:
