@@ -2,7 +2,185 @@
 plone.event recurrence tests
 ============================
 
-    >>> interact( locals() )
+#    >>> interact( locals() )
+
+
+recurrence_sequence_ical - rrulestr test
+========================================
+
+
+Basic
+-----
+
+Timezone naive calculations. Timezone naivety should be the exception...
+    >>> from plone.event.recurrence import recurrence_sequence_ical
+    >>> from datetime import datetime
+    >>> dates = recurrence_sequence_ical(
+    ...     start=datetime(2010,01,01,0,0),
+    ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")
+    >>> list(dates)
+    [datetime.datetime(2010, 1, 1, 0, 0),
+        datetime.datetime(2010, 1, 11, 0, 0),
+        datetime.datetime(2010, 1, 21, 0, 0),
+        datetime.datetime(2010, 1, 31, 0, 0),
+        datetime.datetime(2010, 2, 10, 0, 0)]
+
+The same with the timezone set.
+    >>> import pytz
+    >>> at = pytz.timezone('Europe/Vienna')
+    >>> dates = recurrence_sequence_ical(
+    ...     start=at.localize(datetime(2010,01,01,0,0)),
+    ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")
+    >>> list(dates)
+    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 11, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 21, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 31, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 2, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+
+
+Get the integer representations from this recurrence rule
+    >>> dates = recurrence_sequence_ical(
+    ...     start=at.localize(datetime(2010,01,01,0,0)),
+    ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")
+    >>> from plone.event.recurrence import recurrence_int_sequence
+    >>> list(recurrence_int_sequence(dates))
+    [1076762820, 1076777220, 1076791620, 1076806020, 1076820420]
+
+
+Crossing Daylight Saving Time Boundaries
+----------------------------------------
+   >>> from plone.event.utils import DSTADJUST, DSTKEEP, DSTAUTO
+
+Timezone aware Daylight Saving Time dates crossing
+    >>> start = at.localize(datetime(2010,10,28,9,0))
+    >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1;COUNT=5"""
+
+This is what you get with DSTADJUST: The start time will be the same also when
+crossing a DST date.
+    >>> dates = recurrence_sequence_ical(start, recrule=rulestr, dst=DSTADJUST)
+    >>> list(dates)
+    [datetime.datetime(2010, 10, 28, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 29, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 31, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 11, 1, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+Well, and this is what you get when crossing DST date with DSTKEEP set: The
+start time is correctly calculated. This behavior might be desired in special
+cases.
+    >>> dates = recurrence_sequence_ical(start, recrule=rulestr, dst=DSTKEEP)
+    >>> list(dates)
+    [datetime.datetime(2010, 10, 28, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 29, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 31, 8, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 11, 1, 8, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+TODO: test DSTAUTO
+
+
+Limiting number of occurences
+-----------------------------
+
+Until (date until recurrence happens) and count (Number of occurences) can also
+be given in recurrence_sequence_ical, instead of defining it in the rrule.
+But defining it in a rrule gives more flexibility since you can set it for each
+rrule individually.
+If MAXCOUNT is exceeded, recurrence generation will stop regardless of any other
+setting.
+
+...init
+    >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1"""
+    >>> start = at.localize(datetime(2010,01,01,0,0))
+    >>> until = at.localize(datetime(2010,01,02,0,0))
+
+...until
+    >>> dates = recurrence_sequence_ical(start, recrule=rulestr, until=until)
+    >>> list(dates)
+    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+...count
+    >>> dates = recurrence_sequence_ical(start, recrule=rulestr, count=3)
+    >>> list(dates)
+    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 3, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+...until and count
+You can mix both until and count. What happens earlier will stop recurrence
+    >>> dates = recurrence_sequence_ical(start, rulestr, until, count=3)
+    >>> list(dates)
+    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+#...MAXCOUNT is important to prevent (unintentional/intentional) abuse. It's
+#a constant, is configurable (TODO) or - for this test - set from outside...
+#    >>> from plone.event.recurrence import MAXCOUNT
+#    >>> MAXCOUNT = 5
+#    >>> dates = recurrence_sequence_ical(start, rulestr)
+#    >>> list(dates)
+#    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+#        datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+#        datetime.datetime(2010, 1, 3, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+#        datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+#        datetime.datetime(2010, 1, 5, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+
+Timezone naive limitations
+--------------------------
+
+Mixing timezone naive (start) and UTC dates (DTSTART note the "Z" for UTC at
+the end) dates doesn't work.
+Better leave out DTSTART from RFC2445 string and pass it to
+recurrence_sequence_ical via the start attribute as shown above.
+DTSTART dates for individual rrules does not work for now anyways
+    >>> start = datetime(2010,01,01,0,0)
+    >>> rulestr = """
+    ... DTSTART:20100101T090000Z
+    ... RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5
+    ... """
+    >>> dates = recurrence_sequence_ical(start, rulestr)
+    >>> list(dates)
+    Traceback (most recent call last):
+    ...
+    TypeError: can't compare offset-naive and offset-aware datetimes
+
+
+Timezone aware parsing regarding RFC2445 does not work
+    >>> rulestr = """DTSTART;TZID=Europe/Vienna:20101029T090000
+    ... RRULE:FREQ=DAILY;INTERVAL=1;COUNT=4
+    ... """
+    >>> dates = recurrence_sequence_ical(start, rulestr)
+    >>> list(dates)
+    Traceback (most recent call last):
+    ...
+    ValueError: unsupported DTSTART parm: TZID=EUROPE/VIENNA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 recurrence_sequence_ical - rrule test
@@ -13,8 +191,8 @@ recurrence_sequence_ical - rruleset test
 ========================================
 
 
-recurrence_sequence_ical - rrulestring test
-===========================================
+
+
 
 
 recurrence_sequence_timedelta test
