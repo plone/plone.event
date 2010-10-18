@@ -18,7 +18,7 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
                              dst=DSTAUTO):
     """ Sequence of datetime objects from dateutil's recurrence rules
     """
-    start = pydt(start)
+    start = pydt(start) # always use python datetime objects
     until = pydt(until)
 
     if isinstance(recrule, rrule.rrule):
