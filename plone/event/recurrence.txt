@@ -11,20 +11,20 @@ recurrence_sequence_ical - rrulestr test
 Basic
 -----
 
-Timezone naive calculations. Timezone naivety should be the exception...
+Timezone naive dates are converted to utc.
     >>> from plone.event.recurrence import recurrence_sequence_ical
     >>> from datetime import datetime
     >>> dates = recurrence_sequence_ical(
     ...     start=datetime(2010,01,01,0,0),
     ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")
     >>> list(dates)
-    [datetime.datetime(2010, 1, 1, 0, 0),
-        datetime.datetime(2010, 1, 11, 0, 0),
-        datetime.datetime(2010, 1, 21, 0, 0),
-        datetime.datetime(2010, 1, 31, 0, 0),
-        datetime.datetime(2010, 2, 10, 0, 0)]
+    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<UTC>),
+        datetime.datetime(2010, 1, 11, 0, 0, tzinfo=<UTC>),
+        datetime.datetime(2010, 1, 21, 0, 0, tzinfo=<UTC>),
+        datetime.datetime(2010, 1, 31, 0, 0, tzinfo=<UTC>),
+        datetime.datetime(2010, 2, 10, 0, 0, tzinfo=<UTC>)]
 
-The same with the timezone set.
+The same with the timezone set beforehand.
     >>> import pytz
     >>> at = pytz.timezone('Europe/Vienna')
     >>> dates = recurrence_sequence_ical(
@@ -128,25 +128,8 @@ a constant, is configurable (TODO) or - for this test - set from outside...
     >>> recurrence.MAXCOUNT = orig_maxcount
 
 
-Timezone naive limitations
---------------------------
-
-Mixing timezone naive (start) and UTC dates (DTSTART note the "Z" for UTC at
-the end) dates doesn't work.
-Better leave out DTSTART from RFC2445 string and pass it to
-recurrence_sequence_ical via the start attribute as shown above.
-DTSTART dates for individual rrules does not work for now anyways
-    >>> start = datetime(2010,01,01,0,0)
-    >>> rulestr = """
-    ... DTSTART:20100101T090000Z
-    ... RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5
-    ... """
-    >>> dates = recurrence_sequence_ical(start, rulestr)
-    >>> list(dates)
-    Traceback (most recent call last):
-    ...
-    TypeError: can't compare offset-naive and offset-aware datetimes
-
+rrulestr timezone limitation
+----------------------------
 
 Timezone aware parsing regarding RFC2445 does not work
     >>> rulestr = """DTSTART;TZID=Europe/Vienna:20101029T090000
