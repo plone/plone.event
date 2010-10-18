@@ -18,14 +18,8 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
                              dst=DSTAUTO):
     """ Sequence of datetime objects from dateutil's recurrence rules
     """
-    # TODO: that's catched anyways when comparing both vars. Maybe leave out.
-    if until:
-        try:
-            # start.tzinfo xnor until.tzinfo. both present or missing
-            assert(not(bool(start.tzinfo) ^ bool(until.tzinfo)))
-        except:
-            raise TypeError, u'Timezones for both until and start have to be' \
-                             + u'present or missing'
+    start = pydt(start)
+    until = pydt(until)
 
     if isinstance(recrule, rrule.rrule):
         rset = rrule.rruleset()
@@ -45,7 +39,6 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
     rset.rdate(start) # RCF2445: always include start date
 
     before = None
-    tznaive = not bool(getattr(start, 'tzinfo', False))
     for cnt, date in enumerate(rset):
         # Limit number of recurrences otherwise calculations take too long
         if MAXCOUNT and cnt+1 > MAXCOUNT: break
@@ -54,10 +47,9 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
 
         # Timezone normalizing
         # For the very first occurence, normalizing should not be needed since
-        # the starting date should be correctly set. For timezone naive dates
-        # there is also no need for normalizing
+        # the starting date should be correctly set.
         # TODO: check if first occurence should be normalized with DSTADJUST
-        if before and not tznaive:
+        if before:
             delta = date - before
             date = utcoffset_normalize(date, delta, dst)
         yield date
