@@ -3,3 +3,6 @@ TODO
 
 * check docstrings for validity
 * utils.txt: guesstz + pydt tests
+OK * remove handling of timezone naive dates. timezone naivety simply doesn't
+  exist. even sylvester is bound to timezones.
+* is it ok to convert timezone naive dates to UTC? #yesyesyes
