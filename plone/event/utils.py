@@ -90,6 +90,8 @@ def pydt(dt):
         return None
 
     if isinstance(dt, datetime):
+        tznaive = not bool(getattr(dt, 'tzinfo', False))
+        if tznaive: return utctz().localize(dt)
         return utcoffset_normalize(dt, dstmode=DSTADJUST)
 
     tz = guesstz(dt)
@@ -101,7 +103,7 @@ def pydt(dt):
     # seconds (parts[6]) is a float, so we map to int
     sec = int(sec)
     dt = datetime(year, month, day, hour, min, sec, tzinfo=tz)
-    dt = dt.tzinfo.normalize(dt)
+    dt = dt.tzinfo.normalize(dt) # TODO: why here normalizing in DSTKEEP mode?
     return dt
 
 
