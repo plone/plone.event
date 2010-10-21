@@ -5,7 +5,7 @@
 
 import unittest
 import doctest
-import zope.component
+from zope.component.testing import tearDown
 from interlude import interact
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
@@ -17,7 +17,7 @@ DOCFILES = [
 
 from zope.interface import implements
 from plone.event.interfaces import IRecurringEventICal
-class RecurrenceStub(object):
+class MockEvent(object):
     """Basic stub object for testing events.
     """
     implements(IRecurringEventICal)
@@ -49,7 +49,7 @@ def test_suite():
             docfile,
             optionflags=OPTIONFLAGS,
             globs={'interact': interact,},
-            tearDown=zope.component.testing.tearDown
+            tearDown=tearDown
         ) for docfile in DOCFILES
     ])
     return suite
