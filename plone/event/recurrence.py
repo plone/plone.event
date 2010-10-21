@@ -13,6 +13,43 @@ from plone.event.utils import DSTAUTO
 
 MAXCOUNT  = 100000 # Maximum number of occurrences
 
+from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
+from zope.component import adapts
+from zope.interface import implements
+
+class RecurrenceSupport(object):
+    """Recurrence support for IRecurringEvent objects.
+    """
+    # TODO: Ensure compatibility with Archetypes based ATEvent and Dexterity
+    #       based content DXEvent.
+
+    implements(IRecurrenceSupport)
+    adapts(IRecurringEventICal)
+
+    def __init__(self, context):
+        self.context = context
+
+    def occurences_start(self):
+        rset = recurrence_sequence_ical(self.context.start_date,
+                                        recrule=self.context.recurrence)
+        return list(rset)
+
+    def occurences_end(self):
+        rset = recurrence_sequence_ical(self.context.end_date,
+                                        recrule=self.context.recurrence)
+        return list(rset)
+
+    def occurences(self):
+        # TODO: is this method neccessary?
+        starts = self.occurences_start()
+        ends = self.occurences_end()
+        events = map(
+            lambda start,end:dict(
+                start_date = start,
+                end_date = end),
+            starts, ends)
+        return events
+
 
 def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
                              dst=DSTAUTO):
