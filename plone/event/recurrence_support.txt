@@ -20,25 +20,26 @@ Register the RecurrenceSupport adapter for IRecurringEvent objects
     >>> from plone.event.interfaces import IRecurrenceSupport
     >>> recurrence = IRecurrenceSupport(event)
     >>> recurrence.occurences_start()
-    [datetime.datetime(2010, 10, 10, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 20, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+    [datetime.datetime(2010, 10, 10, 9, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 20, 9, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
         datetime.datetime(2010, 11, 9, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
         datetime.datetime(2010, 11, 19, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
+
     >>> recurrence.occurences_end()
-    [datetime.datetime(2010, 10, 10, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 20, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 10, 30, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+    [datetime.datetime(2010, 10, 10, 10, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 20, 10, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 30, 10, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
         datetime.datetime(2010, 11, 9, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
         datetime.datetime(2010, 11, 19, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
 
     >>> recurrence.occurences()
-    [{'start_date': datetime.datetime(2010, 10, 10, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 10, 10, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
-        {'start_date': datetime.datetime(2010, 10, 20, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 10, 20, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
-        {'start_date': datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        'end_date': datetime.datetime(2010, 10, 30, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
+    [{'start_date': datetime.datetime(2010, 10, 10, 9, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+        'end_date': datetime.datetime(2010, 10, 10, 10, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)},
+        {'start_date': datetime.datetime(2010, 10, 20, 9, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+        'end_date': datetime.datetime(2010, 10, 20, 10, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)},
+        {'start_date': datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+        'end_date': datetime.datetime(2010, 10, 30, 10, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)},
         {'start_date': datetime.datetime(2010, 11, 9, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
         'end_date': datetime.datetime(2010, 11, 9, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)},
         {'start_date': datetime.datetime(2010, 11, 19, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
