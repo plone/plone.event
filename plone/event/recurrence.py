@@ -5,17 +5,18 @@
 __author__ = """Jens Klein <jens@bluedynamics.com>,
                 Johannes Raggam <johannes@raggam.co.at>"""
 
+from zope.component import adapts
+from zope.interface import implements
+
 import datetime
 from dateutil import rrule
 from plone.event.utils import pydt, dt2int, utc
 from plone.event.utils import utcoffset_normalize
 from plone.event.utils import DSTAUTO
+from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
 
 MAXCOUNT  = 100000 # Maximum number of occurrences
 
-from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
-from zope.component import adapts
-from zope.interface import implements
 
 class RecurrenceSupport(object):
     """Recurrence support for IRecurringEvent objects.
