@@ -25,6 +25,7 @@ setup(name='plone.event',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'python-dateutil',
       ],
       extras_require={'test': ['interlude',]},
       )
