@@ -73,7 +73,8 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
                              forceset=True
                              # compatible=True # RFC2445 compatibility
                              )
-
+    else:
+        rset = rrule.rruleset()
     rset.rdate(start) # RCF2445: always include start date
 
     before = None
