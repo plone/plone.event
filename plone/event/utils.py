@@ -51,7 +51,7 @@ def utctz():
 
 
 def utc(dt):
-    """convert python datetime to UTC."""
+    """Convert Python datetime to UTC."""
     if dt is None:
         return None
     return dt.astimezone(utctz())
@@ -84,7 +84,7 @@ def guesstz(DT):
 
 
 def pydt(dt):
-    """converts a zope DateTime in a python datetime.
+    """Converts a Zope's Products.DateTime in a Python datetime.
     """
     if dt is None:
         return None
