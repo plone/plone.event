@@ -14,3 +14,4 @@ TODO
 OK * remove handling of timezone naive dates. timezone naivety simply doesn't
   exist. even sylvester is bound to timezones.
 
+- Ensure compatibility with Archetypes based ATEvent and Dexterity based content DXEvent.
