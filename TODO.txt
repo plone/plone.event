@@ -9,6 +9,8 @@ TODO
 
 * check docstrings for validity
 
+* make MAXCOUNT ceiling for occurences configurable. maybe via plone..
+
 * is it ok to convert timezone naive dates to UTC? guess so.
 
 OK * remove handling of timezone naive dates. timezone naivety simply doesn't
