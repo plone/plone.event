@@ -1,8 +1,16 @@
 TODO
 ====
 
-* check docstrings for validity
+- implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
+
+- create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
+
 * utils.txt: guesstz + pydt tests
+
+* check docstrings for validity
+
+* is it ok to convert timezone naive dates to UTC? guess so.
+
 OK * remove handling of timezone naive dates. timezone naivety simply doesn't
   exist. even sylvester is bound to timezones.
-* is it ok to convert timezone naive dates to UTC? #yesyesyes
+
