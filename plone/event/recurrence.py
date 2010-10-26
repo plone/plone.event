@@ -15,15 +15,14 @@ from plone.event.utils import utcoffset_normalize
 from plone.event.utils import DSTAUTO
 from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
 
+# TODO: make me configurable, somehow.
 MAXCOUNT  = 100000 # Maximum number of occurrences
+
 
 
 class RecurrenceSupport(object):
     """Recurrence support for IRecurringEvent objects.
     """
-    # TODO: Ensure compatibility with Archetypes based ATEvent and Dexterity
-    #       based content DXEvent.
-
     implements(IRecurrenceSupport)
     adapts(IRecurringEventICal)
 
