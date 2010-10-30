@@ -20,7 +20,7 @@ MAXCOUNT  = 100000 # Maximum number of occurrences
 
 
 class RecurrenceSupport(object):
-    """Recurrence support for IRecurringEvent objects.
+    """Recurrence support event adapter for IRecurringEvent objects.
     """
     implements(IRecurrenceSupport)
     adapts(IRecurringEventICal)

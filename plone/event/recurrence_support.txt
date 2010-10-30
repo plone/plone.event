@@ -1,6 +1,6 @@
-=====================================
-plone.app.event recurrence unit tests
-=====================================
+======================================================
+plone.event RecurrenceSupport event adapter unit tests
+======================================================
 
 Register the RecurrenceSupport adapter for IRecurringEvent objects
     >>> import zope.component
