@@ -130,7 +130,55 @@ Dateconversion with int2dt from anything else than integers does not work:
 
 
 
+pydt tests
+==========
 
+    >>> from DateTime import DateTime
+    >>> from plone.event.utils import pydt
+    >>> from plone.event.utils import utc
+
+    >>> interact( locals() )
+
+    >>> dt = pydt(DateTime('2005/11/07 18:00:00 UTC'))
+    >>> dt
+    datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<UTC>)
+    >>> utc(dt)
+    datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<UTC>)
+
+    >>> dt = pydt(DateTime('2005/11/07 18:00:00 Brazil/East'))
+    >>> dt
+    datetime.datetime(2005, 11, 7, 19, 6, tzinfo=<DstTzInfo 'Brazil/East' BRST-1 day, 22:00:00 DST>)
+
+TODO, check difference of above output to that from original test:
+datetime.datetime(2005, 11, 7, 18, 0, tzinfo=tzfile('/usr/share/zoneinfo/Brazil/East'))
+
+    >>> utc(dt)
+    datetime.datetime(2005, 11, 7, 21, 6, tzinfo=<UTC>)
+
+TODO: original output
+datetime.datetime(2005, 11, 7, 20, 0, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
+
+    >>> dt = pydt(DateTime('2005/11/07 18:00:00 GMT-2'))
+    >>> dt
+    datetime.datetime(2005, 11, 7, 20, 0, tzinfo=<UTC>)
+
+TODO: original output
+datetime.datetime(2005, 11, 7, 18, 0, tzinfo=tzoffset('GMT-2', -7200))
+
+    >>> dt.astimezone(gettz('UTC'))
+    datetime.datetime(2005, 11, 7, 20, 0, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
+
+    >>> dt = DT2dt(DateTime('2005/07/07 18:00:00 Brazil/East'))
+    >>> dt
+    datetime.datetime(2005, 7, 7, 18, 0, tzinfo=tzfile('/usr/share/zoneinfo/Brazil/East'))
+    >>> dt.astimezone(gettz('UTC'))
+    datetime.datetime(2005, 7, 7, 21, 0, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
+
+    >>> dt = DT2dt(DateTime('2005/07/07 18:00:00 GMT-3'))
+    >>> dt
+    datetime.datetime(2005, 7, 7, 18, 0, tzinfo=tzoffset('GMT-3', -10800))
+    >>> dt.astimezone(gettz('UTC'))
+    datetime.datetime(2005, 7, 7, 21, 0, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
 
 
 
