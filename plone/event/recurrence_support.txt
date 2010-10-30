@@ -7,7 +7,6 @@ Register the RecurrenceSupport adapter for IRecurringEvent objects
     >>> from plone.event.recurrence import RecurrenceSupport
     >>> zope.component.provideAdapter(RecurrenceSupport)
 
-    >>> from plone.event.tests import MockEvent
     >>> from datetime import datetime
     >>> import pytz
 
@@ -45,5 +44,5 @@ Register the RecurrenceSupport adapter for IRecurringEvent objects
         {'start_date': datetime.datetime(2010, 11, 19, 9, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
         'end_date': datetime.datetime(2010, 11, 19, 10, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)}]
 
-    >>> interact( locals() )
+    >>> #interact( locals() )
 

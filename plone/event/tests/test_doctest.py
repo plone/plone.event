@@ -3,6 +3,7 @@
 # GNU General Public License (GPL)
 #
 
+import os.path
 import unittest
 import doctest
 from zope.component.testing import tearDown
@@ -12,8 +13,7 @@ OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
     'recurrence.txt',
     'recurrence_support.txt',
-    'utils.txt',
-]
+    'utils.txt',]
 
 from zope.interface import implements
 from plone.event.interfaces import IRecurringEventICal
@@ -46,9 +46,11 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTests([
         doctest.DocFileSuite(
-            docfile,
+            os.path.join(os.path.dirname(__file__), '..', docfile),
+            module_relative=False,
             optionflags=OPTIONFLAGS,
-            globs={'interact': interact,},
+            globs={'interact': interact,
+                   'MockEvent': MockEvent},
             tearDown=tearDown
         ) for docfile in DOCFILES
     ])
