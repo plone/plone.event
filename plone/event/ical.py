@@ -22,6 +22,12 @@ class DefaultICalendar(object):
         self.context = context
     
     def header(self):
+        # TODO: check if we need to put this into header in this
+        #       default implementation
+        # data = ICS_HEADER % dict(prodid=PRODID)
+        # data += 'X-WR-CALNAME:%s\n' % context.Title()
+        # data += 'X-WR-CALDESC:%s\n' % context.Description()
+
         return ICS_HEADER
     
     def footer(self):
