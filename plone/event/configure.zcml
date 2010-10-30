@@ -3,5 +3,15 @@
     i18n_domain="plone.event">
 
   <adapter factory=".recurrence.RecurrenceSupport" />
+  
+  <!-- Export events into iCal format -->
+  <adapter
+      for="list"
+      factory=".ical.EventsICal"
+      />
+  <adapter
+      for=".interfaces.IEvent"
+      factory=".ical.EventICal"
+      /> 
 
 </configure>

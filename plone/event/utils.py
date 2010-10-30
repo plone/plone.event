@@ -13,6 +13,115 @@ DSTADJUST = 'adjust'
 DSTKEEP   = 'keep'
 DSTAUTO   = 'auto'
 
+# Utility functions used by plone.event
+
+def dateStringsForEvent(event):
+    # Smarter handling for whole-day events
+    data_dict = toDisplay(event)
+    if event.getWholeDay():
+        # For all-day events we must not include the time within
+        # the date-time string
+        start_str = _dateForWholeDay(event.start())[:8]
+        if data_dict['same_day']:
+            # one-day events end with the timestamp of the next day
+            # (which is the start data plus 1 day)
+            end_str = _dateForWholeDay(event.start() + 1)[:8]
+        else:
+            # all-day events lasting several days end at the next
+            # day after the end date
+            end_str = _dateForWholeDay(event.end() + 1)[:8]
+    else:
+        # default (as used in Plone)
+        start_str = rfc2445dt(event.start())
+        end_str = rfc2445dt(event.end())
+
+    return start_str, end_str
+
+
+def toDisplay(event):
+    """ Return dict containing pre-calculated information for
+        building a <start>-<end> date string. Keys are
+       'start_date' - date string of the start date
+       'start_time' - time string of the start date
+       'end_date' - date string of the end date
+       'end_time' - time string of the end date
+       'same_day' - event ends on the same day
+    """
+
+    # The behavior os ulocalized_time() with time_only is odd.
+    # Setting time_only=False should return the date part only and *not*
+    # the time
+    #
+    # ulocalized_time(event.start(), False,  time_only=True, context=event)
+    # u'14:40'
+    # ulocalized_time(event.start(), False,  time_only=False, context=event)
+    # u'14:40'
+    # ulocalized_time(event.start(), False,  time_only=None, context=event)
+    # u'16.03.2010'
+
+    # TODO: check date formats after we removed localization below
+    # this needs to separate date and time as ulocalized_time does
+    start_date = event.start()
+    end_date = event.end()
+    start_time = event.start()
+    end_time = event.end()
+    same_day = isSameDay(event)
+    same_time = isSameTime(event)
+
+    # set time fields to None for whole day events
+    if event.getWholeDay():
+        start_time = end_time = None
+
+    return  dict(start_date=start_date,
+                 start_time=start_time,
+                 end_date=end_date,
+                 end_time=end_time,
+                 same_day=same_day,
+                 same_time=same_time)
+
+
+def rfc2445dt(dt):
+    """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
+    return dt.HTML4().replace('-', '').replace(':', '')
+
+def _dateForWholeDay(dt):
+    """ Replacement for rfc2445dt() for events lasting whole day in
+        order to get the date string according to the current time zone.
+        rfc2445dt() returns the date string according to UTC which is
+        *not* what we want!
+    """
+    return dt.strftime('%Y%m%d')
+
+def vformat(s):
+    """ Replace unix line endings with dos line endings """
+    return s.strip().replace(',','\,').replace(':','\:').replace(';','\;')
+
+def isSameTime(event):
+    return event.start().time == event.end().time
+
+def isSameDay(event):
+    return event.start().year() == event.end().year() and \
+           event.start().month() == event.end().month() and \
+           event.start().day() == event.end().day()
+
+
+def foldline(s, lineLen=70):
+    """ make a string folded per RFC2445 (each line must be less than 75 octets)
+    This code is a minor modification of MakeICS.py, available at:
+    http://www.zope.org/Members/Feneric/MakeICS/
+    """
+    workStr = s.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\\n')
+    workStr = workStr.strip()
+    numLinesToBeProcessed = len(workStr) / lineLen
+    startingChar = 0
+    res = ''
+    while numLinesToBeProcessed >= 1:
+        res = '%s%s\n ' % (res, workStr[startingChar:startingChar + lineLen])
+        startingChar += lineLen
+        numLinesToBeProcessed -= 1
+    return '%s%s\n' % (res, workStr[startingChar:])
+
+
 def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations
     @param date: datetime instance to normalize.
@@ -46,15 +155,32 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
         return date.tzinfo.normalize(date)
 
 
-def utctz():
-    return pytz.timezone('UTC')
-
-
-def utc(dt):
-    """Convert Python datetime to UTC."""
+def pydt(dt):
+    """Converts a Zope's Products.DateTime in a Python datetime.
+    """
     if dt is None:
         return None
-    return dt.astimezone(utctz())
+
+    if isinstance(dt, datetime):
+        tznaive = not bool(getattr(dt, 'tzinfo', False))
+        if tznaive: return utctz().localize(dt)
+        return utcoffset_normalize(dt, dstmode=DSTADJUST)
+
+    tz = guesstz(dt)
+    if tz is None:
+        dt = dt.toZone('UTC')
+        tz = utctz()
+
+    year, month, day, hour, min, sec = dt.parts()[:6]
+    # seconds (parts[6]) is a float, so we map to int
+    sec = int(sec)
+    dt = datetime(year, month, day, hour, min, sec, tzinfo=tz)
+    dt = dt.tzinfo.normalize(dt) # TODO: why here normalizing in DSTKEEP mode?
+    return dt
+
+
+def utctz():
+    return pytz.timezone('UTC')
 
 
 # TODO: let guesstz guess the time zone not via zope's DateTime
@@ -83,28 +209,11 @@ def guesstz(DT):
     return None
 
 
-def pydt(dt):
-    """Converts a Zope's Products.DateTime in a Python datetime.
-    """
+def utc(dt):
+    """Convert Python datetime to UTC."""
     if dt is None:
         return None
-
-    if isinstance(dt, datetime):
-        tznaive = not bool(getattr(dt, 'tzinfo', False))
-        if tznaive: return utctz().localize(dt)
-        return utcoffset_normalize(dt, dstmode=DSTADJUST)
-
-    tz = guesstz(dt)
-    if tz is None:
-        dt = dt.toZone('UTC')
-        tz = utctz()
-
-    year, month, day, hour, min, sec = dt.parts()[:6]
-    # seconds (parts[6]) is a float, so we map to int
-    sec = int(sec)
-    dt = datetime(year, month, day, hour, min, sec, tzinfo=tz)
-    dt = dt.tzinfo.normalize(dt) # TODO: why here normalizing in DSTKEEP mode?
-    return dt
+    return dt.astimezone(utctz())
 
 
 def dt2int(dt):
@@ -134,4 +243,6 @@ def int2dt(dtint):
     years = dtint / 60 / 24 / 31 / 12
     return datetime(years, months, days, hours, minutes, tzinfo=pytz.timezone('UTC'))
 
+
+    
 

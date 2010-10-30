@@ -10,8 +10,7 @@ from zope.interface import implements
 
 import datetime
 from dateutil import rrule
-from plone.event.utils import pydt, dt2int, utc
-from plone.event.utils import utcoffset_normalize
+from plone.event.utils import pydt, dt2int, utc, utcoffset_normalize, DSTAUTO
 from plone.event.utils import DSTAUTO
 from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
 
