@@ -10,38 +10,34 @@ from plone.event.constants import (
 
 from plone.event import utils
 
-from plone.event.interfaces import ICalExporter, ICalEventExporter
+from plone.event.interfaces import IICalendar, IICalEventExporter
 
 
-class EventsICal(object):
-    """Exports list of events into iCal format according to
-    RFC2445 specification.
-    """
-
-    implements(ICalExporter)
-
-    def __init__(self, events):
-        self.events = events
-
-    def __call__(self):
-        data = ICS_HEADER % dict(prodid=PRODID)
-        # TODO: ensure we have Title and Description declared by IEvent
-        #data += 'X-WR-CALNAME:%s\n' % context.Title()
-        #data += 'X-WR-CALDESC:%s\n' % context.Description()
-        for event in self.events:
-            data += ICalEventExporter(event)()
-        data += ICS_FOOTER
-        return data
-
-class EventICal(object):
-    """See interface"""
+class DefaultICalendar(object):
+    """Provides default hardcoded iCal header and footer"""
     
-    implements(ICalEventExporter)
+    implements(IICalendar)
+    
+    def __init__(self, context):
+        self.context = context
+    
+    def header(self):
+        return ICS_HEADER
+    
+    def footer(self):
+        return ICS_FOOTER
+
+class EventICalConverter(object):
+    """Converts Event to and from iCal format"""
+    
+    implements(IICalEventExporter)
 
     def __init__(self, context):
         self.context = context
 
-    def __call__(self):
+    def feed(self):
+        # TODO: ensure non-ascii characters are working, internally we're woking
+        # only with unicode srings, and return it in 'utf-8' at the end
         start_str, end_str = utils.dateStringsForEvent(self.context)
         out = StringIO()
         map = {

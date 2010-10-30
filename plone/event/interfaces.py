@@ -5,6 +5,7 @@
 __author__ = """Johannes Raggam <johannes@raggam.co.at>"""
 
 from zope.interface import Interface
+from zope.interface.interfaces import IInterface
 from zope.interface import Attribute
 from zope import schema
 
@@ -56,19 +57,23 @@ class IRecurrenceSupport(Interface):
         """Returns all the event's start and end occurences as a list of tuples.
         """
 
-class ICalExporter(Interface):
-    """Serializes list of events into iCalendar formatted data."""
-    
-    events = schema.List(
-        title=u"List of events to export",
+class IICalendar(Interface):
+    """Provides header and footer for iCalendar format"""
+
+    context = schema.Object(
+        title=u"Any interface that might provide data for iCal header",
         description=u'',
-        value_type=schema.Object(schema=IEvent)
+        schema=IInterface
     )
 
-class ICalEventExporter(Interface):
-    """Serializes single event into iCalendar formatted single entry.
+    def header():
+        """Returns iCal header"""
     
-    It doesn't include any iCal header.
+    def footer():
+        """Returns iCal footer"""
+
+class IICalEventExporter(Interface):
+    """Serializes single event into iCalendar formatted entry.
     """
     
     context = schema.Object(
@@ -76,3 +81,7 @@ class ICalEventExporter(Interface):
         description=u'',
         schema=IEvent
     )
+    
+    def feed():
+        """Returns ICal event entry, doesn't include iCal header, that should
+        be done in application level level"""
