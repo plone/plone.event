@@ -9,7 +9,7 @@ from Products.CMFPlone.utils import safe_unicode
 
 from plone.event.constants import PRODID, ICS_HEADER, ICS_FOOTER, \
     ICS_EVENT_START, ICS_EVENT_END
-from plone.event.utils import dateStringsForEvent, vformat, rfc2445dt
+from plone.event.utils import dateStringsForEvent, vformat, rfc2445dt, foldline
 from plone.event.interfaces import IICalendar, IICalEventExporter
 
 
@@ -58,7 +58,7 @@ class EventICalConverter(object):
 
         description = context.Description()
         if description:
-            out.append(utils.foldline(u'DESCRIPTION:%s\n' %
+            out.append(foldline(u'DESCRIPTION:%s\n' %
                 vformat(safe_unicode(description))))
 
         location = context.getLocation()
