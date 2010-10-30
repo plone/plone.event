@@ -56,7 +56,7 @@ class IRecurrenceSupport(Interface):
         """Returns all the event's start and end occurences as a list of tuples.
         """
 
-class ICalExporter(Interface):
+class IICalExporter(Interface):
     """Serializes list of events into iCalendar formatted data."""
     
     events = schema.List(
@@ -65,7 +65,7 @@ class ICalExporter(Interface):
         value_type=schema.Object(schema=IEvent)
     )
 
-class ICalEventExporter(Interface):
+class IICalEventExporter(Interface):
     """Serializes single event into iCalendar formatted single entry.
     
     It doesn't include any iCal header.
