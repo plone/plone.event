@@ -1,9 +1,13 @@
 TODO
 ====
 
-- implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
+* implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
 
-- create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
+* create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
+
+    * move code from plone.app.event
+    * add tests
+    * make sure we have all event fields included into iCal 
 
 * utils.txt: guesstz + pydt tests
 
