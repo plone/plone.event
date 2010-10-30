@@ -37,7 +37,6 @@ def dateStringsForEvent(event):
 
     return start_str, end_str
 
-
 def toDisplay(event):
     """ Return dict containing pre-calculated information for
         building a <start>-<end> date string. Keys are
@@ -79,7 +78,6 @@ def toDisplay(event):
                  same_day=same_day,
                  same_time=same_time)
 
-
 def rfc2445dt(dt):
     """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
     return dt.HTML4().replace('-', '').replace(':', '')
@@ -104,7 +102,6 @@ def isSameDay(event):
            event.start().month() == event.end().month() and \
            event.start().day() == event.end().day()
 
-
 def foldline(s, lineLen=70):
     """ make a string folded per RFC2445 (each line must be less than 75 octets)
     This code is a minor modification of MakeICS.py, available at:
@@ -120,7 +117,6 @@ def foldline(s, lineLen=70):
         startingChar += lineLen
         numLinesToBeProcessed -= 1
     return '%s%s\n' % (res, workStr[startingChar:])
-
 
 def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations
@@ -154,7 +150,6 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     else: # DSTKEEP
         return date.tzinfo.normalize(date)
 
-
 def pydt(dt):
     """Converts a Zope's Products.DateTime in a Python datetime.
     """
@@ -182,7 +177,6 @@ def pydt(dt):
 def utctz():
     return pytz.timezone('UTC')
 
-
 # TODO: let guesstz guess the time zone not via zope's DateTime
 def guesstz(DT):
     """'Guess' pytz from a zope DateTime.
@@ -208,13 +202,11 @@ def guesstz(DT):
         pass
     return None
 
-
 def utc(dt):
     """Convert Python datetime to UTC."""
     if dt is None:
         return None
     return dt.astimezone(utctz())
-
 
 def dt2int(dt):
     """Calculates an integer from a datetime.
@@ -228,7 +220,6 @@ def dt2int(dt):
     value = (((dt.year*12+dt.month)*31+dt.day)*24+dt.hour)*60+dt.minute
     return value
 
-
 def int2dt(dtint):
     """Returns a datetime object from an integer representation with
     resolution of one minute, relative to utc.
@@ -241,8 +232,5 @@ def int2dt(dtint):
     days = dtint / 60 / 24 % 31
     months = dtint / 60 / 24 / 31 % 12
     years = dtint / 60 / 24 / 31 / 12
-    return datetime(years, months, days, hours, minutes, tzinfo=pytz.timezone('UTC'))
-
-
-    
-
+    return datetime(years, months, days, hours, minutes,
+        tzinfo=pytz.timezone('UTC'))
