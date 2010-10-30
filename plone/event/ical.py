@@ -10,7 +10,7 @@ from plone.event.constants import (
 
 from plone.event import utils
 
-from plone.event.interfaces import ICalExporter, ICalEventExporter
+from plone.event.interfaces import IICalExporter, IICalEventExporter
 
 
 class EventsICal(object):
@@ -18,7 +18,7 @@ class EventsICal(object):
     RFC2445 specification.
     """
 
-    implements(ICalExporter)
+    implements(IICalExporter)
 
     def __init__(self, events):
         self.events = events
@@ -29,14 +29,14 @@ class EventsICal(object):
         #data += 'X-WR-CALNAME:%s\n' % context.Title()
         #data += 'X-WR-CALDESC:%s\n' % context.Description()
         for event in self.events:
-            data += ICalEventExporter(event)()
+            data += IICalEventExporter(event)()
         data += ICS_FOOTER
         return data
 
 class EventICal(object):
     """See interface"""
     
-    implements(ICalEventExporter)
+    implements(IICalEventExporter)
 
     def __init__(self, context):
         self.context = context
