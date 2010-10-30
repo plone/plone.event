@@ -8,6 +8,7 @@ __author__ = """Jens Klein <jens@bluedynamics.com>,
 import pytz
 from datetime import datetime
 from datetime import timedelta
+from dateutil import tz
 
 DSTADJUST = 'adjust'
 DSTKEEP   = 'keep'
@@ -234,3 +235,16 @@ def int2dt(dtint):
     years = dtint / 60 / 24 / 31 / 12
     return datetime(years, months, days, hours, minutes,
         tzinfo=pytz.timezone('UTC'))
+
+def gettz(name=None):
+    try:
+        return _extra_times[name]
+    except KeyError:
+        return tz.gettz(name)
+
+_extra_times = {}
+for x in range(-12, 0) + range(1, 13):
+    for n in ('GMT', 'UTC'):
+        name = '%s%+i' % (n, x)
+        timezone = tz.tzoffset(name, x*3600)
+        _extra_times[name] = timezone

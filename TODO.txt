@@ -5,7 +5,6 @@ TODO
 
 * create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
 
-    * move code from plone.app.event
     * add tests
     * make sure we have all event fields included into iCal 
     * check if we need extend iCal header with custom headers
