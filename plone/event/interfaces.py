@@ -6,6 +6,8 @@ __author__ = """Johannes Raggam <johannes@raggam.co.at>"""
 
 from zope.interface import Interface
 from zope.interface import Attribute
+from zope import schema
+
 
 class IEvent(Interface):
     """Generic calendar event for Plone.
@@ -53,3 +55,24 @@ class IRecurrenceSupport(Interface):
     def occurences():
         """Returns all the event's start and end occurences as a list of tuples.
         """
+
+class ICalExporter(Interface):
+    """Serializes list of events into iCalendar formatted data."""
+    
+    events = schema.List(
+        title=u"List of events to export",
+        description=u'',
+        value_type=schema.Object(schema=IEvent)
+    )
+
+class ICalEventExporter(Interface):
+    """Serializes single event into iCalendar formatted single entry.
+    
+    It doesn't include any iCal header.
+    """
+    
+    context = schema.Object(
+        title=u"Event",
+        description=u'',
+        schema=IEvent
+    )
