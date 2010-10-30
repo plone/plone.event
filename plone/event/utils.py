@@ -81,7 +81,7 @@ def toDisplay(event):
 
 def rfc2445dt(dt):
     """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
-    return dt.HTML4().replace('-', '').replace(':', '')
+    return dt.HTML4().replace(u'-', u'').replace(u':', u'')
 
 def _dateForWholeDay(dt):
     """ Replacement for rfc2445dt() for events lasting whole day in
@@ -93,7 +93,8 @@ def _dateForWholeDay(dt):
 
 def vformat(s):
     """ Replace unix line endings with dos line endings """
-    return s.strip().replace(',','\,').replace(':','\:').replace(';','\;')
+    return s.strip().replace(u',', u'\,').replace(u':', u'\:'
+        ).replace(u';', u'\;')
 
 def isSameTime(event):
     return event.start().time == event.end().time
@@ -108,16 +109,17 @@ def foldline(s, lineLen=70):
     This code is a minor modification of MakeICS.py, available at:
     http://www.zope.org/Members/Feneric/MakeICS/
     """
-    workStr = s.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\\n')
+    workStr = s.replace(u'\r\n', u'\n').replace(u'\r', u'\n'
+        ).replace(u'\n', u'\\n')
     workStr = workStr.strip()
     numLinesToBeProcessed = len(workStr) / lineLen
     startingChar = 0
-    res = ''
+    res = u''
     while numLinesToBeProcessed >= 1:
-        res = '%s%s\n ' % (res, workStr[startingChar:startingChar + lineLen])
+        res = u'%s%s\n ' % (res, workStr[startingChar:startingChar + lineLen])
         startingChar += lineLen
         numLinesToBeProcessed -= 1
-    return '%s%s\n' % (res, workStr[startingChar:])
+    return u'%s%s\n' % (res, workStr[startingChar:])
 
 def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations

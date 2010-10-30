@@ -1,15 +1,15 @@
-from cStringIO import StringIO
+from Acquisition import aq_inner
+# TODO: probably get rid of DateTime dependency here
+from DateTime import DateTime
 
 from zope.component import getMultiAdapter
 from zope.interface import implements
-from Acquisition import aq_inner
-from DateTime import DateTime
 
-from plone.event.constants import (
-    PRODID, ICS_HEADER, ICS_FOOTER, ICS_EVENT_START, ICS_EVENT_END)
+from Products.CMFPlone.utils import safe_unicode
 
-from plone.event import utils
-
+from plone.event.constants import PRODID, ICS_HEADER, ICS_FOOTER, \
+    ICS_EVENT_START, ICS_EVENT_END
+from plone.event.utils import dateStringsForEvent, vformat, rfc2445dt
 from plone.event.interfaces import IICalendar, IICalEventExporter
 
 
@@ -42,64 +42,63 @@ class EventICalConverter(object):
         self.context = context
 
     def feed(self):
-        # TODO: ensure non-ascii characters are working, internally we're woking
-        # only with unicode srings, and return it in 'utf-8' at the end
-        start_str, end_str = utils.dateStringsForEvent(self.context)
-        out = StringIO()
+        context = aq_inner(self.context)
+        start_str, end_str = dateStringsForEvent(context)
+        out = []
         map = {
-            'dtstamp'   : utils.rfc2445dt(DateTime()),
-            'created'   : utils.rfc2445dt(DateTime(self.context.CreationDate())),
-            'uid'       : self.context.UID(),
-            'modified'  : utils.rfc2445dt(DateTime(self.context.ModificationDate())),
-            'summary'   : utils.vformat(self.context.Title()),
+            'dtstamp'   : rfc2445dt(DateTime()),
+            'created'   : rfc2445dt(DateTime(context.CreationDate())),
+            'uid'       : context.UID(),
+            'modified'  : rfc2445dt(DateTime(context.ModificationDate())),
+            'summary'   : vformat(safe_unicode(context.Title())),
             'startdate' : start_str,
             'enddate'   : end_str,
             }
-        out.write(ICS_EVENT_START % map)
+        out.append(ICS_EVENT_START % map)
 
-        description = self.context.Description()
+        description = context.Description()
         if description:
-            out.write(utils.foldline('DESCRIPTION:%s\n' % utils.vformat(description)))
+            out.append(utils.foldline(u'DESCRIPTION:%s\n' %
+                vformat(safe_unicode(description))))
 
-        location = self.context.getLocation()
+        location = context.getLocation()
         if location:
-            out.write('LOCATION:%s\n' % utils.vformat(location))
+            out.append(u'LOCATION:%s\n' % vformat(safe_unicode(location)))
 
-        subject = self.context.Subject()
+        subject = context.Subject()
         if subject:
-            out.write('CATEGORIES:%s\n' % ','.join(subject))
+            out.append(u'CATEGORIES:%s\n' % u','.join(subject))
 
-        attendees = self.context.getAttendees()
+        # TODO: revisit and implement attendee export according to RFC
+        attendees = context.getAttendees()
         for attendee in attendees:
-            out.write('ATTENDEE;CN="%s";ROLE=REQ-PARTICIPANT\n'%utils.vformat(attendee))
+            out.append(u'ATTENDEE;CN="%s";ROLE=REQ-PARTICIPANT\n' %
+                vformat(safe_unicode(attendee)))
 
-
-        # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
+        # -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
         #ORGANIZER;CN=%(name):MAILTO=%(email)
         #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
 
         cn = []
-        contact = self.context.contact_name()
+        contact = context.contact_name()
         if contact:
-            cn.append(contact)
-        phone = self.context.contact_phone()
+            cn.append(safe_unicode(contact))
+        phone = context.contact_phone()
         if phone:
             cn.append(phone)
-        email = self.context.contact_email()
+        email = context.contact_email()
         if email:
             cn.append(email)
         if cn:
-            out.write('CONTACT:%s\n' % utils.vformat(', '.join(cn)))
+            out.append(u'CONTACT:%s\n' % vformat(u', '.join(cn)))
 
-        url = self.context.event_url()
+        url = context.event_url()
         if url:
-            out.write('URL:%s\n' % url)
+            out.append(u'URL:%s\n' % url)
 
         # allow derived event types to inject additional data for iCal
-        try:
-            self.context.getICalSupplementary(out)
-        except AttributeError:
-            pass
+        if hasattr(self.context, 'getICalSupplementary'):
+            context.getICalSupplementary(out)
 
-        out.write(ICS_EVENT_END)
-        return out.getvalue()
+        out.append(ICS_EVENT_END)
+        return u''.join(out)
