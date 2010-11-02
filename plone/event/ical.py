@@ -5,6 +5,7 @@ from DateTime import DateTime
 from zope.component import getMultiAdapter
 from zope.interface import implements
 
+# TODO: remove any dependency on CMFPlone
 from Products.CMFPlone.utils import safe_unicode
 
 from plone.event.constants import PRODID, ICS_HEADER, ICS_FOOTER, \
@@ -22,18 +23,15 @@ class DefaultICalendar(object):
         self.context = context
     
     def header(self):
-        # TODO: check if we need to put this into header in this
-        #       default implementation
-        # data = ICS_HEADER % dict(prodid=PRODID)
-        # data += 'X-WR-CALNAME:%s\n' % context.Title()
-        # data += 'X-WR-CALDESC:%s\n' % context.Description()
-
-        return ICS_HEADER
+        data = ICS_HEADER % dict(prodid=PRODID)
+        data += 'X-WR-CALNAME:%s\n' % safe_unicode(self.context.Title())
+        data += 'X-WR-CALDESC:%s\n' % safe_unicode(self.context.Description())
+        return data
     
     def footer(self):
         return ICS_FOOTER
 
-class EventICalConverter(object):
+class EventICalExporter(object):
     """Converts Event to and from iCal format"""
     
     implements(IICalEventExporter)
@@ -74,11 +72,7 @@ class EventICalConverter(object):
         for attendee in attendees:
             out.append(u'ATTENDEE;CN="%s";ROLE=REQ-PARTICIPANT\n' %
                 vformat(safe_unicode(attendee)))
-
-        # -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
-        #ORGANIZER;CN=%(name):MAILTO=%(email)
-        #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
-
+        
         cn = []
         contact = context.contact_name()
         if contact:

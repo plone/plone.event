@@ -3,12 +3,12 @@ TODO
 
 * implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
 
+* fill in IEvent interface
+
 * create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
 
     * add more tests
     * make sure we have all event fields included into iCal 
-    * check if we need extend iCal header with custom headers
-    * ensure iCal is properly handling non-ascii chars and returning result in 'utf-8' encoding
     * check how and where we should perform localization of dates
 
 * fix timezone tests (need to evaluate what function to use: pydt or DT2dt)

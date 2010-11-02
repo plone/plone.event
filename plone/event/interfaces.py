@@ -13,6 +13,10 @@ from zope import schema
 class IEvent(Interface):
     """Generic calendar event for Plone.
     """
+    
+    # TODO: agree on what fields should go into this interfaces and 
+    #       fill it in
+    
     start_date = Attribute(u"""Date when the first occurence of the event
                                begins as datetime object""")
     end_date = Attribute(u"""Date when the first occurence of the event ends as

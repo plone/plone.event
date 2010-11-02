@@ -12,7 +12,7 @@
 
   <adapter
       for=".interfaces.IEvent"
-      factory=".ical.EventICalConverter"
+      factory=".ical.EventICalExporter"
       /> 
 
 </configure>
