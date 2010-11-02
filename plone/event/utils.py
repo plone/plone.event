@@ -13,6 +13,7 @@ from dateutil import tz
 DSTADJUST = 'adjust'
 DSTKEEP   = 'keep'
 DSTAUTO   = 'auto'
+MAX32 = int(2**31 - 1)
 
 # Utility functions used by plone.event
 
@@ -221,6 +222,14 @@ def dt2int(dt):
     # TODO: if dt has not timezone information, guess and set it
     dt = utc(dt)
     value = (((dt.year*12+dt.month)*31+dt.day)*24+dt.hour)*60+dt.minute
+
+    # TODO: unit test me
+    if value > MAX32:
+        # value must be integer fitting in the 32bit range
+        raise OverflowError(
+            """%s is not within the range of indexable dates,<<
+            exceeding 32bit range.""" % dt
+        )
     return value
 
 def int2dt(dtint):
