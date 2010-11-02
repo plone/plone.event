@@ -137,8 +137,6 @@ pydt tests
     >>> from plone.event.utils import pydt
     >>> from plone.event.utils import utc
 
-    >>> #interact( locals() )
-
     >>> dt = pydt(DateTime('2005/11/07 18:00:00 UTC'))
     >>> dt
     datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<UTC>)
@@ -151,6 +149,7 @@ pydt tests
 
 TODO, check difference of above output to that from original test:
 datetime.datetime(2005, 11, 7, 18, 0, tzinfo=tzfile('/usr/share/zoneinfo/Brazil/East'))
+Maybe DST and TZ info changed since 2005?
 
     >>> utc(dt)
     datetime.datetime(2005, 11, 7, 21, 6, tzinfo=<UTC>)
@@ -165,5 +164,7 @@ datetime.datetime(2005, 11, 7, 20, 0, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
 TODO: original output
 datetime.datetime(2005, 11, 7, 18, 0, tzinfo=tzoffset('GMT-2', -7200))
 
-    >>> dt.astimezone(gettz('UTC'))
-    datetime.datetime(2005, 11, 7, 20, 0, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
+#    >>> dt.astimezone(gettz('UTC'))
+
+    >>> utc(dt)
+    datetime.datetime(2005, 11, 7, 20, 0, tzinfo=<UTC>)
