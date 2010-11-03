@@ -24,8 +24,8 @@ class DefaultICalendar(object):
     
     def header(self):
         data = ICS_HEADER % dict(prodid=PRODID)
-        data += 'X-WR-CALNAME:%s\n' % safe_unicode(self.context.Title())
-        data += 'X-WR-CALDESC:%s\n' % safe_unicode(self.context.Description())
+        data += u'X-WR-CALNAME:%s\n' % safe_unicode(self.context.Title())
+        data += u'X-WR-CALDESC:%s\n' % safe_unicode(self.context.Description())
         return data
     
     def footer(self):

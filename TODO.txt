@@ -5,12 +5,6 @@ TODO
 
 * fill in IEvent interface
 
-* create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
-
-    * add more tests
-    * make sure we have all event fields included into iCal 
-    * check how and where we should perform localization of dates
-
 * fix timezone tests (need to evaluate what function to use: pydt or DT2dt)
 
 * utils.txt: guesstz + pydt tests
