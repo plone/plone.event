@@ -16,24 +16,24 @@ from plone.event.interfaces import IICalendar, IICalEventExporter
 
 class DefaultICalendar(object):
     """Provides default hardcoded iCal header and footer"""
-    
+
     implements(IICalendar)
-    
+
     def __init__(self, context):
         self.context = context
-    
+
     def header(self):
         data = ICS_HEADER % dict(prodid=PRODID)
         data += 'X-WR-CALNAME:%s\n' % safe_unicode(self.context.Title())
         data += 'X-WR-CALDESC:%s\n' % safe_unicode(self.context.Description())
         return data
-    
+
     def footer(self):
         return ICS_FOOTER
 
 class EventICalExporter(object):
     """Converts Event to and from iCal format"""
-    
+
     implements(IICalEventExporter)
 
     def __init__(self, context):
@@ -51,6 +51,7 @@ class EventICalExporter(object):
             'summary'   : vformat(safe_unicode(context.Title())),
             'startdate' : start_str,
             'enddate'   : end_str,
+            'recurrence': context.recurrence,
             }
         out.append(ICS_EVENT_START % map)
 
@@ -72,7 +73,7 @@ class EventICalExporter(object):
         for attendee in attendees:
             out.append(u'ATTENDEE;CN="%s";ROLE=REQ-PARTICIPANT\n' %
                 vformat(safe_unicode(attendee)))
-        
+
         cn = []
         contact = context.contact_name()
         if contact:
