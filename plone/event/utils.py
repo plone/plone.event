@@ -149,10 +149,18 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
         elif dstmode==DSTAUTO:
             dstmode = DSTADJUST
 
-    if dstmode==DSTADJUST:
-        return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
-    else: # DSTKEEP
-        return date.tzinfo.normalize(date)
+    try:
+        if dstmode==DSTADJUST:
+            return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
+        else: # DSTKEEP
+            return date.tzinfo.normalize(date)
+    except:
+        # TODO: python-datetime converts e.g RDATE:20100119T230000Z to
+        # datetime.datetime(2010, 1, 19, 23, 0, tzinfo=tzutc())
+        # but that should be a real utc zoneinfo!
+        pass
+        # import pdb;pdb.set_trace()
+
 
 def pydt(dt):
     """Converts a Zope's Products.DateTime in a Python datetime.
