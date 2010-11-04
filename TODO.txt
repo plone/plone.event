@@ -1,6 +1,11 @@
 TODO
 ====
 
+* unlimited occurences are still possible with ical export, since there is no
+  check on validity of the rrulestr itself. count/until limitations are done in
+  recurrence_sequence_ical method, but until/count limitations are not set in
+  rrulestr
+
 * implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
 
 * fill in IEvent interface
@@ -8,7 +13,7 @@ TODO
 * create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
 
     * add more tests
-    * make sure we have all event fields included into iCal 
+    * make sure we have all event fields included into iCal
     * check how and where we should perform localization of dates
 
 * fix timezone tests (need to evaluate what function to use: pydt or DT2dt)
