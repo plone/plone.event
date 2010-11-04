@@ -16,6 +16,8 @@ TODO
     * make sure we have all event fields included into iCal
     * check how and where we should perform localization of dates
 
+    * test recurrence ical export
+
 * fix timezone tests (need to evaluate what function to use: pydt or DT2dt)
 
 * utils.txt: guesstz + pydt tests
