@@ -1,6 +1,21 @@
 TODO
 ====
 
+* timezone handling: DateTime often returns
+  timezones as an UTC/GMT offset. with recurring dates which are recurring over
+  daylight saving time change dates, this would propably lead into undesired
+  results, since the offset would simply be kept - regardless if there was a
+  daylight saving time change.
+  safest is always to use timezones defined in the olson database via pytz.
+  other/unknown times provided by Zope's DateTime are simply converted to UTC -
+  which can easily be converted back to the local timezone on display.
+* tests of vs.event's DT2dt imeplementation would propably break on other
+  systems than linux (at least windows), since tzinfo is always a tzfile
+  referenced in /usr/share ..
+* DateTime often returns timezones as GMT/UTC offset. we should prepare for
+  storing real timezones instead of offsets.
+
+
 * unlimited occurences are still possible with ical export, since there is no
   check on validity of the rrulestr itself. count/until limitations are done in
   recurrence_sequence_ical method, but until/count limitations are not set in
