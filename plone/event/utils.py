@@ -170,8 +170,9 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     except:
         # TODO: python-datetime converts e.g RDATE:20100119T230000Z to
         # datetime.datetime(2010, 1, 19, 23, 0, tzinfo=tzutc())
-        # but that should be a real utc zoneinfo!
-        pass
+        # should that be a real utc zoneinfo?
+        # anyways, return UTC date as-is
+        return date
 
 def pydt(dt):
     """Converts a Zope's Products.DateTime in a Python datetime.
