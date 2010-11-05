@@ -16,6 +16,8 @@ TODO
   storing real timezones instead of offsets.
 
 
+* test recurrence ical export
+
 * unlimited occurences are still possible with ical export, since there is no
   check on validity of the rrulestr itself. count/until limitations are done in
   recurrence_sequence_ical method, but until/count limitations are not set in
