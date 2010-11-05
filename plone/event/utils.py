@@ -15,7 +15,15 @@ DSTKEEP   = 'keep'
 DSTAUTO   = 'auto'
 MAX32 = int(2**31 - 1)
 
-# Utility functions used by plone.event
+
+### Display helpers
+def isSameTime(event):
+    return event.start().time == event.end().time
+
+def isSameDay(event):
+    return event.start().year() == event.end().year() and \
+           event.start().month() == event.end().month() and \
+           event.start().day() == event.end().day()
 
 def dateStringsForEvent(event):
     # Smarter handling for whole-day events
@@ -80,10 +88,6 @@ def toDisplay(event):
                  same_day=same_day,
                  same_time=same_time)
 
-def rfc2445dt(dt):
-    """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
-    return dt.HTML4().replace(u'-', u'').replace(u':', u'')
-
 def _dateForWholeDay(dt):
     """ Replacement for rfc2445dt() for events lasting whole day in
         order to get the date string according to the current time zone.
@@ -92,18 +96,16 @@ def _dateForWholeDay(dt):
     """
     return dt.strftime('%Y%m%d')
 
+
+### RFC2445 export helpers
+def rfc2445dt(dt):
+    """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
+    return dt.HTML4().replace(u'-', u'').replace(u':', u'')
+
 def vformat(s):
     """ Replace unix line endings with dos line endings """
     return s.strip().replace(u',', u'\,').replace(u':', u'\:'
         ).replace(u';', u'\;')
-
-def isSameTime(event):
-    return event.start().time == event.end().time
-
-def isSameDay(event):
-    return event.start().year() == event.end().year() and \
-           event.start().month() == event.end().month() and \
-           event.start().day() == event.end().day()
 
 def foldline(s, lineLen=70):
     """ make a string folded per RFC2445 (each line must be less than 75 octets)
@@ -121,6 +123,17 @@ def foldline(s, lineLen=70):
         startingChar += lineLen
         numLinesToBeProcessed -= 1
     return u'%s%s\n' % (res, workStr[startingChar:])
+
+
+### Timezone helpers
+def utctz():
+    return pytz.timezone('UTC')
+
+def utc(dt):
+    """Convert Python datetime to UTC."""
+    if dt is None:
+        return None
+    return dt.astimezone(utctz())
 
 def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations
@@ -185,7 +198,6 @@ def pydt(dt):
     dt = dt.tzinfo.normalize(dt) # TODO: why here normalizing in DSTKEEP mode?
     return dt
 
-
 def guesstz(DT):
     """'Guess' pytz from a zope DateTime.
 
@@ -211,17 +223,7 @@ def guesstz(DT):
     return None
 
 
-def utctz():
-    return pytz.timezone('UTC')
-
-
-def utc(dt):
-    """Convert Python datetime to UTC."""
-    if dt is None:
-        return None
-    return dt.astimezone(utctz())
-
-
+### Date as integer representation helpers
 def dt2int(dt):
     """Calculates an integer from a datetime.
     Resolution is one minute, always relative to utc
@@ -256,3 +258,4 @@ def int2dt(dtint):
     years = dtint / 60 / 24 / 31 / 12
     return datetime(years, months, days, hours, minutes,
         tzinfo=pytz.timezone('UTC'))
+
