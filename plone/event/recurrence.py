@@ -68,7 +68,8 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
         # dtstart: optional used when no dtstart is in RFC2445 string
         rset = rrule.rrulestr(recrule,
                              dtstart=start,
-                             forceset=True
+                             forceset=True,
+                             # ignoretz=True
                              # compatible=True # RFC2445 compatibility
                              )
     else:
