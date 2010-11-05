@@ -186,10 +186,6 @@ def pydt(dt):
     return dt
 
 
-def utctz():
-    return pytz.timezone('UTC')
-
-# TODO: let guesstz guess the time zone not via zope's DateTime
 def guesstz(DT):
     """'Guess' pytz from a zope DateTime.
 
@@ -214,11 +210,17 @@ def guesstz(DT):
         pass
     return None
 
+
+def utctz():
+    return pytz.timezone('UTC')
+
+
 def utc(dt):
     """Convert Python datetime to UTC."""
     if dt is None:
         return None
     return dt.astimezone(utctz())
+
 
 def dt2int(dt):
     """Calculates an integer from a datetime.
@@ -254,16 +256,3 @@ def int2dt(dtint):
     years = dtint / 60 / 24 / 31 / 12
     return datetime(years, months, days, hours, minutes,
         tzinfo=pytz.timezone('UTC'))
-
-def gettz(name=None):
-    try:
-        return _extra_times[name]
-    except KeyError:
-        return tz.gettz(name)
-
-_extra_times = {}
-for x in range(-12, 0) + range(1, 13):
-    for n in ('GMT', 'UTC'):
-        name = '%s%+i' % (n, x)
-        timezone = tz.tzoffset(name, x*3600)
-        _extra_times[name] = timezone

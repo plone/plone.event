@@ -18,7 +18,6 @@ Cannot normalize timezone naive dates.
 
 Setting a timezoned date
     >>> import pytz
-    >>> from plone.event.utils import gettz
     >>> at = pytz.timezone('Europe/Vienna')
     >>> date = at.localize(datetime(2010,10,10,0,0))
     >>> date
@@ -163,8 +162,6 @@ datetime.datetime(2005, 11, 7, 20, 0, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
 
 TODO: original output
 datetime.datetime(2005, 11, 7, 18, 0, tzinfo=tzoffset('GMT-2', -7200))
-
-#    >>> dt.astimezone(gettz('UTC'))
 
     >>> utc(dt)
     datetime.datetime(2005, 11, 7, 20, 0, tzinfo=<UTC>)
