@@ -82,9 +82,8 @@ Multiple Ruleset
 ----------------
 
     >>> start = at.localize(datetime(2010,01,01,0,0))
-    >>> rulestr = """
-    ... RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100109T230000Z
-    ... RDATE:20100119T230000Z
+    >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100109T230000Z
+    ... RDATE:20100119T230000Z;
     ... EXRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20100109T230000Z
     ... EXDATE:20100101T230000Z"""
 
@@ -94,14 +93,15 @@ Multiple Ruleset
         datetime.datetime(2010, 1, 6, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 8, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+        datetime.datetime(2010, 1, 19, 23, 0, tzinfo=tzutc())]
 
-should read
-[datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 6, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 8, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 10, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
+should rather be:
+[datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+datetime.datetime(2010, 1, 6, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+datetime.datetime(2010, 1, 8, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+datetime.datetime(2010, 1, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
 
 
 #    >>> interact( locals() )
