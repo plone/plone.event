@@ -172,8 +172,6 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
         # datetime.datetime(2010, 1, 19, 23, 0, tzinfo=tzutc())
         # but that should be a real utc zoneinfo!
         pass
-        # import pdb;pdb.set_trace()
-
 
 def pydt(dt):
     """Converts a Zope's Products.DateTime in a Python datetime.
