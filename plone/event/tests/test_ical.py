@@ -15,7 +15,8 @@ class FakeEvent(object):
     def __init__(self, uid=None, title=None, description=None, start=None,
                  end=None, wholeDay=None, created=None, modified=None,
                  location=None, subject=[], attendees=[], contact_name=None,
-                 contact_phone=None, contact_email=None, event_url=None):
+                 contact_phone=None, contact_email=None, event_url=None,
+                 recurrence=None):
         self.uid = uid
         self.title = title
         self.description = description
@@ -31,6 +32,7 @@ class FakeEvent(object):
         self.cphone = contact_phone
         self.cemail = contact_email
         self.eurl = event_url
+        self.recurrence = recurrence
 
     def start(self):
         return self._start
@@ -43,37 +45,37 @@ class FakeEvent(object):
 
     def Title(self):
         return self.title
-    
+
     def Description(self):
         return self.description
 
     def CreationDate(self):
         return self.created
-    
+
     def ModificationDate(self):
         return self.modified
-        
+
     def getLocation(self):
         return self.location
 
     def Subject(self):
         return self.subject
-    
+
     def getAttendees(self):
         return self.attendees
-    
+
     def contact_name(self):
         return self.cname
-    
+
     def contact_phone(self):
         return self.cphone
 
     def contact_email(self):
         return self.cemail
-    
+
     def event_url(self):
         return self.eurl
-    
+
     def UID(self):
         return self.uid
 
