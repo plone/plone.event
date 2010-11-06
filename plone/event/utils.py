@@ -71,9 +71,9 @@ def toDisplay(event):
     # TODO: check date formats after we removed localization below
     # this needs to separate date and time as ulocalized_time does
     start_date = event.start()
+    start_time = event.start().strftime("%H:%M")
     end_date = event.end()
-    start_time = event.start()
-    end_time = event.end()
+    end_time = event.end().strftime("%H:%M")
     same_day = isSameDay(event)
     same_time = isSameTime(event)
 
