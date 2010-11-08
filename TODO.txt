@@ -1,7 +1,26 @@
 TODO
 ====
 
-* timezone handling: DateTime often returns
+* check docstrings for validity
+* DateTime often returns timezones as GMT/UTC offset. we should prepare for
+  storing real timezones instead of offsets in P.Archetypes.
+* Test recurrence ical export
+* Unlimited occurences are still possible with ical export, since there is no
+  check on validity of the rrulestr itself. count/until limitations are done in
+  recurrence_sequence_ical method, but until/count limitations are not set in
+  rrulestr
+* implement RFC2445 event types (event, todo, journal, freebusy) as interfaces
+  which content types may provide
+* Expose more attributes for IEvent interface
+* make sure we have all event fields included into iCal
+* check how and where we should perform localization of dates
+* utils.txt: guesstz + pydt tests
+* make MAXCOUNT ceiling for occurences configurable. maybe via plone..
+* is it ok to convert timezone naive dates to UTC? guess so.
+* Ensure compatibility with Archetypes based ATEvent and Dexterity based content
+  DXEvent.
+
+OK * timezone handling: DateTime often returns
   timezones as an UTC/GMT offset. with recurring dates which are recurring over
   daylight saving time change dates, this would propably lead into undesired
   results, since the offset would simply be kept - regardless if there was a
@@ -9,50 +28,19 @@ TODO
   safest is always to use timezones defined in the olson database via pytz.
   other/unknown times provided by Zope's DateTime are simply converted to UTC -
   which can easily be converted back to the local timezone on display.
-* tests of vs.event's DT2dt imeplementation would propably break on other
+OK * tests of vs.event's DT2dt imeplementation would propably break on other
   systems than linux (at least windows), since tzinfo is always a tzfile
   referenced in /usr/share ..
-* DateTime often returns timezones as GMT/UTC offset. we should prepare for
-  storing real timezones instead of offsets.
 
-
-* test recurrence ical export
-
-* unlimited occurences are still possible with ical export, since there is no
-  check on validity of the rrulestr itself. count/until limitations are done in
-  recurrence_sequence_ical method, but until/count limitations are not set in
-  rrulestr
-
-* implement RFC2445 event types (event, todo, journal, freebusy) as interfaces which content types may provide
-
-* fill in IEvent interface
-
-* create adapters which serialize events to iCal format corresponding to their RFC2445 type (event, todo, journal, freebusy)
-
-    * add more tests
-    * make sure we have all event fields included into iCal
-    * check how and where we should perform localization of dates
-
-    * test recurrence ical export
-
-* fix timezone tests (need to evaluate what function to use: pydt or DT2dt)
-
-* utils.txt: guesstz + pydt tests
-
-* check docstrings for validity
-
-* make MAXCOUNT ceiling for occurences configurable. maybe via plone..
-
-* is it ok to convert timezone naive dates to UTC? guess so.
-
+OK for IEvent * create adapters which serialize events to iCal format
+  corresponding to their RFC2445 type (event, todo, journal, freebusy)
+OK * Add more tests
+OK * Fix timezone tests (need to evaluate what function to use: pydt or DT2dt)
 OK * remove handling of timezone naive dates. timezone naivety simply doesn't
   exist. even sylvester is bound to timezones.
-
-- Ensure compatibility with Archetypes based ATEvent and Dexterity based content DXEvent.
 
 Future
 ======
 * Calendar views
 * iCal import
 * caldav support
-
