@@ -94,17 +94,25 @@ def utc(dt):
     return dt.astimezone(utctz())
 
 def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
-    """Fixes invalid UTC offsets from recurrence calculations
+    """Fixes invalid UTC offsets from recurrence calculations.
+
     @param date: datetime instance to normalize.
-    @param delta: datetime.timedelta instance
-    @param dstmode: is either DSTADJUST, DSTKEEP or DSTAUTO. On DSTADJUST we have a
-            more human behaviour on daylight saving time changes: 8:00 on
-            day before spring dst-change plus 24h results in 8:00 day after
-            dst-change, which means in fact one hour less is added. On a
-            recurconf.recrule < 24h this will fail!
-            If DSTKEEP is selected, the time is added in its real hours, so
-            the above example results in 9:00 on day after dst-change.
-            DSTAUTO uses DSTADJUST for a delta >=24h and DSTKEEP for < 24h.
+
+    @param delta: datetime.timedelta instance.
+    Mode DSTADJUST: When crossing daylight saving time changes, the start time
+        of the date before DST change will be the same in value as afterwards.
+        It is adjusted relative to UTC. So 8:00 GMT+1 before will also result in
+        8:00 GMT+2 afterwards. This is what humans might expect when recurring
+        rules are defined.
+    Mode DSTKEEP: When crossing daylight saving time changes, the start time of
+        the date before and after DST change will be the same relative to UTC.
+        So, 8:00 GMT+1 before will result in 7:00 GMT+2 afterwards. This
+        behavior might be what machines expect, when recurrence rules are
+        defined.
+    Mode DSTAUTO:
+        If the relative delta between two occurences of a reucurrence sequence
+        is less than a day, DSTKEEP will be used - otherwise DSTADJUST. This
+        behavior is the default.
 
     """
     try:
