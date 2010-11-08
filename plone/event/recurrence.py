@@ -18,9 +18,9 @@ from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
 MAXCOUNT  = 100000 # Maximum number of occurrences
 
 
-
 class RecurrenceSupport(object):
     """Recurrence support event adapter for IRecurringEvent objects.
+
     """
     implements(IRecurrenceSupport)
     adapts(IRecurringEventICal)
@@ -52,7 +52,28 @@ class RecurrenceSupport(object):
 
 def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
                              dst=DSTAUTO):
-    """ Sequence of datetime objects from dateutil's recurrence rules
+    """ Calculates a sequence of datetime objects from a recurrence rule
+    following the RFC2445 specification, using python-dateutil recurrence rules.
+
+    @param start:   datetime or DateTime instance of the date from which the
+                    recurrence sequence is calculated.
+
+    @param recrule: String with RFC2445 comaptible recurrence definition,
+                    dateutil.rrule or dateutil.rruleset instances.
+
+    @param until:   datetime or DateTime instance of the date, until the
+                    recurrence is calculated. If not given, count or MAXDATE
+                    limit the recurrence calculation.
+
+    @param count:   Integer which defines the number of occurences. If not
+                    given, until or MAXDATE limits the recurrence calculation.
+
+    @param dst:     Daylight Saving Time crossing behavior. DSTAUTO, DSTADJUST
+                    or DSTKEEP. For more information, see
+                    plone.event.utils.utcoffset_normalize.
+
+    @return: A generator which generates a sequence of datetime instances.
+
     """
     start = pydt(start) # always use python datetime objects
     until = pydt(until)
@@ -97,21 +118,27 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
 
 def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
                                   dst=DSTAUTO):
-    """a sequence of integer objects.
+    """ Calculates a sequence of datetime objects from a timedelta integer,
+    which defines the minutes between each occurence.
 
-    @param recurconf.start: a python datetime (non-naive) or Zope DateTime.
-    @param recurconf.recrule: Timedelta as integer >=0 (unit is minutes) or None.
-    @param recurconf.until: a python datetime (non-naive) or Zope DateTime >=start or None.
-    @param recurconf.dst: is either DSTADJUST, DSTKEEP or DSTAUTO. On DSTADJUST we have a
-                more human behaviour on daylight saving time changes: 8:00 on
-                day before spring dst-change plus 24h results in 8:00 day after
-                dst-change, which means in fact one hour less is added. On a
-                recurconf.recrule < 24h this will fail!
-                If DSTKEEP is selected, the time is added in its real hours, so
-                the above example results in 9:00 on day after dst-change.
-                DSTAUTO uses DSTADJUST for a delta >=24h and DSTKEEP for < 24h.
+    @param start: datetime or DateTime instance of the date from which the
+                  recurrence sequence is calculated.
 
-    @return: a sequence of dates
+    @param delta: Integer which defines the minutes between each date occurence.
+
+    @param until: datetime or DateTime instance of the date, until the
+                  recurrence is calculated. If not given, count or MAXDATE limit
+                  the recurrence calculation.
+
+    @param count: Integer which defines the number of occurences. If not given,
+                  until or MAXDATE limits the recurrence calculation.
+
+    @param dst:   Daylight Saving Time crossing behavior. DSTAUTO, DSTADJUST or
+                  DSTKEEP. For more information, see
+                  plone.event.utils.utcoffset_normalize.
+
+    @return: A generator which generates a sequence of datetime instances.
+
     """
     start = pydt(start)
     yield start
@@ -139,7 +166,9 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
 
 
 def recurrence_int_sequence(sequence):
-    """ IRecurringSequence as integer represetations of dates.
+    """ Generates a sequence of integer representations from a sequence of
+    dateime instances.
+
     """
     for dt in sequence:
         yield dt2int(dt)
