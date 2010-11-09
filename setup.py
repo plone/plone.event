@@ -27,6 +27,13 @@ setup(name='plone.event',
           # -*- Extra requirements: -*-
           'python-dateutil',
           'pytz',
+          'zope.component',
+          'zope.interface',
+          'zope.schema',
+          # Problematic imports - those dependencies should go
+          'Acquisition',
+          'DateTime',
+          'Products.CMFPlone',
       ],
       extras_require={'test': [
           #'interlude',
