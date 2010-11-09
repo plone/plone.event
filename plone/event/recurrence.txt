@@ -103,10 +103,6 @@ datetime.datetime(2010, 1, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:
 datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
 
-
-#    >>> interact( locals() )
-
-
 Limiting number of occurences
 -----------------------------
 

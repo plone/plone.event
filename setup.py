@@ -28,5 +28,7 @@ setup(name='plone.event',
           'python-dateutil',
           'pytz',
       ],
-      extras_require={'test': ['interlude', 'DateTime']},
+      extras_require={'test': [
+          #'interlude',
+          'DateTime']},
       )
