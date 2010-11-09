@@ -166,6 +166,15 @@ Timezone aware parsing regarding RFC2445 does not work
     ...
     ValueError: unsupported DTSTART parm: TZID=EUROPE/VIENNA
 
+Using Timezone naive dates in a recurrence string also breaks in dateutil 1.5
+    >>> dates = recurrence_sequence_ical(
+    ...     start=at.localize(datetime(2010,01,01,0,0)),
+    ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100104T000000""")
+    >>> list(dates)
+    Traceback (most recent call last):
+    ...
+    TypeError: can't compare offset-naive and offset-aware datetimes
+
 
 recurrence_sequence_ical - rrule test
 =====================================
