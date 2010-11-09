@@ -28,7 +28,7 @@ class MockEvent(object):
         self.duration = end_date - start_date
         #subject
         #location
-        #wholeDay
+        #whole_day
         #startDate
         #endDate
         #text

@@ -13,7 +13,7 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 class FakeEvent(object):
 
     def __init__(self, uid=None, title=None, description=None, start=None,
-                 end=None, wholeDay=None, created=None, modified=None,
+                 end=None, whole_day=None, created=None, modified=None,
                  location=None, subject=[], attendees=[], contact_name=None,
                  contact_phone=None, contact_email=None, event_url=None,
                  recurrence=None):
@@ -22,7 +22,7 @@ class FakeEvent(object):
         self.description = description
         self._start = DateTime(start)
         self._end = DateTime(end)
-        self._wholeDay = wholeDay
+        self._whole_day = whole_day
         self.created = created
         self.modified = modified
         self.location = location
@@ -40,8 +40,8 @@ class FakeEvent(object):
     def end(self):
         return self._end
 
-    def getWholeDay(self):
-        return self._wholeDay
+    def whole_day(self):
+        return self._whole_day
 
     def Title(self):
         return self.title
@@ -86,7 +86,7 @@ class ICalExportTests(unittest.TestCase):
         return FakeEvent(uid='123456', title='Plone Conference',
             description='Annual Plone Conference',
             start='2010-10-25', end='2010-11-01',
-            wholeDay=True, created='2010-10-01',
+            whole_day=True, created='2010-10-01',
             modified='2010-10-31',
             location='Bristol, UK', subject=['plone', 'cms'],
             attendees=['plonistas', 'devs'], contact_name='mat',

@@ -27,7 +27,7 @@ def isSameDay(event):
 
 def dateStringsForEvent(event):
     # Smarter handling for whole-day events
-    if event.getWholeDay():
+    if event.whole_day():
         # For all-day events we must not include the time within
         # the date-time string
         start_str = _dateForWholeDay(event.start())[:8]
