@@ -30,10 +30,10 @@ setup(name='plone.event',
           'zope.component',
           'zope.interface',
           'zope.schema',
-          # Problematic imports - those dependencies should go
+          # Problematic imports - those dependencies must go
           'Acquisition',
           'DateTime',
-          'Products.CMFPlone',
+          'Plone',
       ],
       extras_require={'test': [
           #'interlude',
