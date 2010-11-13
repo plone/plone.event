@@ -176,6 +176,27 @@ Using Timezone naive dates in a recurrence string also breaks in dateutil 1.5
     TypeError: can't compare offset-naive and offset-aware datetimes
 
 
+python-dateutils parse function accepts an default value, from which missing
+parameters are copied. Could this be the key to solve the problem?
+
+    >>> ref = at.localize(dt(2010,1,1))
+    >>> parser.parse('20100109T000000', default=ref)
+    datetime.datetime(2010, 1, 9, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
+
+
+yo! but not really the solution yet. timezones are not adjusted properly
+
+    >>> parser.parse('20100809T000000', default=ref)
+    datetime.datetime(2010, 8, 9, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
+
+
+this works. but can't be used to solve rrulestr parsing problems.
+
+    >>> parser.parse('20100109T000000', default=ref.tzinfo.localize(parser.parse('20100809T000000')))
+    datetime.datetime(2010, 1, 9, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
+
+
+
 recurrence_sequence_ical - rrule test
 =====================================
 
