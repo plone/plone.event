@@ -102,7 +102,13 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
         # Limit number of recurrences otherwise calculations take too long
         if MAXCOUNT and cnt+1 > MAXCOUNT: break
         if count and cnt+1 > count: break
-        if until and utc(date) > utc(until): break
+        if until and utc(date) > utc(until): break # normally this one should be
+                                                   # after date normalizing
+
+        ## TODO
+        # tz = start.tzinfo ## move upwards
+        # if isinstance(recrule, str): tz.localize(date) ## use marker var
+        ## and done.
 
         # Timezone normalizing
         # For the very first occurence, normalizing should not be needed since
