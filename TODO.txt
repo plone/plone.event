@@ -5,8 +5,7 @@ TODO
   dates and localize afterwards.
   dateutil rrulestr timezone solutions:
   -- python-dateutil
-  * add VTIMEZONE component (DTSTART is also present and not part of an recuurence rule set, as defined by RFC2445)
-  * add support TIMEZONE support for DTSTART and UNTIL (which is a subcomponent)
+  * add TZID support for DTSTART and UNTIL param
   * add default date to parser, which copies missing values to result (e.g. the timezone)
   * add localize function to _rrulestr class
   -- plone.event
@@ -16,7 +15,7 @@ TODO
 
 * utils.RFC2445 is converting from DateTime. check usage of that and how TZ are
   handled.
-* use VTIMEZONE component for ics exports
+* use TZIDs (and then also VTIMEZONE to define the TZID) for date components in ics exports
 
 * check docstrings for validity
 * DateTime often returns timezones as GMT/UTC offset. we should prepare for
