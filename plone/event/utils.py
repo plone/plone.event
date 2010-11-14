@@ -56,6 +56,56 @@ def _dateForWholeDay(dt):
 
 
 ### RFC2445 export helpers
+def dt_rfc2445(dt, mode='utc', date=True, time=True):
+    """ Convert a datetime or DateTime object into an RFC2445 compatible
+    datetime string.
+
+    @param dt: datetime or DateTime object to convert.
+
+    @param mode: Conversion mode ('utc'|'local'|'float')
+        Mode 'utc':   Return datetime string in UTC
+        Mode 'local': Return datetime string as local including a TZID component
+        Mode 'float': Return datetime string as floating (local without TZID
+                      component)
+
+    Usage:
+
+    >>> from datetime import datetime
+    >>> import pytz # this import actually takes quite a long time!
+    >>> from plone.event.utils import dt_rfc2445
+
+    >>> at = pytz.timezone('Europe/Vienna')
+    >>> dt = at.localize(datetime(2010,10,10,10,10))
+    >>> dt
+    datetime.datetime(2010, 10, 10, 10, 10, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
+
+    >>> assert(dt_rfc2445(dt) == dt_rfc2445(dt, mode='utc'))
+    >>> dt_rfc2445(dt)
+    '20101010T081000Z'
+
+    >>> dt_rfc2445(dt, mode='local')
+    ('20101010T101000', 'Europe/Vienna')
+
+    >>> dt_rfc2445(dt, mode='float')
+    '20101010T101000'
+
+    >>> assert(dt_rfc2445(dt, date=True, time=True) == dt_rfc2445(dt))
+    >>> dt_rfc2445(dt, time=False)
+    '20101010Z'
+    >>> dt_rfc2445(dt, date=False)
+    '081000Z'
+
+    """
+    dt = pydt(dt)
+    if mode == 'utc': dt = utc(dt)
+    date = "%s%s%s%s" % (date and dt.strftime("%Y%m%d") or '',
+                         date and time and 'T' or '',
+                         time and dt.strftime("%H%M%S") or '',
+                         mode=='utc' and 'Z' or '')
+    if mode == 'local': return date, dt.tzinfo.zone
+    return date
+
+
 def rfc2445dt(DT):
     """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
     return DT.HTML4().replace(u'-', u'').replace(u':', u'')
