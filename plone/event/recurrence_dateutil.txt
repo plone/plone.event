@@ -1,0 +1,71 @@
+Problems with the python-dateutil package
+=========================================
+
+#    >>> interact( locals() )
+
+
+General imports used in here
+
+    >>> from plone.event.recurrence import recurrence_sequence_ical
+    >>> from datetime import datetime
+    >>> import pytz
+    >>> at = pytz.timezone('Europe/Vienna')
+
+
+Using the VALUE parameter in DTSTART or any other date component does not work.
+The value parameter can be used to distinguish between DATE and DATE-TIME.
+Please note, that DATE-TIME is the default.
+
+    >>> start = at.localize(datetime(2010,01,01,0,0))
+    >>> rulestr = """DTSTART;VALUE=DATE:20101029"""
+    >>> dates = recurrence_sequence_ical(start, rulestr)
+    >>> list(dates)
+    Traceback (most recent call last):
+    ...
+    ValueError: unsupported DTSTART parm: VALUE=DATE
+
+
+Timezone aware parsing regarding RFC2445 does not work
+
+    >>> start = at.localize(datetime(2010,01,01,0,0))
+    >>> rulestr = """DTSTART;TZID=Europe/Vienna:20101029T090000
+    ... RRULE:FREQ=DAILY;INTERVAL=1;COUNT=4
+    ... """
+    >>> dates = recurrence_sequence_ical(start, rulestr)
+    >>> list(dates)
+    Traceback (most recent call last):
+    ...
+    ValueError: unsupported DTSTART parm: TZID=EUROPE/VIENNA
+
+
+Mixing timezone aware and naive dates also breaks
+
+    >>> dates = recurrence_sequence_ical(
+    ...     start=at.localize(datetime(2010,01,01,0,0)),
+    ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100104T000000""")
+    >>> list(dates)
+    Traceback (most recent call last):
+    ...
+    TypeError: can't compare offset-naive and offset-aware datetimes
+
+
+python-dateutils parse function accepts an default value, from which missing
+parameters are copied. Could this be the key to solve the problem?
+
+    >>> from dateutil import parser
+
+    >>> ref = at.localize(datetime(2010,1,1))
+    >>> parser.parse('20100109T000000', default=ref)
+    datetime.datetime(2010, 1, 9, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
+
+
+yo! but not really the solution yet. timezones are not adjusted properly
+
+    >>> parser.parse('20100809T000000', default=ref)
+    datetime.datetime(2010, 8, 9, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
+
+
+this works. but can't be used to solve rrulestr parsing problems.
+
+    >>> parser.parse('20100109T000000', default=ref.tzinfo.localize(parser.parse('20100809T000000')))
+    datetime.datetime(2010, 1, 9, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)

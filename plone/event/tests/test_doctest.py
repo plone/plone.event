@@ -13,6 +13,7 @@ OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
     'recurrence.txt',
     'recurrence_support.txt',
+    'recurrence_dateutil.txt',
     'utils.txt',]
 
 from zope.interface import implements
