@@ -56,9 +56,9 @@ def _dateForWholeDay(dt):
 
 
 ### RFC2445 export helpers
-def rfc2445dt(dt):
+def rfc2445dt(DT):
     """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
-    return dt.HTML4().replace(u'-', u'').replace(u':', u'')
+    return DT.HTML4().replace(u'-', u'').replace(u':', u'')
 
 def vformat(s):
     """ Replace unix line endings with dos line endings """
