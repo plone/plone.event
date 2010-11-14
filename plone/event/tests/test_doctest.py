@@ -55,6 +55,10 @@ def test_suite():
             tearDown=tearDown
         ) for docfile in DOCFILES
     ])
+    suite.addTests([
+        doctest.DocTestSuite('plone.event.utils',
+                             optionflags=OPTIONFLAGS,),
+    ])
     return suite
 
 if __name__ == '__main__':
