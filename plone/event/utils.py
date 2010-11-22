@@ -168,7 +168,7 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     try:
         assert(bool(date.tzinfo))
     except:
-        raise TypeError, u'Cannot normalize timezone naive dates'
+        raise TypeError('Cannot normalize timezone naive dates')
     assert(dstmode in [DSTADJUST, DSTKEEP, DSTAUTO])
     if delta:
         assert(isinstance(delta, timedelta)) # Easier in Java
@@ -265,7 +265,7 @@ def int2dt(dtint):
 
     """
     if not isinstance(dtint, int):
-        raise ValueError, 'int2dt expects integer values as arguments.'
+        raise ValueError('int2dt expects integer values as arguments.')
     minutes = dtint % 60
     hours = dtint / 60 % 24
     days = dtint / 60 / 24 % 31
