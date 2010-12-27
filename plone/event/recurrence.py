@@ -11,7 +11,6 @@ from zope.interface import implements
 import datetime
 from dateutil import rrule
 from plone.event.utils import pydt, dt2int, utc, utcoffset_normalize, DSTAUTO
-from plone.event.utils import DSTAUTO
 from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
 
 # TODO: make me configurable, somehow.
