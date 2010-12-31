@@ -8,7 +8,6 @@ __author__ = """Jens Klein <jens@bluedynamics.com>,
 import pytz
 from datetime import datetime
 from datetime import timedelta
-from dateutil import tz
 
 DSTADJUST = 'adjust'
 DSTKEEP   = 'keep'
