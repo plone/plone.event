@@ -29,15 +29,15 @@ def dateStringsForEvent(event):
     if event.whole_day():
         # For all-day events we must not include the time within
         # the date-time string
-        start_str = _dateForWholeDay(event.start())[:8]
+        start_str = rfc2445dt(event.start(), mode="float", time=False)
         if isSameDay(event):
             # one-day events end with the timestamp of the next day
             # (which is the start data plus 1 day)
-            end_str = _dateForWholeDay(event.start() + 1)[:8]
+            end_str = rfc2445dt(event.start() + 1, mode="float", time=False)
         else:
             # all-day events lasting several days end at the next
             # day after the end date
-            end_str = _dateForWholeDay(event.end() + 1)[:8]
+            end_str = rfc2445dt(event.end() + 1, mode="float", time=False)
     else:
         # default (as used in Plone)
         start_str = rfc2445dt(event.start())
@@ -45,17 +45,9 @@ def dateStringsForEvent(event):
 
     return start_str, end_str
 
-def _dateForWholeDay(dt):
-    """ Replacement for rfc2445dt() for events lasting whole day in
-        order to get the date string according to the current time zone.
-        rfc2445dt() returns the date string according to UTC which is
-        *not* what we want!
-    """
-    return dt.strftime('%Y%m%d')
-
 
 ### RFC2445 export helpers
-def dt_rfc2445(dt, mode='utc', date=True, time=True):
+def rfc2445dt(dt, mode='utc', date=True, time=True):
     """ Convert a datetime or DateTime object into an RFC2445 compatible
     datetime string.
 
@@ -71,27 +63,27 @@ def dt_rfc2445(dt, mode='utc', date=True, time=True):
 
     >>> from datetime import datetime
     >>> import pytz # this import actually takes quite a long time!
-    >>> from plone.event.utils import dt_rfc2445
+    >>> from plone.event.utils import rfc2445dt
 
     >>> at = pytz.timezone('Europe/Vienna')
     >>> dt = at.localize(datetime(2010,10,10,10,10))
     >>> dt
     datetime.datetime(2010, 10, 10, 10, 10, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
 
-    >>> assert(dt_rfc2445(dt) == dt_rfc2445(dt, mode='utc'))
-    >>> dt_rfc2445(dt)
+    >>> assert(rfc2445dt(dt) == rfc2445dt(dt, mode='utc'))
+    >>> rfc2445dt(dt)
     '20101010T081000Z'
 
-    >>> dt_rfc2445(dt, mode='local')
+    >>> rfc2445dt(dt, mode='local')
     ('20101010T101000', 'Europe/Vienna')
 
-    >>> dt_rfc2445(dt, mode='float')
+    >>> rfc2445dt(dt, mode='float')
     '20101010T101000'
 
-    >>> assert(dt_rfc2445(dt, date=True, time=True) == dt_rfc2445(dt))
-    >>> dt_rfc2445(dt, time=False)
+    >>> assert(rfc2445dt(dt, date=True, time=True) == rfc2445dt(dt))
+    >>> rfc2445dt(dt, time=False)
     '20101010Z'
-    >>> dt_rfc2445(dt, date=False)
+    >>> rfc2445dt(dt, date=False)
     '081000Z'
 
     """
@@ -104,10 +96,6 @@ def dt_rfc2445(dt, mode='utc', date=True, time=True):
     if mode == 'local': return date, dt.tzinfo.zone
     return date
 
-
-def rfc2445dt(DT):
-    """ UTC in RFC2445 format YYYYMMDDTHHMMSSZ for a DateTime object """
-    return DT.HTML4().replace(u'-', u'').replace(u':', u'')
 
 def vformat(s):
     """ Replace unix line endings with dos line endings """

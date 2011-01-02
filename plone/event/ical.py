@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 # TODO: probably get rid of DateTime dependency here
 from DateTime import DateTime
 
-from zope.component import getMultiAdapter
 from zope.interface import implements
 
 # TODO: remove any dependency on CMFPlone

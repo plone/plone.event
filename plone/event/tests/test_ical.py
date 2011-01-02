@@ -3,7 +3,6 @@ import unittest
 
 from plone.event.ical import DefaultICalendar, EventICalExporter
 from plone.event.constants import ICS_FOOTER, ICS_HEADER
-from plone.event.utils import rfc2445dt
 
 from DateTime import DateTime
 
