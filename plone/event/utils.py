@@ -120,6 +120,17 @@ def foldline(s, lineLen=70):
     """ make a string folded per RFC2445 (each line must be less than 75 octets)
     This code is a minor modification of MakeICS.py, available at:
     http://www.zope.org/Members/Feneric/MakeICS/
+    
+    >>> from plone.event.utils import foldline
+    >>> foldline('foo')
+    u'foo\\n'
+    
+    >>> longtext = ("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+    ...             "Vestibulum convallis imperdiet dui posuere.")
+    >>> foldline(longtext)
+    u'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum co\\n
+    nvallis imperdiet dui posuere.\\n'
+
     """
     workStr = s.replace(u'\r\n', u'\n').replace(u'\r', u'\n'
         ).replace(u'\n', u'\\n')
