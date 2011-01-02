@@ -17,7 +17,7 @@ Register the RecurrenceSupport adapter for IRecurringEvent objects
     >>> start = datetime(2010,10,10,9,0,0,0,pytz.timezone('CET'))
     >>> end = datetime(2010,10,10,10,0,0,0,pytz.timezone('CET'))
     >>> rulestr = 'RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5'
-    >>> event = MockEvent(recurrence=rulestr, start_date=start, end_date=end)
+    >>> event = FakeEvent(recurrence=rulestr, start_date=start, end_date=end)
 
     >>> from plone.event.interfaces import IRecurrenceSupport
     >>> recurrence = IRecurrenceSupport(event)
