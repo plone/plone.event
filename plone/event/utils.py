@@ -59,7 +59,12 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
         Mode 'float': Return datetime string as floating (local without TZID
                       component)
 
-    Usage:
+    @param date: Return date.
+
+    @param time: Return time.
+
+    Usage
+    =====
 
     >>> from datetime import datetime
     >>> import pytz # this import actually takes quite a long time!
@@ -85,6 +90,15 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
     '20101010Z'
     >>> rfc2445dt(dt, date=False)
     '081000Z'
+
+    RFC2445 dates from DateTime objects
+    -----------------------------------
+    >>> from DateTime import DateTime
+    >>> rfc2445dt(DateTime('2010/08/31 18:00:00 Europe/Belgrade'))
+    '20100831T170000Z'
+
+    >>> rfc2445dt(DateTime('2010/08/31 20:15:00 GMT+1'))
+    '20100831T191500Z'
 
     """
     dt = pydt(dt)
@@ -179,6 +193,34 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
 
 def pydt(dt):
     """Converts a Zope's Products.DateTime in a Python datetime.
+
+    TODO
+    ====
+
+    >>> #interact(locals(), use_ipython=False)
+    
+    Strange behavior with Brazil/East Times
+    ---------------------------------------
+    
+    >>> from DateTime import DateTime
+    >>> from plone.event.utils import pydt
+    >>> pydt(DateTime('2005/07/20 18:00:00 Brazil/East'))
+    datetime.datetime(2005, 7, 20, 18, 6, tzinfo=<DstTzInfo 'Brazil/East' BRT-1 day, 21:00:00 STD>)
+
+    Well, that is weired. How comes, that Brazil pydt conversion from a
+    Brazil/East time gets 6 minutes added?
+    pytz uses LMT timezone for Brazil/East:
+    >>> import pytz
+    >>> tz = pytz.timezone("Brazil/East")
+    >>> tz
+    <DstTzInfo 'Brazil/East' LMT-1 day, 20:54:00 STD>
+    
+    After normalizing tzinfo, those 6 minutes offset is added
+    >>> from datetime import datetime
+    >>> dt = datetime(2005, 7, 20, 18, 0, 0, tzinfo=tz)
+    >>> dt.tzinfo.normalize(tz)
+    datetime.datetime(2005, 7, 20, 18, 6, tzinfo=<DstTzInfo 'Brazil/East' BRT-1 day, 21:00:00 STD>)
+
     """
     if dt is None:
         return None
