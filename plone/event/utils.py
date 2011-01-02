@@ -112,7 +112,20 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
 
 
 def vformat(s):
-    """ Replace unix line endings with dos line endings """
+    """ Escape special chars for use in vcal/ical files.
+    
+    >>> from plone.event.utils import vformat
+    >>> vformat('foo')
+    u'foo'
+    >>> vformat('foo,bar')
+    u'foo\\\\,bar'
+    >>> vformat('foo;bar')
+    u'foo\\\\;bar'
+    >>> vformat('foo:bar')
+    u'foo\\\\:bar'
+    >>> vformat('foo:bar,more')
+    u'foo\\\\:bar\\\\,more'
+    """
     return s.strip().replace(u',', u'\,').replace(u':', u'\:'
         ).replace(u';', u'\;')
 

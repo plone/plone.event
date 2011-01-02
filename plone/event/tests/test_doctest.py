@@ -7,7 +7,7 @@ import os.path
 import unittest
 import doctest
 from zope.component.testing import tearDown
-#from interlude import interact
+from interlude import interact
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
@@ -57,7 +57,9 @@ def test_suite():
     ])
     suite.addTests([
         doctest.DocTestSuite('plone.event.utils',
-                             optionflags=OPTIONFLAGS,),
+                             optionflags=OPTIONFLAGS,
+                             globs={'interact': interact,}
+                             ),
     ])
     return suite
 
