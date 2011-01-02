@@ -218,7 +218,7 @@ def pydt(dt):
     After normalizing tzinfo, those 6 minutes offset is added
     >>> from datetime import datetime
     >>> dt = datetime(2005, 7, 20, 18, 0, 0, tzinfo=tz)
-    >>> dt.tzinfo.normalize(tz)
+    >>> dt.tzinfo.normalize(dt)
     datetime.datetime(2005, 7, 20, 18, 6, tzinfo=<DstTzInfo 'Brazil/East' BRT-1 day, 21:00:00 STD>)
 
     """
