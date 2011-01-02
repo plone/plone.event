@@ -17,9 +17,35 @@ MAX32 = int(2**31 - 1)
 
 ### Display helpers
 def isSameTime(event):
+    """ Test if event starts and ends at same time.
+
+    >>> from plone.event.tests.test_doctest import FakeEvent
+    >>> from plone.event.utils import isSameTime
+    >>> isSameTime(FakeEvent(start='2000/01/01 06:00:00',
+    ...                      end='2010/02/02 06:00:00'))
+    True
+    >>> from plone.event.tests.test_doctest import FakeEvent
+    >>> from plone.event.utils import isSameTime
+    >>> isSameTime(FakeEvent(start='2000/10/12 06:00:00',
+    ...                      end='2000/10/12 18:00:00'))
+    False
+
+    """
     return event.start().time == event.end().time
 
 def isSameDay(event):
+    """ Test if event starts and ends at same day.
+
+    >>> from plone.event.tests.test_doctest import FakeEvent
+    >>> from plone.event.utils import isSameDay
+    >>> isSameDay(FakeEvent(start='2000/10/12 06:00:00',
+    ...                     end='2000/10/12 18:00:00'))
+    True
+    >>> isSameDay(FakeEvent(start='2000/10/12 06:00:00',
+    ...                     end='2000/10/13 18:00:00'))
+    False
+
+    """
     return event.start().year() == event.end().year() and \
            event.start().month() == event.end().month() and \
            event.start().day() == event.end().day()
