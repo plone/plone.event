@@ -33,7 +33,7 @@ setup(name='plone.event',
           # Problematic imports - those dependencies must go
           'Acquisition',
           'DateTime',
-          'Plone',
+          'Products.CMFPlone',
       ],
       extras_require={'test': [
           #'interlude',
