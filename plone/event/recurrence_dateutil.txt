@@ -122,7 +122,7 @@ Timezone aware parsing regarding RFC2445 does not work
     ValueError: unsupported DTSTART parm: TZID=EUROPE/VIENNA
 
 
-Mixing timezone aware and naive dates also breaks
+Mixing timezone aware and naive dates also breaks (this is not a bug)
 
     >>> dates = recurrence_sequence_ical(
     ...     start=at.localize(datetime(2010,01,01,0,0)),
@@ -133,8 +133,9 @@ Mixing timezone aware and naive dates also breaks
     TypeError: can't compare offset-naive and offset-aware datetimes
 
 
-python-dateutils parse function accepts an default value, from which missing
-parameters are copied. Could this be the key to solve the problem?
+python-dateutils parse function accepts a default value, from which missing
+parameters are copied. Could this be the key to solve the problem with missing
+timezones?
 
     >>> from dateutil import parser
 
@@ -144,6 +145,7 @@ parameters are copied. Could this be the key to solve the problem?
 
 
 yo! but not really the solution yet. timezones are not adjusted properly
+(should be CET+2 here)
 
     >>> parser.parse('20100809T000000', default=ref)
     datetime.datetime(2010, 8, 9, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
