@@ -14,6 +14,7 @@ DSTKEEP   = 'keep'
 DSTAUTO   = 'auto'
 MAX32 = int(2**31 - 1)
 
+# >>> interact(locals(), use_ipython=False )
 
 ### Display helpers
 def isSameTime(event):
@@ -300,13 +301,26 @@ def guesstz(DT):
     datetime implementation available and still stucks with this incomplete
     implementation.
 
+    >>> from DateTime import DateTime
+    >>> from plone.event.utils import guesstz
+
+    Timezones with the same name as in the Olson DB can easily be guessed.
+    >>> guesstz(DateTime('2010-01-01 Europe/Vienna'))
+    <DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>
+
+    GMT timezones which are popular with DateTime cannot be guessed,
+    unfortunatly
+    >>> guesstz(DateTime('2010-01-01 GMT+1'))
     """
     if DT.timezoneNaive():
         return utctz()
     tzname = DT.timezone()
 
+    # In the Olson timezone database, Etc/GMT+1 seems not to be the same as
+    # GMT+1. The UTC offsets are different. Therefore a conversion from GMT
+    # to a pytz equivalent is not easily possible.
     #    # DateTime timezones not fully compatible with pytz
-    #    # see http://pypi.python.org/pypi/DateTime/2.12.0
+    #    # see http://pypi.python.org/pypi/DateTime
     #    if tzname.startswith('GMT'):
     #        tzname = 'Etc/%s' % tzname
     try:
