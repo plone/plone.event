@@ -49,8 +49,7 @@ class RecurrenceSupport(object):
         return events
 
 
-def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
-                             dst=DSTAUTO):
+def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
     """ Calculates a sequence of datetime objects from a recurrence rule
     following the RFC2445 specification, using python-dateutil recurrence rules.
 
@@ -67,57 +66,38 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None,
     @param count:   Integer which defines the number of occurences. If not
                     given, until or MAXDATE limits the recurrence calculation.
 
-    @param dst:     Daylight Saving Time crossing behavior. DSTAUTO, DSTADJUST
-                    or DSTKEEP. For more information, see
-                    plone.event.utils.utcoffset_normalize.
-
     @return: A generator which generates a sequence of datetime instances.
 
     """
     start = pydt(start) # always use python datetime objects
     until = pydt(until)
+    tz = start.tzinfo
 
-    if isinstance(recrule, rrule.rrule):
-        rset = rrule.rruleset()
-        rset.rrule(recrule) # always use an rset
-    elif isinstance(recrule, rrule.rruleset):
-        rset = recrule
-    elif isinstance(recrule, str):
-        # RFC2445 string
-        # forceset: always return a rruleset
-        # dtstart: optional used when no dtstart is in RFC2445 string
-        rset = rrule.rrulestr(recrule,
-                             dtstart=start,
-                             forceset=True,
-                             # ignoretz=True
-                             # compatible=True # RFC2445 compatibility
-                             )
-    else:
-        rset = rrule.rruleset()
-    rset.rdate(start) # RCF2445: always include start date
+    # RFC2445 string
+    # forceset: always return a rruleset
+    # dtstart: optional used when no dtstart is in RFC2445 string
+    #          dtstart is given as timezone naive time. timezones are
+    #          applied afterwards, since rrulestr doesn't normalize
+    #          timezones over DST boundaries
+    start = start.replace(tzinfo=None) # tznaive
+    rset = rrule.rrulestr(recrule,
+                          dtstart=start,
+                          forceset=True,
+                          # ignoretz=True
+                          # compatible=True # RFC2445 compatibility
+                          )
+    rset.rdate(start) # RCF2445: always include start date 
 
-    before = None
     for cnt, date in enumerate(rset):
+        # Localize tznaive dates from rrulestr sequence
+        date = tz.localize(date)
+
         # Limit number of recurrences otherwise calculations take too long
         if MAXCOUNT and cnt+1 > MAXCOUNT: break
         if count and cnt+1 > count: break
-        if until and utc(date) > utc(until): break # normally this one should be
-                                                   # after date normalizing
+        if until and utc(date) > utc(until): break
 
-        ## TODO
-        # tz = start.tzinfo ## move upwards
-        # if isinstance(recrule, str): tz.localize(date) ## use marker var
-        ## and done.
-
-        # Timezone normalizing
-        # For the very first occurence, normalizing should not be needed since
-        # the starting date should be correctly set.
-        # TODO: check if first occurence should be normalized with DSTADJUST
-        if before:
-            delta = date - before
-            date = utcoffset_normalize(date, delta, dst)
         yield date
-        before = date
     return
 
 
@@ -159,8 +139,7 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
         after = before + delta
         after = utcoffset_normalize(after, delta, dst)
 
-        # TODO: can these break conditions be generalized into a function, so
-        #       that it can be used with ical code?
+        # Limit number of recurrences otherwise calculations take too long
         if MAXCOUNT and cnt+1 > MAXCOUNT: break
         if count and cnt+1 > count: break
         if until and utc(after) > utc(until): break
