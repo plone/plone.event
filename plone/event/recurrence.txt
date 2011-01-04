@@ -364,7 +364,8 @@ seqDT shows now a hour of 21 because it's converted to UTC
     >>> seqdt
     [datetime.datetime(2008, 8, 26, 23, 59, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)]
 
-this fails! mainly zope DateTimes fault
+Comparison of two datetime with same time related to UTC but in different
+timezones works.
     >>> seqDT[0] == seqdt[0]
     True
 
@@ -372,7 +373,7 @@ Does integer represenation work?
     >>> seqDT = list(recurrence_int_sequence(recurrence_sequence_timedelta(DT, 0, None)))
     >>> seqdt = list(recurrence_int_sequence(recurrence_sequence_timedelta(dt, 0, None)))
 
-this fails too! see above
+Integer sequences are the same anyways, because dates are converted to UTC first.
     >>> seqDT[0] == seqdt[0]
     True
 
