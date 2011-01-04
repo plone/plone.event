@@ -139,7 +139,7 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
 
 def vformat(s):
     """ Escape special chars for use in vcal/ical files.
-    
+
     >>> from plone.event.utils import vformat
     >>> vformat('foo')
     u'foo'
@@ -159,11 +159,11 @@ def foldline(s, lineLen=70):
     """ make a string folded per RFC2445 (each line must be less than 75 octets)
     This code is a minor modification of MakeICS.py, available at:
     http://www.zope.org/Members/Feneric/MakeICS/
-    
+
     >>> from plone.event.utils import foldline
     >>> foldline('foo')
     u'foo\\n'
-    
+
     >>> longtext = ("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
     ...             "Vestibulum convallis imperdiet dui posuere.")
     >>> foldline(longtext)
@@ -248,10 +248,10 @@ def pydt(dt):
     ====
 
     >>> #interact(locals(), use_ipython=False)
-    
+
     Strange behavior with Brazil/East Times
     ---------------------------------------
-    
+
     >>> from DateTime import DateTime
     >>> from plone.event.utils import pydt
     >>> pydt(DateTime('2005/07/20 18:00:00 Brazil/East'))
@@ -264,7 +264,7 @@ def pydt(dt):
     >>> tz = pytz.timezone("Brazil/East")
     >>> tz
     <DstTzInfo 'Brazil/East' LMT-1 day, 20:54:00 STD>
-    
+
     After normalizing tzinfo, those 6 minutes offset is added
     >>> from datetime import datetime
     >>> dt = datetime(2005, 7, 20, 18, 0, 0, tzinfo=tz)
