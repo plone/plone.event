@@ -230,10 +230,10 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
             dstmode = DSTADJUST
 
     try:
-        if dstmode==DSTADJUST:
-            return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
-        else: # DSTKEEP
+        if dstmode==DSTKEEP:
             return date.tzinfo.normalize(date)
+        else: # DSTADJUST
+            return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
     except:
         # TODO: python-datetime converts e.g RDATE:20100119T230000Z to
         # datetime.datetime(2010, 1, 19, 23, 0, tzinfo=tzutc())
