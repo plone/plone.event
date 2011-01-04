@@ -76,7 +76,7 @@ def test_suite():
             os.path.join(os.path.dirname(__file__), '..', docfile),
             module_relative=False,
             optionflags=OPTIONFLAGS,
-            globs={#'interact': interact,
+            globs={'interact': interact,
                    'FakeEvent': FakeEvent},
             tearDown=tearDown
         ) for docfile in DOCFILES
