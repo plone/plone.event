@@ -48,15 +48,12 @@ Get the integer representations from this recurrence rule
 
 Crossing Daylight Saving Time Boundaries
 ----------------------------------------
-   >>> from plone.event.utils import DSTADJUST, DSTKEEP, DSTAUTO
 
 Timezone aware Daylight Saving Time dates crossing
     >>> start = at.localize(datetime(2010,10,28,9,0))
     >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1;COUNT=5"""
 
-This is what you get with DSTADJUST: The start time will be the same also when
-crossing a DST date.
-    >>> dates = recurrence_sequence_ical(start, recrule=rulestr, dst=DSTADJUST)
+    >>> dates = recurrence_sequence_ical(start, recrule=rulestr)
     >>> list(dates)
     [datetime.datetime(2010, 10, 28, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
         datetime.datetime(2010, 10, 29, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
@@ -64,28 +61,15 @@ crossing a DST date.
         datetime.datetime(2010, 10, 31, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 11, 1, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
-Well, and this is what you get when crossing DST date with DSTKEEP set: The
-start time is correctly calculated. This behavior might be desired in special
-cases.
-    >>> dates = recurrence_sequence_ical(start, recrule=rulestr, dst=DSTKEEP)
-    >>> list(dates)
-    [datetime.datetime(2010, 10, 28, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
-        datetime.datetime(2010, 10, 29, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
-        datetime.datetime(2010, 10, 30, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
-        datetime.datetime(2010, 10, 31, 8, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-        datetime.datetime(2010, 11, 1, 8, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
-
-TODO: test DSTAUTO
-
 
 Multiple Ruleset
 ----------------
 
     >>> start = at.localize(datetime(2010,01,01,0,0))
-    >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100109T230000Z
-    ... RDATE:20100119T230000Z
-    ... EXRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20100109T230000Z
-    ... EXDATE:20100101T230000Z"""
+    >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100110T000000
+    ... RDATE:20100120T000000
+    ... EXRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20100110T000000
+    ... EXDATE:20100102T000000"""
 
     >>> dates = recurrence_sequence_ical(start, recrule=rulestr)
     >>> list(dates)
@@ -93,14 +77,7 @@ Multiple Ruleset
         datetime.datetime(2010, 1, 6, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 8, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 19, 23, 0, tzinfo=tzutc())]
-
-should rather be:
-[datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 6, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 8, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
-datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+        datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
 
 Limiting number of occurences
@@ -153,58 +130,10 @@ a constant, is configurable (TODO) or - for this test - set from outside...
     >>> recurrence.MAXCOUNT = orig_maxcount
 
 
-recurrence_sequence_ical - rrule test
-=====================================
-
-    >>> cet = pytz.timezone('CET')
-    >>> start = cet.localize(datetime(2010,01,01,0,0))
-    >>> until = cet.localize(datetime(2010,01,05,0,0))
-
-    >>> from dateutil import rrule
-    >>> dates = recurrence_sequence_ical(start,
-    ...     recrule=rrule.rrule(rrule.DAILY, dtstart=start),
-    ...     until=until)
-    >>> list(dates)
-    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 3, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 5, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
-
-
-    >>> start = cet.localize(datetime(2010,01,01,0,0))
-    >>> until = cet.localize(datetime(2016,01,02,0,0))
-    >>> dates = recurrence_sequence_ical(start,
-    ...     recrule=rrule.rrule(rrule.YEARLY, dtstart=start, interval=2, count=2),
-    ...     until=until)
-    >>> list(dates)
-    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2012, 1, 1, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
-
-
-recurrence_sequence_ical - rruleset test
-========================================
-
-Demo on a complex ruleset
-    >>> start = cet.localize(datetime(2010,01,01,0,0))
-    >>> until1 = cet.localize(datetime(2010,01,10,0,0))
-    >>> until2 = cet.localize(datetime(2010,01,20,0,0))
-    >>> ruleset = rrule.rruleset()
-    >>> ruleset.rrule(rrule.rrule(rrule.DAILY, dtstart=start, until=until1))
-    >>> ruleset.rdate(cet.localize(datetime(2010,01,20,0,0)))
-    >>> ruleset.exrule(rrule.rrule(rrule.DAILY, dtstart=start, until=until1, interval=2,))
-    >>> ruleset.exdate(cet.localize(datetime(2010,01,02,0,0)))
-    >>> dates = recurrence_sequence_ical(start, recrule=ruleset, until=until2)
-    >>> list(dates)
-    [datetime.datetime(2010, 1, 4, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 6, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 8, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 10, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
-        datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
-
 
 recurrence_sequence_timedelta test
 ==================================
+    >>> from plone.event.utils import DSTKEEP, DSTADJUST, DSTAUTO 
     >>> from plone.event.recurrence import recurrence_sequence_timedelta
     >>> from datetime import timedelta
 
