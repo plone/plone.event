@@ -67,6 +67,32 @@ Timezone aware Daylight Saving Time dates crossing
         datetime.datetime(2010, 11, 1, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
 
+Note, that recurrence_sequence_ical calculates occurences timezone naively and
+applies timezones afterwards. This leads into a problem in corner cases:
+    >>> list(recurrence_sequence_ical(
+    ...      start=at.localize(datetime(2010,10,30,23,0,0,0)),
+    ...      recrule="""RRULE:FREQ=HOURLY;INTERVAL=1;COUNT=7"""
+    ...      ))
+    [datetime.datetime(2010, 10, 30, 23, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 31, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 31, 1, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>),
+        datetime.datetime(2010, 10, 31, 2, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 10, 31, 3, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 10, 31, 4, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
+        datetime.datetime(2010, 10, 31, 5, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
+
+Here is an hour missing, because at 3:00 in the morning, the clock is turned an hour
+back. Correct would be:
+[datetime.datetime(2010, 10, 30, 23, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+datetime.datetime(2010, 10, 31, 0, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+datetime.datetime(2010, 10, 31, 1, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+datetime.datetime(2010, 10, 31, 2, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
+datetime.datetime(2010, 10, 31, 2, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+datetime.datetime(2010, 10, 31, 3, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>),
+datetime.datetime(2010, 10, 31, 4, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
+
+
+
 Multiple Ruleset
 ----------------
 
