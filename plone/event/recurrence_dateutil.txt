@@ -79,7 +79,6 @@ datetime in date components
 
 General imports used in here
 
-    >>> from plone.event.recurrence import recurrence_sequence_ical
     >>> from datetime import datetime
     >>> import pytz
     >>> at = pytz.timezone('Europe/Vienna')
@@ -90,9 +89,8 @@ The value parameter can be used to distinguish between DATE and DATE-TIME.
 Please note, that DATE-TIME is the default.
 
     >>> start = at.localize(datetime(2010,01,01,0,0))
-    >>> rulestr = """DTSTART;VALUE=DATE:20101029"""
-    >>> dates = recurrence_sequence_ical(start, rulestr)
-    >>> list(dates)
+    >>> recrule = """DTSTART;VALUE=DATE:20101029"""
+    >>> list(rrule.rrulestr(recrule, dtstart=start, forceset=True))
     Traceback (most recent call last):
     ...
     ValueError: unsupported DTSTART parm: VALUE=DATE
@@ -103,7 +101,6 @@ python-dateutil does not accept Timezone identifiers for Date components
 
 General imports used in here
 
-    >>> from plone.event.recurrence import recurrence_sequence_ical
     >>> from datetime import datetime
     >>> import pytz
     >>> at = pytz.timezone('Europe/Vienna')
@@ -112,11 +109,10 @@ General imports used in here
 Timezone aware parsing regarding RFC2445 does not work
 
     >>> start = at.localize(datetime(2010,01,01,0,0))
-    >>> rulestr = """DTSTART;TZID=Europe/Vienna:20101029T090000
+    >>> recrule = """DTSTART;TZID=Europe/Vienna:20101029T090000
     ... RRULE:FREQ=DAILY;INTERVAL=1;COUNT=4
     ... """
-    >>> dates = recurrence_sequence_ical(start, rulestr)
-    >>> list(dates)
+    >>> list(rrule.rrulestr(recrule, dtstart=start, forceset=True))
     Traceback (most recent call last):
     ...
     ValueError: unsupported DTSTART parm: TZID=EUROPE/VIENNA
@@ -124,10 +120,9 @@ Timezone aware parsing regarding RFC2445 does not work
 
 Mixing timezone aware and naive dates also breaks (this is not a bug)
 
-    >>> dates = recurrence_sequence_ical(
-    ...     start=at.localize(datetime(2010,01,01,0,0)),
-    ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100104T000000""")
-    >>> list(dates)
+    >>> start=at.localize(datetime(2010,01,01,0,0))
+    >>> recrule="""RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100104T000000"""
+    >>> list(rrule.rrulestr(recrule, dtstart=start, forceset=True))
     Traceback (most recent call last):
     ...
     TypeError: can't compare offset-naive and offset-aware datetimes
