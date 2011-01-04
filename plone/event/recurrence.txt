@@ -11,9 +11,14 @@ recurrence_sequence_ical - rrulestr test
 Basic
 -----
 
-Timezone naive dates are converted to utc.
+When no recurrence rule is given, the start date should be returned.
     >>> from plone.event.recurrence import recurrence_sequence_ical
     >>> from datetime import datetime
+    >>> dates = recurrence_sequence_ical(start=datetime(2010,01,01,0,0))
+    >>> list(dates)
+    [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<UTC>)]
+
+Timezone naive dates are converted to utc.
     >>> dates = recurrence_sequence_ical(
     ...     start=datetime(2010,01,01,0,0),
     ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")

@@ -72,20 +72,23 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
     start = pydt(start) # always use python datetime objects
     until = pydt(until)
     tz = start.tzinfo
-
-    # RFC2445 string
-    # forceset: always return a rruleset
-    # dtstart: optional used when no dtstart is in RFC2445 string
-    #          dtstart is given as timezone naive time. timezones are
-    #          applied afterwards, since rrulestr doesn't normalize
-    #          timezones over DST boundaries
     start = start.replace(tzinfo=None) # tznaive
-    rset = rrule.rrulestr(recrule,
-                          dtstart=start,
-                          forceset=True,
-                          # ignoretz=True
-                          # compatible=True # RFC2445 compatibility
-                          )
+
+    if isinstance(recrule, str):
+        # RFC2445 string
+        # forceset: always return a rruleset
+        # dtstart: optional used when no dtstart is in RFC2445 string
+        #          dtstart is given as timezone naive time. timezones are
+        #          applied afterwards, since rrulestr doesn't normalize
+        #          timezones over DST boundaries
+        rset = rrule.rrulestr(recrule,
+                              dtstart=start,
+                              forceset=True,
+                              # ignoretz=True
+                              # compatible=True # RFC2445 compatibility
+                              )
+    else:
+        rset = rrule.rruleset()
     rset.rdate(start) # RCF2445: always include start date 
 
     for cnt, date in enumerate(rset):
