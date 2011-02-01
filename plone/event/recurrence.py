@@ -56,7 +56,7 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
     @param start:   datetime or DateTime instance of the date from which the
                     recurrence sequence is calculated.
 
-    @param recrule: String with RFC2445 comaptible recurrence definition,
+    @param recrule: String with RFC2445 compatible recurrence definition,
                     dateutil.rrule or dateutil.rruleset instances.
 
     @param until:   datetime or DateTime instance of the date, until the
