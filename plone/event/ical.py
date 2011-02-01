@@ -50,9 +50,12 @@ class EventICalExporter(object):
             'summary'   : vformat(safe_unicode(context.Title())),
             'startdate' : start_str,
             'enddate'   : end_str,
-            'recurrence': context.recurrence,
             }
         out.append(ICS_EVENT_START % map)
+
+        recurrence = context.recurrence
+        if recurrence:
+            out.append(u'%s\n' % context.recurrence)
 
         description = context.Description()
         if description:

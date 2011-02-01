@@ -25,7 +25,6 @@ LAST-MODIFIED:%(modified)s
 SUMMARY:%(summary)s
 DTSTART:%(startdate)s
 DTEND:%(enddate)s
-%(recurrence)s
 """
 
 # Note: a previous version of event end set "TRANSP:OPAQUE", which would cause

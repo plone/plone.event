@@ -54,6 +54,9 @@ class ICalExportTests(unittest.TestCase):
             u'URL:http://www.ploneconf2010.org',
             u'CLASS:PUBLIC',
             u'END:VEVENT')
+        # Check that DESCRIPTION is after DTEND and we don't have None
+        # for reccurence in between.
+        self.assertTrue(u'DTEND:20101102\nDESCRIPTION' in data)
 
     def stestEventExporterGetICalSupplementaryMethod(self):
         event = self.createEvent()
