@@ -13,10 +13,10 @@ from zope import schema
 class IEvent(Interface):
     """Generic calendar event for Plone.
     """
-    
-    # TODO: agree on what fields should go into this interfaces and 
+
+    # TODO: agree on what fields should go into this interfaces and
     #       fill it in
-    
+
     start_date = Attribute(u"""Date when the first occurence of the event
                                begins as datetime object""")
     end_date = Attribute(u"""Date when the first occurence of the event ends as
@@ -48,21 +48,23 @@ class IRecurrenceSupport(Interface):
     """
 
     def occurences_start():
-        """Returns all the event's start occurences which indicates the
+        """Return all the event's start occurences which indicates the
            beginning of each event.
         """
 
     def occurences_end():
-        """Returns all the event's end occurences which indicates the
+        """Return all the event's end occurences which indicates the
            ending of each event.
         """
 
     def occurences():
-        """Returns all the event's start and end occurences as a list of tuples.
+        """Return all the event's start and end occurences as a list of tuples.
         """
 
+
 class IICalendar(Interface):
-    """Provides header and footer for iCalendar format"""
+    """Provide header and footer for iCalendar format.
+    """
 
     context = schema.Object(
         title=u"Any interface that might provide data for iCal header",
@@ -72,20 +74,22 @@ class IICalendar(Interface):
 
     def header():
         """Returns iCal header"""
-    
+
     def footer():
         """Returns iCal footer"""
 
+
 class IICalEventExporter(Interface):
-    """Serializes single event into iCalendar formatted entry.
+    """Serialize single event into iCalendar formatted entry.
     """
-    
+
     context = schema.Object(
         title=u"Event",
         description=u'',
         schema=IEvent
     )
-    
+
     def feed():
-        """Returns ICal event entry, doesn't include iCal header, that should
-        be done in application level level"""
+        """Return ICal event entry, doesn't include iCal header, that should
+        be done in application level.
+        """
