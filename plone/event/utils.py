@@ -249,10 +249,11 @@ def dt2DT(dt):
     >>> interact(locals(), use_ipython=False )
     >>> from datetime import datetime
     >>> import pytz
-    >>> TODO: finish me.
-    
-    TODO: see, if recurrences in event browserview are datetimes or 
-    DateTimes. display them accordingly to the timezone of the start 
+
+    TODO: finish me.
+
+    TODO: see, if recurrences in event browserview are datetimes or
+    DateTimes. display them accordingly to the timezone of the start
     date - and not UTC
 
     TODO: this introduces a dependency to DateTime. move it to p.a.event.
