@@ -4,12 +4,6 @@ plone.event RecurrenceSupport event adapter unit tests
 
     >>> #interact( locals() )
 
-
-Register the RecurrenceSupport adapter for IRecurringEvent objects
-    >>> import zope.component
-    >>> from plone.event.recurrence import RecurrenceSupport
-    >>> zope.component.provideAdapter(RecurrenceSupport)
-
     >>> from datetime import datetime
     >>> import pytz
 
