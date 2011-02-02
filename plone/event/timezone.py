@@ -1,6 +1,10 @@
 import os
 import time
 import pytz
+from zope.interface import directlyProvides
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
+
 
 class ServerTimezoneGetter(object):
     """ Retrieve the timezone from the server.
@@ -50,3 +54,20 @@ class ServerTimezoneGetter(object):
             else:
                 zone = 'UTC'
         return pytz.timezone(zone)
+
+# TODO: cache me
+def TimezoneVocabulary(context):
+    """
+    >>> import zope.component
+    >>> from zope.schema.interfaces import IVocabularyFactory
+    >>> tzvocab = zope.component.getUtility(IVocabularyFactory, 'TimezoneVocabulary')
+    >>> interact(locals(), use_ipython=False )
+
+    TODO: find something more breakage proof than following test
+    >>> assert('Africa/Abidjan' == list(tzvocab(None))[0].value)
+
+    TODO: make timezone source adaptable to provide vocab with commont_timezones
+          or all_timezones
+    """
+    return SimpleVocabulary.fromValues(pytz.common_timezones)
+directlyProvides(TimezoneVocabulary, IVocabularyFactory)

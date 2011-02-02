@@ -19,6 +19,10 @@
       component="plone.event.timezone.ServerTimezoneGetter"
       provides="plone.event.interfaces.ITimezoneGetter"
       />
+  <utility
+      component=".timezone.TimezoneVocabulary"
+      name="TimezoneVocabulary"
+      />
 
 
 </configure>
