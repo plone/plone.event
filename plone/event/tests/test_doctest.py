@@ -16,6 +16,14 @@ DOCFILES = [
     'recurrence_dateutil.txt',
     'utils.txt',]
 
+from zope.configuration import xmlconfig
+import zope.component
+import plone.event
+def load_zcml(doctest_context):
+    context = xmlconfig.file('meta.zcml', zope.component)
+    xmlconfig.file('configure.zcml', zope.component, context=context)
+    xmlconfig.file('configure.zcml', plone.event, context=context)
+
 from zope.interface import implements
 from plone.event.interfaces import IRecurringEventICal
 from DateTime import DateTime
@@ -75,6 +83,7 @@ def test_suite():
         doctest.DocFileSuite(
             os.path.join(os.path.dirname(__file__), '..', docfile),
             module_relative=False,
+            setUp=load_zcml,
             optionflags=OPTIONFLAGS,
             globs={'interact': interact,
                    'FakeEvent': FakeEvent},
