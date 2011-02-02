@@ -1,44 +1,43 @@
 import os
 import time
 import pytz
-from zope.interface import implements
-from plone.event.interfaces import ITimezoneGetter
 
-class ServerTimezoneGetter():
+class ServerTimezoneGetter(object):
     """ Retrieve the timezone from the server.
 
     """
-    implements(ITimezoneGetter)
 
     @property
     def timezone(self):
         """ Get the timezone of the server.
         Default Fallback: UTC
 
-        >>> from plone.event.timezone import ServerTimezoneFactory
+        >>> import zope.component
+        >>> from plone.event.interfaces import ITimezoneGetter
+        >>> tzgetter = zope.component.getUtility(ITimezoneGetter)
         >>> import os
         >>> import time
         >>> timetz = time.tzname
         >>> ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
 
         >>> os.environ['TZ'] = "Europe/Vienna"
-        >>> ServerTimezoneFactory()
+        >>> tzgetter().timezone
         <DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>
 
-        >>> os.environ['TZ'] = None
+        >>> os.environ['TZ'] = ""
         >>> time.tzname = None
-        >>> ServerTimezoneFactory()
+        >>> tzgetter().timezone
         <UTC>
 
         >>> time.tzname = ('CET', 'CEST')
-        >>> ServerTimezoneFactory()
+        >>> tzgetter().timezone
         <DstTzInfo 'CET' CET+1:00:00 STD>
 
-        >>> time.tzname = origtz
+        >>> time.tzname = timetz
         >>> if ostz:
         ...     os.environ['TZ'] = ostz
         ... else:
-                del os.environ['TZ']
+        ...     del os.environ['TZ']
 
         """
         zone = None

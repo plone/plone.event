@@ -15,6 +15,9 @@ DOCFILES = [
     'recurrence_support.txt',
     'recurrence_dateutil.txt',
     'utils.txt',]
+DOCMODS = [
+    'plone.event.utils',
+    'plone.event.timezone',]
 
 from zope.configuration import xmlconfig
 import zope.component
@@ -91,11 +94,12 @@ def test_suite():
         ) for docfile in DOCFILES
     ])
     suite.addTests([
-        doctest.DocTestSuite('plone.event.utils',
+        doctest.DocTestSuite(docmod,
+                             setUp=load_zcml,
                              optionflags=OPTIONFLAGS,
                              globs={'interact': interact,
                                     'FakeEvent': FakeEvent}
-                             ),
+                             ) for docmod in DOCMODS
     ])
     return suite
 

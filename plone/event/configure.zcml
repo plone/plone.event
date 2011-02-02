@@ -15,4 +15,10 @@
       factory=".ical.EventICalExporter"
       /> 
 
+  <utility
+      component="plone.event.timezone.ServerTimezoneGetter"
+      provides="plone.event.interfaces.ITimezoneGetter"
+      />
+
+
 </configure>
