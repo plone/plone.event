@@ -10,6 +10,17 @@ from zope.interface import Attribute
 from zope import schema
 
 
+class ITimezoneGetter(Interface):
+    """ Get the configured timezone.
+    The implementation of ITimezoneGetter is registered as utility, which can
+    be overloaded in subsequent packages, creating a chain with fallbacks.
+
+    Based on pytz, using the Olson database.
+
+    """
+    timezone = Attribute(u"""Get the configured Timezone.""")
+
+
 class IEvent(Interface):
     """Generic calendar event for Plone.
     """
