@@ -19,8 +19,7 @@ class ServerTimezoneGetter(object):
         >>> from zope.component import getUtility
         >>> from plone.event.interfaces import ITimezoneGetter
         >>> tzgetter = getUtility(ITimezoneGetter)
-        >>> defaulttzgetter = getUtility(ITimezoneGetter,
-        ...     'DefaultTimezoneGetter')
+        >>> fbtzgetter = getUtility(ITimezoneGetter, 'FallbackTimezoneGetter')
         >>> assert(tzgetter == defaulttzgetter)
         >>> import os
         >>> import time

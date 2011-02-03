@@ -18,7 +18,7 @@
   <utility
       component=".timezone.ServerTimezoneGetter"
       provides=".interfaces.ITimezoneGetter"
-      name="DefaultTimezoneGetter"
+      name="FallbackTimezoneGetter"
       />
   <utility
       component=".timezone.ServerTimezoneGetter"
