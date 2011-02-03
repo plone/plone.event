@@ -16,8 +16,13 @@
       /> 
 
   <utility
-      component="plone.event.timezone.ServerTimezoneGetter"
-      provides="plone.event.interfaces.ITimezoneGetter"
+      component=".timezone.ServerTimezoneGetter"
+      provides=".interfaces.ITimezoneGetter"
+      name="DefaultTimezoneGetter"
+      />
+  <utility
+      component=".timezone.ServerTimezoneGetter"
+      provides=".interfaces.ITimezoneGetter"
       />
   <utility
       component=".timezone.TimezoneVocabulary"

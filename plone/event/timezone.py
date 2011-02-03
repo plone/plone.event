@@ -16,9 +16,12 @@ class ServerTimezoneGetter(object):
         """ Get the timezone of the server.
         Default Fallback: UTC
 
-        >>> import zope.component
+        >>> from zope.component import getUtility
         >>> from plone.event.interfaces import ITimezoneGetter
-        >>> tzgetter = zope.component.getUtility(ITimezoneGetter)
+        >>> tzgetter = getUtility(ITimezoneGetter)
+        >>> defaulttzgetter = getUtility(ITimezoneGetter,
+        ...     'DefaultTimezoneGetter')
+        >>> assert(tzgetter == defaulttzgetter)
         >>> import os
         >>> import time
         >>> timetz = time.tzname
@@ -26,7 +29,7 @@ class ServerTimezoneGetter(object):
 
         >>> os.environ['TZ'] = "Europe/Vienna"
         >>> tzgetter().timezone
-        <DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>
+        'Europe/Vienna'
 
         >>> os.environ['TZ'] = ""
         >>> time.tzname = None
@@ -37,11 +40,11 @@ class ServerTimezoneGetter(object):
         ...    assert(len(w) == 1)
         ...    assert(issubclass(w[-1].category, RuntimeWarning))
         ...    assert("timezone" in str(w[-1].message))
-        <UTC>
+        'UTC'
 
         >>> time.tzname = ('CET', 'CEST')
         >>> tzgetter().timezone
-        <DstTzInfo 'CET' CET+1:00:00 STD>
+        'CET'
 
         >>> time.tzname = timetz
         >>> if ostz:
@@ -50,19 +53,23 @@ class ServerTimezoneGetter(object):
         ...     del os.environ['TZ']
 
         """
-        zone = None
+        timezone = None
         if 'TZ' in os.environ.keys():
-            zone = os.environ['TZ']
-        if not zone:
+            # Timezone from OS env var
+            timezone = os.environ['TZ']
+        if not timezone:
+            # Timezone from python time
             zones = time.tzname
             if zones and len(zones) > 0:
-                zone = zones[0]
+                timezone = zones[0]
             else:
+                # Default fallback = UTC
                 import warnings
                 warnings.warn("Operating system's timezone cannot be found"\
                         "- using UTC.", RuntimeWarning)
-                zone = 'UTC'
-        return pytz.timezone(zone)
+                timezone = 'UTC'
+        # following statement ensures, that timezone is a valid pytz zone
+        return pytz.timezone(timezone).zone
 
 # TODO: cache me
 def TimezoneVocabulary(context):
