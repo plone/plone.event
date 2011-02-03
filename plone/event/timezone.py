@@ -30,7 +30,13 @@ class ServerTimezoneGetter(object):
 
         >>> os.environ['TZ'] = ""
         >>> time.tzname = None
-        >>> tzgetter().timezone
+        >>> import warnings
+        >>> with warnings.catch_warnings(record=True) as w:
+        ...    warnings.simplefilter("always")
+        ...    tzgetter().timezone
+        ...    assert(len(w) == 1)
+        ...    assert(issubclass(w[-1].category, RuntimeWarning))
+        ...    assert("timezone" in str(w[-1].message))
         <UTC>
 
         >>> time.tzname = ('CET', 'CEST')
@@ -52,6 +58,9 @@ class ServerTimezoneGetter(object):
             if zones and len(zones) > 0:
                 zone = zones[0]
             else:
+                import warnings
+                warnings.warn("Operating system's timezone cannot be found"\
+                        "- using UTC.", RuntimeWarning)
                 zone = 'UTC'
         return pytz.timezone(zone)
 
