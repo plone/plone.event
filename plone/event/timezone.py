@@ -70,7 +70,6 @@ def TimezoneVocabulary(context):
     >>> import zope.component
     >>> from zope.schema.interfaces import IVocabularyFactory
     >>> tzvocab = zope.component.getUtility(IVocabularyFactory, 'TimezoneVocabulary')
-    >>> interact(locals(), use_ipython=False )
 
     TODO: find something more breakage proof than following test
     >>> assert('Africa/Abidjan' == list(tzvocab(None))[0].value)
