@@ -20,11 +20,7 @@
       provides=".interfaces.ITimezoneGetter"
       name="FallbackTimezoneGetter"
       />
-  <utility
-      component=".timezone.ServerTimezoneGetter"
-      provides=".interfaces.ITimezoneGetter"
-      />
-  <utility
+ <utility
       component=".timezone.TimezoneVocabulary"
       name="TimezoneVocabulary"
       />
