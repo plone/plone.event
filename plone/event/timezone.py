@@ -81,5 +81,5 @@ def TimezoneVocabulary(context):
     TODO: make timezone source adaptable to provide vocab with commont_timezones
           or all_timezones
     """
-    return SimpleVocabulary.fromValues(pytz.common_timezones)
+    return SimpleVocabulary.fromValues(pytz.all_timezones)
 directlyProvides(TimezoneVocabulary, IVocabularyFactory)
