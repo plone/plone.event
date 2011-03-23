@@ -81,6 +81,7 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
         #          dtstart is given as timezone naive time. timezones are
         #          applied afterwards, since rrulestr doesn't normalize
         #          timezones over DST boundaries
+        # TODO If we don't have COUNT=x, set COUNT to MAXCOUNT
         rset = rrule.rrulestr(recrule,
                               dtstart=start,
                               forceset=True,
