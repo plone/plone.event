@@ -309,8 +309,15 @@ def pydt(dt):
     year, month, day, hour, min, sec = dt.parts()[:6]
     # seconds (parts[6]) is a float, so we map to int
     sec = int(sec)
+    # There is a problem with timezone Europe/Paris
+    # tz is equal to <DstTzInfo 'Europe/Paris' PMT+0:09:00 STD>
     dt = datetime(year, month, day, hour, min, sec, tzinfo=tz)
-    dt = dt.tzinfo.normalize(dt) # TODO: why here normalizing in DSTKEEP mode?
+    # before:
+    # datetime.datetime(2011, 3, 14, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' PMT+0:09:00 STD>)
+    # dt = dt.tzinfo.normalize(dt)
+    # after: datetime.datetime(2011, 3, 14, 15, 10, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
+    dt = utcoffset_normalize(dt, dstmode=DSTADJUST)
+    # after: datetime.datetime(2011, 3, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
     return dt
 
 def guesstz(DT):
