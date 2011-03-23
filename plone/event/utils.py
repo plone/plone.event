@@ -246,7 +246,7 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
 def dt2DT(dt):
     """ Converts a python datetime object back to Zope's DateTime.
 
-    >>> interact(locals(), use_ipython=False )
+    >>> #interact(locals(), use_ipython=False )
     >>> from datetime import datetime
     >>> import pytz
 
