@@ -27,20 +27,22 @@ class RecurrenceSupport(object):
     def __init__(self, context):
         self.context = context
 
-    def occurences_start(self):
+    def occurences_start(self, limit_start=None, limit_end=None):
         rset = recurrence_sequence_ical(self.context.start_date,
                                         recrule=self.context.recurrence)
         return list(rset)
 
-    def occurences_end(self):
+    def occurences_end(self, limit_start=None, limit_end=None):
+        recrule = self.context.recurrence
+        #import pdb; pdb.set_trace()
         rset = recurrence_sequence_ical(self.context.end_date,
-                                        recrule=self.context.recurrence)
+                                        recrule=recrule)
         return list(rset)
 
-    def occurences(self, limit_start=Null, limit_end=Null):
+    def occurences(self, limit_start=None, limit_end=None):
         # TODO: is this method neccessary?
-        starts = self.occurences_start()
-        ends = self.occurences_end()
+        starts = self.occurences_start(limit_start, limit_end)
+        ends = self.occurences_end(limit_start, limit_end)
         events = map(
             lambda start,end:dict(
                 start_date = start,
