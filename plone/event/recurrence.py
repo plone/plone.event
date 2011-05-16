@@ -37,7 +37,7 @@ class RecurrenceSupport(object):
                                         recrule=self.context.recurrence)
         return list(rset)
 
-    def occurences(self):
+    def occurences(self, limit_start=Null, limit_end=Null):
         # TODO: is this method neccessary?
         starts = self.occurences_start()
         ends = self.occurences_end()
