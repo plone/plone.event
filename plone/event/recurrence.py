@@ -27,15 +27,30 @@ class RecurrenceSupport(object):
     def __init__(self, context):
         self.context = context
 
+    def recurrences(self, date, recrule, limit_start=None, limit_end=None):
+        rset = recurrence_sequence_ical(date,
+                                        recrule=recrule)
+        if limit_start: limit_start = pydt(limit_start)
+        if limit_end: limit_end = pydt(limit_end)
+        if limit_start and limit_end:
+            rset.between(limit_start, limit_end, inc=True)
+        elif limit_end:
+            rset.before(limit_end, inc=True)
+        elif limit_start:
+            rset.after(limit_start, inc=True)
+        return rset
+
     def occurences_start(self, limit_start=None, limit_end=None):
-        rset = recurrence_sequence_ical(self.context.start_date,
-                                        recrule=self.context.recurrence)
-        return list(rset)
+        ctx = self.context
+        rset = recurrences(ctx.start_date, ctx.recurrence,
+                           limit_start, limit_end)
+        return rset
 
     def occurences_end(self, limit_start=None, limit_end=None):
-        rset = recurrence_sequence_ical(self.context.end_date,
-                                        recrule=self.context.recurrence)
-        return list(rset)
+        ctx = self.context
+        rset = recurrences(ctx.end_date, ctx.recurrence,
+                           limit_start, limit_end)
+        return rset
 
     def occurences(self, limit_start=None, limit_end=None):
         # TODO: is this method neccessary?
