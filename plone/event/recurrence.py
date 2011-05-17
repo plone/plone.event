@@ -34,7 +34,6 @@ class RecurrenceSupport(object):
 
     def occurences_end(self, limit_start=None, limit_end=None):
         recrule = self.context.recurrence
-        #import pdb; pdb.set_trace()
         rset = recurrence_sequence_ical(self.context.end_date,
                                         recrule=recrule)
         return list(rset)
