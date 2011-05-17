@@ -42,25 +42,21 @@ class RecurrenceSupport(object):
 
     def occurences_start(self, limit_start=None, limit_end=None):
         ctx = self.context
-        rset = recurrences(ctx.start_date, ctx.recurrence,
-                           limit_start, limit_end)
+        rset = self.recurrences(ctx.start_date, ctx.recurrence,
+                                limit_start, limit_end)
         return rset
 
     def occurences_end(self, limit_start=None, limit_end=None):
         ctx = self.context
-        rset = recurrences(ctx.end_date, ctx.recurrence,
-                           limit_start, limit_end)
+        rset = self.recurrences(ctx.end_date, ctx.recurrence,
+                                limit_start, limit_end)
         return rset
 
     def occurences(self, limit_start=None, limit_end=None):
         # TODO: is this method neccessary?
         starts = self.occurences_start(limit_start, limit_end)
         ends = self.occurences_end(limit_start, limit_end)
-        events = map(
-            lambda start,end:dict(
-                start_date = start,
-                end_date = end),
-            starts, ends)
+        events = map(lambda start,end:(start, end), starts, ends)
         return events
 
 
