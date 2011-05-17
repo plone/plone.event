@@ -33,9 +33,8 @@ class RecurrenceSupport(object):
         return list(rset)
 
     def occurences_end(self, limit_start=None, limit_end=None):
-        recrule = self.context.recurrence
         rset = recurrence_sequence_ical(self.context.end_date,
-                                        recrule=recrule)
+                                        recrule=self.context.recurrence)
         return list(rset)
 
     def occurences(self, limit_start=None, limit_end=None):
