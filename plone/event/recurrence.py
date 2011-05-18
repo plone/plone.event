@@ -10,7 +10,8 @@ from zope.interface import implements
 
 import datetime
 from dateutil import rrule
-from plone.event.utils import pydt, dt2int, utc, utcoffset_normalize, DSTAUTO
+from plone.event.utils import (
+        pydt, dt2int, utc, utcoffset_normalize, DSTAUTO, tzdel)
 from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
 
 # TODO: make me configurable, somehow.
@@ -27,29 +28,16 @@ class RecurrenceSupport(object):
     def __init__(self, context):
         self.context = context
 
-    def recurrences(self, date, recrule, limit_start=None, limit_end=None):
-        rset = recurrence_sequence_ical(date,
-                                        recrule=recrule)
-        if limit_start: limit_start = pydt(limit_start)
-        if limit_end: limit_end = pydt(limit_end)
-        if limit_start and limit_end:
-            rset.between(limit_start, limit_end, inc=True)
-        elif limit_end:
-            rset.before(limit_end, inc=True)
-        elif limit_start:
-            rset.after(limit_start, inc=True)
-        return rset
-
     def occurences_start(self, limit_start=None, limit_end=None):
         ctx = self.context
-        rset = self.recurrences(ctx.start_date, ctx.recurrence,
-                                limit_start, limit_end)
+        rset = recurrence_sequence_ical(ctx.start_date, recrule=ctx.recurrence,
+                from_=limit_start, until=limit_end)
         return rset
 
     def occurences_end(self, limit_start=None, limit_end=None):
         ctx = self.context
-        rset = self.recurrences(ctx.end_date, ctx.recurrence,
-                                limit_start, limit_end)
+        rset = recurrence_sequence_ical(ctx.end_date, recrule=ctx.recurrence,
+                from_=limit_start, until=limit_end)
         return rset
 
     def occurences(self, limit_start=None, limit_end=None):
@@ -60,7 +48,7 @@ class RecurrenceSupport(object):
         return events
 
 
-def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
+def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=None):
     """ Calculates a sequence of datetime objects from a recurrence rule
     following the RFC2445 specification, using python-dateutil recurrence rules.
 
@@ -69,6 +57,10 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
 
     @param recrule: String with RFC2445 compatible recurrence definition,
                     dateutil.rrule or dateutil.rruleset instances.
+
+    @param from_:   datetime or DateTime instance of the date, to limit -
+                    possibly with until - the result within a timespan -
+                    The Date Horizon.
 
     @param until:   datetime or DateTime instance of the date, until the
                     recurrence is calculated. If not given, count or MAXDATE
@@ -81,9 +73,12 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
 
     """
     start = pydt(start) # always use python datetime objects
+    from_ = pydt(from_)
     until = pydt(until)
     tz = start.tzinfo
-    start = start.replace(tzinfo=None) # tznaive
+    start = tzdel(start) # tznaive | start defines tz
+    _from = tzdel(from_)
+    _until = tzdel(until)
 
     if isinstance(recrule, str):
         # RFC2445 string
@@ -101,7 +96,15 @@ def recurrence_sequence_ical(start, recrule=None, until=None, count=None):
                               )
     else:
         rset = rrule.rruleset()
-    rset.rdate(start) # RCF2445: always include start date 
+    rset.rdate(start) # RCF2445: always include start date
+
+    # limit
+    if _from and _until:
+        rset.between(_from, _until, inc=True)
+    elif _until:
+        rset.before(_until, inc=True)
+    elif _from:
+        rset.after(_from, inc=True)
 
     for cnt, date in enumerate(rset):
         # Localize tznaive dates from rrulestr sequence
