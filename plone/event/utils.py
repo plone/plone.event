@@ -262,6 +262,13 @@ def dt2DT(dt):
     return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.tzname())
 
 
+def tzdel(dt):
+    # TODO: test me
+    if dt:
+        return dt.replace(tzinfo=None)
+    else:
+        return None
+
 def pydt(dt):
     """Converts a Zope's Products.DateTime in a Python datetime.
 
