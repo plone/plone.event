@@ -116,9 +116,12 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
     RFC2445 dates from DateTime objects
     -----------------------------------
     >>> from DateTime import DateTime
-    >>> rfc2445dt(DateTime('2010/08/31 18:00:00 Europe/Belgrade'))
-    '20100831T170000Z'
 
+    It's summer time! So TZ in Belgrade is GMT+2.
+    >>> rfc2445dt(DateTime('2010/08/31 18:00:00 Europe/Belgrade'))
+    '20100831T160000Z'
+
+    GMT offsets are converted to UTC without any DST adjustments.
     >>> rfc2445dt(DateTime('2010/08/31 20:15:00 GMT+1'))
     '20100831T191500Z'
 
