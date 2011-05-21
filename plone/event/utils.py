@@ -263,7 +263,22 @@ def dt2DT(dt):
 
 
 def tzdel(dt):
-    # TODO: test me
+    """ Create timezone naive datetime from a timezone aware one by removing
+    the timezone component.
+
+    >>> from plone.event.utils import tzdel, utctz
+    >>> from datetime import datetime
+    >>> dt = utctz().localize(datetime(2011, 05, 21, 12, 25))
+
+    Remove the timezone:
+    >>> tzdel(dt)
+    datetime.datetime(2011, 5, 21, 12, 25)
+
+    Using tzdel on a dt instance doesn't alter it:
+    >>> dt
+    datetime.datetime(2011, 5, 21, 12, 25, tzinfo=<UTC>)
+
+    """
     if dt:
         return dt.replace(tzinfo=None)
     else:
