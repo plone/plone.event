@@ -100,11 +100,8 @@ def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=
 
     # limit
     if _from and _until:
-        rset.between(_from, _until, inc=True)
-    elif _until:
-        rset.before(_until, inc=True)
-    elif _from:
-        rset.after(_from, inc=True)
+        # between doesn't add a ruleset but returns a list
+        rset = rset.between(_from, _until, inc=True)
 
     for cnt, date in enumerate(rset):
         # Localize tznaive dates from rrulestr sequence
@@ -113,6 +110,7 @@ def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=
         # Limit number of recurrences otherwise calculations take too long
         if MAXCOUNT and cnt+1 > MAXCOUNT: break
         if count and cnt+1 > count: break
+        if from_ and utc(date) < utc(from_): continue
         if until and utc(date) > utc(until): break
 
         yield date
