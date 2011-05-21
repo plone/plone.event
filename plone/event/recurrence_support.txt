@@ -7,6 +7,49 @@ plone.event RecurrenceSupport event adapter unit tests
     >>> from datetime import datetime
     >>> import pytz
 
+test occurences generation and limiting results
+    >>> start = datetime(2011,05,16,9,0,0,0)
+    >>> end = datetime(2011,05,16,10,0,0,0)
+    >>> rulestr = 'RRULE:FREQ=DAILY;COUNT=5'
+    >>> event = FakeEvent(recurrence=rulestr, start_date=start, end_date=end)
+
+No filter
+    >>> from plone.event.interfaces import IRecurrenceSupport
+    >>> recurrence = IRecurrenceSupport(event)
+    >>> list(recurrence.occurences_start())
+    [datetime.datetime(2011, 5, 16, 9, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 17, 9, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 18, 9, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 19, 9, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 20, 9, 0, tzinfo=<UTC>)]
+
+Filter with limit_start and limit_end
+    >>> list(recurrence.occurences_start(
+    ...     limit_start=datetime(2011, 05, 17, 0, 0),
+    ...     limit_end=datetime(2011, 05, 18, 12, 0)))
+    [datetime.datetime(2011, 5, 17, 9, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 18, 9, 0, tzinfo=<UTC>)]
+
+Filter with limit_start
+    >>> list(recurrence.occurences_end(
+    ...     limit_start=datetime(2011, 05, 19, 0, 0)))
+    [datetime.datetime(2011, 5, 19, 10, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 20, 10, 0, tzinfo=<UTC>)]
+
+Filter with limit_end
+    >>> list(recurrence.occurences_end(
+    ...     limit_end=datetime(2011, 05, 17, 23, 59)))
+    [datetime.datetime(2011, 5, 16, 10, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 17, 10, 0, tzinfo=<UTC>)]
+
+Filter with limit_start and limit_end to get just one day
+    >>> list(recurrence.occurences(
+    ...     limit_start=datetime(2011, 05, 17, 0, 0),
+    ...     limit_end=datetime(2011, 05, 17, 23, 59)))
+    [(datetime.datetime(2011, 5, 17, 9, 0, tzinfo=<UTC>),
+        datetime.datetime(2011, 5, 17, 10, 0, tzinfo=<UTC>))]
+
+
 #... DTSTART:20101010T090000-0300
     >>> start = datetime(2010,10,10,9,0,0,0,pytz.timezone('CET'))
     >>> end = datetime(2010,10,10,10,0,0,0,pytz.timezone('CET'))
