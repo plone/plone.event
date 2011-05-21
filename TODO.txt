@@ -1,7 +1,7 @@
 TODO
 ====
 
-* use new rrulestr and TZ handling idea: calculate recurrence from tz naive
+OK * use new rrulestr and TZ handling idea: calculate recurrence from tz naive
   dates and localize afterwards.
   dateutil rrulestr timezone solutions:
   -- python-dateutil
@@ -9,7 +9,7 @@ TODO
   * add default date to parser, which copies missing values to result (e.g. the timezone)
   * add localize function to _rrulestr class
   -- plone.event
-  * remove tz from p.event.recurrence.recurrence_sequence_ical dtstart component, let calculate tz-naively and localize afterwards.
+  OK * remove tz from p.event.recurrence.recurrence_sequence_ical dtstart component, let calculate tz-naively and localize afterwards.
   * use custom parser to create RFC2445 compatible dt string - tz naive. use DTSTART component in recrule string then. localize afterwards.
 
 
