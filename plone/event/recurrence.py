@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# GNU General Public License (GPL)
-#
-__author__ = """Jens Klein <jens@bluedynamics.com>,
-                Johannes Raggam <johannes@raggam.co.at>"""
 
 from zope.component import adapts
 from zope.interface import implements
