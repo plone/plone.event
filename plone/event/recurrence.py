@@ -47,7 +47,7 @@ class RecurrenceSupport(object):
         events = map(lambda start,end:(start, end), starts, ends)
         return events
 
-#TODO test from_ and until limiting
+
 def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=None):
     """ Calculates a sequence of datetime objects from a recurrence rule
     following the RFC2445 specification, using python-dateutil recurrence rules.
