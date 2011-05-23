@@ -141,7 +141,7 @@ setting.
 
 ...until and count
 You can mix both until and count. What happens earlier will stop recurrence
-    >>> dates = recurrence_sequence_ical(start, rulestr, until, count=3)
+    >>> dates = recurrence_sequence_ical(start, rulestr, until=until, count=3)
     >>> list(dates)
     [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 1, 2, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
@@ -326,7 +326,7 @@ The correct behaviour on below day level: DSTKEEP is choosen.
     >>> start = datetime(2008,03,29,21,0,0,0,pytz.timezone('CET'))
     >>> until = datetime(2008,03,30,21,0,0,0,pytz.timezone('CET')) - timedelta(microseconds=1)
     >>> until = utcoffset_normalize(until, dstmode=DSTADJUST)
-    >>> dates = recurrence_sequence_timedelta(start, 60, until)
+    >>> dates = recurrence_sequence_timedelta(start, delta=60, until=until)
     >>> len(list(dates))
     23
 
