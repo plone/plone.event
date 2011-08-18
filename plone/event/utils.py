@@ -1,5 +1,181 @@
 # -*- coding: utf-8 -*-
 
+import textwrap
+
+
+def foldline(text, lenght=70):
+    """ Make a string folded per RFC5545 (each line must be less than 75 octets)
+
+    >>> from plone.event.utils import foldline
+    >>> foldline('foo')
+    u'foo\\n'
+
+    >>> longtext = ("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+    ...             "Vestibulum convallis imperdiet dui posuere.")
+    >>> foldline(longtext)
+    u'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum co\\n
+    nvallis imperdiet dui posuere.\\n'
+
+    """
+    return '\n'.join(
+            textwrap.wrap(text, lenght,
+                subsequent_indent='  ',
+                drop_whitespace=True,
+                )
+            )
+
+import os
+import time
+import pytz
+import warnings
+
+
+def default_timezone():
+    """ Retrieve the timezone from the server.
+        Default Fallback: UTC
+
+        >>> from zope.component import getUtility
+        >>> from plone.event.interfaces import ITimezoneGetter
+        >>> tzgetter = getUtility(ITimezoneGetter, 'FallbackTimezoneGetter')
+        >>> import os
+        >>> import time
+        >>> timetz = time.tzname
+        >>> ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
+
+        >>> os.environ['TZ'] = "Europe/Vienna"
+        >>> tzgetter().timezone
+        'Europe/Vienna'
+
+        >>> os.environ['TZ'] = ""
+        >>> time.tzname = None
+        >>> import warnings
+        >>> with warnings.catch_warnings(record=True) as w:
+        ...    warnings.simplefilter("always")
+        ...    tzgetter().timezone
+        ...    assert(len(w) == 1)
+        ...    assert(issubclass(w[-1].category, RuntimeWarning))
+        ...    assert("timezone" in str(w[-1].message))
+        'UTC'
+
+        >>> time.tzname = ('CET', 'CEST')
+        >>> tzgetter().timezone
+        'CET'
+
+        >>> time.tzname = timetz
+        >>> if ostz:
+        ...     os.environ['TZ'] = ostz
+        ... else:
+        ...     del os.environ['TZ']
+
+    """
+
+    timezone = None
+    if 'TZ' in os.environ.keys():
+        # Timezone from OS env var
+        timezone = os.environ['TZ']
+    if not timezone:
+        # Timezone from python time
+        zones = time.tzname
+        if zones and len(zones) > 0:
+            timezone = zones[0]
+        else:
+            # Default fallback = UTC
+            warnings.warn("Operating system's timezone cannot be found"\
+                          "- using UTC.", RuntimeWarning)
+            timezone = 'UTC'
+    # following statement ensures, that timezone is a valid pytz zone
+    return pytz.timezone(timezone).zone
+
+
+
+
+# for plone.app.event
+
+    @property
+    def is_same_time(self):
+        return self.context.start.time() == self.context.end.time()
+
+    @property
+    def is_same_day(self):
+        return self.context.start.year == self.context.end.year and \
+               self.context.start.month == self.context.end.month and \
+               self.context.start.day == self.context.end.day
+
+    # ical/vcal string
+
+    @property
+    def body(self):
+        out = []
+
+        if self.context.whole_day:
+            # For all-day events we must not include the time within
+            # the date-time string
+            start = convert_to_rfc2445_string(self.context.start,
+                        mode="float", time=False)
+            if self.is_same_day:
+                # one-day events end with the timestamp of the next day
+                # (which is the start data plus 1 day)
+                end = convert_to_rfc2445_string(self.context.start + 1,
+                            mode="float", time=False)
+            else:
+                # all-day events lasting several days end at the next
+                # day after the end date
+                end = convert_to_rfc2445_string(self.context.end + 1,
+                            mode="float", time=False)
+        else:
+            # default
+            start = convert_to_rfc2445_string(self.context.start)
+            end = convert_to_rfc2445_string(self.context.end)
+
+        out.append(self.EVENT_START % {
+            'dtstamp'   : convert_to_rfc2445_string(datetime.today()),
+            'created'   : convert_to_rfc2445_string(self.context.creation_date),
+            'modified'  : convert_to_rfc2445_string(self.context.modification_date),
+            'uid'       : self.context.uid,
+            'summary'   : self.escape(self.context.summary),
+            'startdate' : start,
+            'enddate'   : end,
+            })
+
+        if self.context.recurrence:
+            out.append(self.context.recurrence)
+
+        if self.context.description:
+            out.append(self.foldline(u'DESCRIPTION:' + self.context.description))
+
+        if self.context.location:
+            out.append(u'LOCATION:%s' % self.escape(self.context.location))
+
+        if self.context.categories:
+            out.append(u'CATEGORIES:%s' % u','.join(self.context.categories))
+
+        # XXX: maybe we should extends to support more iCal options here
+        for attendee in self.context.attendees:
+            out.append(u'ATTENDEE;CN="%s";ROLE=REQ-PARTICIPANT' %
+                    self.escape(attendee))
+
+        contact = []
+        if self.context.contact_name:
+            contact.append(self.context.contact_name)
+        if self.context.contact_phone:
+            contact.append(self.context.contact_phone)
+        if self.context.contact_email:
+            contact.append(self.context.contact_email)
+        if contact:
+            out.append(self.foldline(u'CONTACT:%s' % self.escape(u', '.join(cn))))
+
+        if self.context.url:
+            out.append(u'URL:%s' % self.context.url)
+
+        out.append(self.EVENT_END)
+
+        # allow derived event types to inject additional data for iCal
+        if hasattr(self.context, 'event_ical_customize'):
+            out = getattr(self.context, 'event_ical_customize')(out)
+
+        return u'\n'.join(out)
+
+
 import pytz
 from datetime import datetime
 from datetime import timedelta
@@ -153,34 +329,6 @@ def vformat(s):
     """
     return s.strip().replace(u',', u'\,').replace(u':', u'\:'
         ).replace(u';', u'\;')
-
-def foldline(s, lineLen=70):
-    """ make a string folded per RFC2445 (each line must be less than 75 octets)
-    This code is a minor modification of MakeICS.py, available at:
-    http://www.zope.org/Members/Feneric/MakeICS/
-
-    >>> from plone.event.utils import foldline
-    >>> foldline('foo')
-    u'foo\\n'
-
-    >>> longtext = ("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-    ...             "Vestibulum convallis imperdiet dui posuere.")
-    >>> foldline(longtext)
-    u'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum co\\n
-    nvallis imperdiet dui posuere.\\n'
-
-    """
-    workStr = s.replace(u'\r\n', u'\n').replace(u'\r', u'\n'
-        ).replace(u'\n', u'\\n')
-    workStr = workStr.strip()
-    numLinesToBeProcessed = len(workStr) / lineLen
-    startingChar = 0
-    res = u''
-    while numLinesToBeProcessed >= 1:
-        res = u'%s%s\n ' % (res, workStr[startingChar:startingChar + lineLen])
-        startingChar += lineLen
-        numLinesToBeProcessed -= 1
-    return u'%s%s\n' % (res, workStr[startingChar:])
 
 
 ### Timezone helpers
