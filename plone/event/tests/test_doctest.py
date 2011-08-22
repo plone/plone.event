@@ -14,7 +14,7 @@ DOCFILES = [
     'utils.txt',]
 DOCMODS = [
     'plone.event.utils',
-    'plone.event.timezone',]
+    ]
 
 from zope.configuration import xmlconfig
 import zope.component
