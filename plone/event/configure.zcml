@@ -15,15 +15,4 @@
       factory=".ical.EventICalExporter"
       /> 
 
-  <utility
-      component=".timezone.ServerTimezoneGetter"
-      provides=".interfaces.ITimezoneGetter"
-      name="FallbackTimezoneGetter"
-      />
- <utility
-      component=".timezone.TimezoneVocabulary"
-      name="TimezoneVocabulary"
-      />
-
-
 </configure>
