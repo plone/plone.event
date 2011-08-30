@@ -1,46 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from zope.component import adapts
-from zope.interface import implements
-
 import datetime
 from dateutil import rrule
 from plone.event.utils import (
         pydt, dt2int, utc, utcoffset_normalize, DSTAUTO, tzdel)
-from plone.event.interfaces import IRecurringEventICal, IRecurrenceSupport
 
 # TODO: make me configurable, somehow.
 MAXCOUNT  = 100000 # Maximum number of occurrences
-
-
-class RecurrenceSupport(object):
-    """Recurrence support event adapter for IRecurringEvent objects.
-
-    """
-    implements(IRecurrenceSupport)
-    adapts(IRecurringEventICal)
-
-    def __init__(self, context):
-        self.context = context
-
-    def occurences_start(self, limit_start=None, limit_end=None):
-        ctx = self.context
-        rset = recurrence_sequence_ical(ctx.start_date, recrule=ctx.recurrence,
-                from_=limit_start, until=limit_end)
-        return rset
-
-    def occurences_end(self, limit_start=None, limit_end=None):
-        ctx = self.context
-        rset = recurrence_sequence_ical(ctx.end_date, recrule=ctx.recurrence,
-                from_=limit_start, until=limit_end)
-        return rset
-
-    def occurences(self, limit_start=None, limit_end=None):
-        # TODO: is this method neccessary?
-        starts = self.occurences_start(limit_start, limit_end)
-        ends = self.occurences_end(limit_start, limit_end)
-        events = map(lambda start,end:(start, end), starts, ends)
-        return events
 
 
 def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=None):

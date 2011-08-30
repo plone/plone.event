@@ -2,8 +2,6 @@
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="plone.event">
 
-  <adapter factory=".recurrence.RecurrenceSupport" />
-  
   <!-- iCal format related adapters -->
   <adapter
       for="zope.interface.Interface"

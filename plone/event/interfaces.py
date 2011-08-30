@@ -50,25 +50,6 @@ class IRecurringEventTimeDelta(IRecurringEvent):
                              minutes""")
 
 
-class IRecurrenceSupport(Interface):
-    """Interface for adapter providing recurrence support.
-    """
-
-    def occurences_start():
-        """Return all the event's start occurences which indicates the
-           beginning of each event.
-        """
-
-    def occurences_end():
-        """Return all the event's end occurences which indicates the
-           ending of each event.
-        """
-
-    def occurences():
-        """Return all the event's start and end occurences as a list of tuples.
-        """
-
-
 class IICalendar(Interface):
     """Provide header and footer for iCalendar format.
     """
