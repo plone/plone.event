@@ -41,7 +41,7 @@ def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=
     _from = tzdel(from_)
     _until = tzdel(until)
 
-    if isinstance(recrule, str):
+    if recrule and isinstance(recrule, str):
         # RFC2445 string
         # forceset: always return a rruleset
         # dtstart: optional used when no dtstart is in RFC2445 string
