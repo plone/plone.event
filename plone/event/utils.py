@@ -4,6 +4,7 @@ import os
 import time
 import pytz
 import warnings
+from datetime import date
 from datetime import datetime
 from datetime import timedelta
 
@@ -311,22 +312,33 @@ def tzdel(dt):
     else:
         return None
 
-def pydt(dt):
+def pydt(dt, missing_zone=None):
     """Converts a Zope's Products.DateTime in a Python datetime.
 
+    @param dt: date, datetime or DateTime object
+    @param missing_zone: A pytz zone to be used, if no timezone is present.
+
+    >>>
+
+    TODO: tests
     """
     if dt is None:
         return None
 
+    if missing_zone is None:
+        missing_zone = utctz()
+
+    if isinstance(dt, date):
+        dt = datetime(dt.year, dt.month, dt.day)
     if isinstance(dt, datetime):
         tznaive = not bool(getattr(dt, 'tzinfo', False))
-        if tznaive: return utctz().localize(dt)
+        if tznaive: return missing_zone.localize(dt)
         return utcoffset_normalize(dt, dstmode=DSTADJUST)
 
     tz = guesstz(dt)
     if tz is None:
-        dt = dt.toZone('UTC')
-        tz = utctz()
+        dt = dt.toZone(missing_zone.zone)
+        tz = missing_zone
 
     year, month, day, hour, min, sec = dt.parts()[:6]
     # seconds (parts[6]) is a float, so we map to int
