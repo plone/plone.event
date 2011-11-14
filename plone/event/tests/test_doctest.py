@@ -16,14 +16,6 @@ DOCMODS = [
     'plone.event.utils',
     ]
 
-from zope.configuration import xmlconfig
-import zope.component
-import plone.event
-def load_zcml(doctest_context):
-    context = xmlconfig.file('meta.zcml', zope.component)
-    xmlconfig.file('configure.zcml', zope.component, context=context)
-    xmlconfig.file('configure.zcml', plone.event, context=context)
-
 from DateTime import DateTime
 from plone.event.utils import pydt
 class FakeEvent(object):
@@ -80,7 +72,6 @@ def test_suite():
         doctest.DocFileSuite(
             os.path.join(os.path.dirname(__file__), '..', docfile),
             module_relative=False,
-            setUp=load_zcml,
             optionflags=OPTIONFLAGS,
             globs={'interact': interact,
                    'FakeEvent': FakeEvent},
@@ -89,7 +80,6 @@ def test_suite():
     ])
     suite.addTests([
         doctest.DocTestSuite(docmod,
-                             setUp=load_zcml,
                              optionflags=OPTIONFLAGS,
                              globs={'interact': interact,
                                     'FakeEvent': FakeEvent}
