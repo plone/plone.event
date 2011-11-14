@@ -14,10 +14,12 @@ over DST changes, like "Go for a beer every day at 6:00 PM". The time is always
 adjusted, which is technically correct. With this in mind, people can work
 around it by using a different content item for events after a DST change.
 
+For reference, see: https://bugs.launchpad.net/dateutil/+bug/890196
+                    https://bugs.launchpad.net/dateutil/+bug/890197
 
-Why we should let rrule calculate Timezone naive dates and applying timezones
-to the sequence afterwards
-=============================================================================
+1) Why we should let rrule calculate Timezone naive dates and applying
+timezones to the sequence afterwards
+======================================================================
 
 dateutil does not normalize/adjust the timezone over Daylight Saving Time
 boundaries. E.g. in Austria in 2010, dst change from summertime (UTC+2) to
@@ -77,8 +79,8 @@ anymore.
 
 
 
-python-dateutil does not accept VALUE parameter to distinguish between date and
-datetime in date components
+2) python-dateutil does not accept VALUE parameter to distinguish between date
+and datetime in date components
 ===============================================================================
 
 General imports used in here
@@ -100,8 +102,8 @@ Please note, that DATE-TIME is the default.
     ValueError: unsupported DTSTART parm: VALUE=DATE
 
 
-python-dateutil does not accept Timezone identifiers for Date components
-========================================================================
+3) python-dateutil does not accept Timezone identifiers for Date components
+===========================================================================
 
 General imports used in here
 
