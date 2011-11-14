@@ -24,14 +24,11 @@ def load_zcml(doctest_context):
     xmlconfig.file('configure.zcml', zope.component, context=context)
     xmlconfig.file('configure.zcml', plone.event, context=context)
 
-from zope.interface import implements
-from plone.event.interfaces import IRecurringEventICal
 from DateTime import DateTime
 from plone.event.utils import pydt
 class FakeEvent(object):
     """ Fake Event for testing.
     """
-    implements(IRecurringEventICal)
     def __init__(self, uid=None, title=None, description=None, start=None,
                  end=None, whole_day=None, created=None, modified=None,
                  location=None, subject=[], attendees=[], contact_name=None,

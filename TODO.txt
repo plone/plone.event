@@ -1,6 +1,11 @@
 TODO
 ====
 
+OK .. OK
+NO .. OBSOLETE
+IP .. IN PROGRESS
+
+
 OK * use new rrulestr and TZ handling idea: calculate recurrence from tz naive
   dates and localize afterwards.
   dateutil rrulestr timezone solutions:
@@ -18,18 +23,19 @@ OK * use new rrulestr and TZ handling idea: calculate recurrence from tz naive
 * use TZIDs (and then also VTIMEZONE to define the TZID) for date components in ics exports
 
 * check docstrings for validity
-* DateTime often returns timezones as GMT/UTC offset. we should prepare for
+OK * DateTime often returns timezones as GMT/UTC offset. we should prepare for
   storing real timezones instead of offsets in P.Archetypes.
-* Test recurrence ical export
-* Unlimited occurences are still possible with ical export, since there is no
+
+NO * Test recurrence ical export
+NO * Unlimited occurences are still possible with ical export, since there is no
   check on validity of the rrulestr itself. count/until limitations are done in
   recurrence_sequence_ical method, but until/count limitations are not set in
   rrulestr
-* implement RFC2445 event types (event, todo, journal, freebusy) as interfaces
+NO * implement RFC2445 event types (event, todo, journal, freebusy) as interfaces
   which content types may provide
-* Expose more attributes for IEvent interface
-* make sure we have all event fields included into iCal
-* check how and where we should perform localization of dates
+NO * Expose more attributes for IEvent interface
+NO * make sure we have all event fields included into iCal
+NO * check how and where we should perform localization of dates
 * utils.txt: guesstz + pydt tests
 * make MAXCOUNT ceiling for occurences configurable. maybe via plone..
 * is it ok to convert timezone naive dates to UTC? guess so.
