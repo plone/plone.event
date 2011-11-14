@@ -318,9 +318,32 @@ def pydt(dt, missing_zone=None):
     @param dt: date, datetime or DateTime object
     @param missing_zone: A pytz zone to be used, if no timezone is present.
 
-    >>>
+    >>> from plone.event.utils import pydt
+    >>> from datetime import date, datetime
+    >>> import pytz
+    >>> at = pytz.timezone('Europe/Vienna')
+    >>> dt = at.localize(datetime(2010,10,30))
+    datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
+    >>> pydt(dt)
+    datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
 
-    TODO: tests
+    >>> dd = date(2010,10,30)
+    >>> dd
+    datetime.date(2010, 10, 30)
+    >>> pydt(dd)
+    datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<UTC>)
+
+    >>> from DateTime import DateTime
+    >>> DT = DateTime('2011/11/11 11:11:11 GMT+1')
+    >>> pydt(DT)
+    datetime.datetime(2011, 11, 11, 10, 11, 11, tzinfo=<UTC>)
+
+    >>> DT2 = DateTime('2011/11/11 11:11:11 Europe/Vienna')
+    >>> DT2
+    DateTime('2011/11/11 11:11:11 Europe/Vienna')
+    >>> pydt(DT2)
+    datetime.datetime(2011, 11, 11, 11, 11, 11, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
+
     """
     if dt is None:
         return None
@@ -328,7 +351,7 @@ def pydt(dt, missing_zone=None):
     if missing_zone is None:
         missing_zone = utctz()
 
-    if isinstance(dt, date):
+    if isinstance(dt, date) and not isinstance(dt, datetime):
         dt = datetime(dt.year, dt.month, dt.day)
     if isinstance(dt, datetime):
         tznaive = not bool(getattr(dt, 'tzinfo', False))
