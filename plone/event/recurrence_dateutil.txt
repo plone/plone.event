@@ -1,14 +1,18 @@
 Problems with the python-dateutil package
 =========================================
 
-#    >>> interact( locals() )
+python-dateutil is used for all recurrence calculations in plone.app.event
+(PLIP10886). It is insanely flexible, but it does not implement every bit of the 
+iCalendar (RFC2445 or the newer RFC5545) specification. The limitations 
 
+Our workaround to this limitations is, that we do all calculations with
+python-dateutil with timezone-naive dates and convert them to the correct
+timezone afterwards.
 
-python-dateutil is very useful and the basis for the recurrence calculations in
-PLIP10886. But it has some limitations, which are outlined here.
-
-There are workarounds to these limitations in plone.event, but they maybe fixed
-in future versions of python-dateutil.
+Related to this, we do not support the case, where the time should be fixed
+over DST changes, like "Go for a beer every day at 6:00 PM". The time is always
+adjusted, which is technically correct. With this in mind, people can work
+around it by using a different content item for events after a DST change.
 
 
 Why we should let rrule calculate Timezone naive dates and applying timezones
