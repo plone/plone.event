@@ -1,41 +1,42 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from setuptools import setup
+
 import os
 
-version = '1.0dev'
 
-setup(name='plone.event',
-      version=version,
-      description="Event and calendaring related tools not bound to Plone",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://pypi.python.org/pypi?%:action=list_classifiers
-      classifiers=[
+setup(
+    name='plone.event',
+    version='1.0dev',
+    description="Event and calendaring related tools not bound to Plone",
+    long_description=open("README.txt").read() + "\n" +
+           open(os.path.join("docs", "HISTORY.txt")).read(),
+    # Get more strings from http://pypi.python.org/pypi?%:action=list_classifiers
+    classifiers=[
         "Framework :: Plone",
         "Programming Language :: Python",
-        ],
-      keywords='Plone calendar calendaring event recurring',
-      author='Plone Foundation',
-      author_email='plone-developers@lists.sourceforge.net',
-      url='http://svn.plone.org/svn/plone/plone.event',
-      license='GPL',
-      packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['plone'],
-      include_package_data=True,
-      zip_safe=False,
-      install_requires=[
-          'setuptools',
-          # -*- Extra requirements: -*-
-          'python-dateutil',
-          'pytz',
-          'zope.component',
-          'zope.interface',
-          'zope.schema',
-          # Problematic imports - those dependencies must go
-          'Acquisition',
-          'DateTime',
-          'Products.CMFPlone',
-      ],
-      extras_require={'test': [
-          #'interlude',
-          'DateTime']},
-      )
+    ],
+    keywords='Plone calendar calendaring event recurring',
+    author='Plone Foundation',
+    author_email='plone-developers@lists.sourceforge.net',
+    url='https://github.com/collective/plone.event',
+    license='GPL',
+    packages=find_packages(exclude=['ez_setup']),
+    namespace_packages=['plone'],
+    include_package_data=True,
+    zip_safe=False,
+    install_requires=[
+        'Acquisition',
+        'DateTime',
+        'Products.CMFPlone',
+        'interlude',
+        'python-dateutil',
+        'pytz',
+        'setuptools',
+        'zope.component',
+        'zope.interface',
+        'zope.schema',
+    ],
+    extras_require={
+        'test': ['DateTime'],
+    },
+)

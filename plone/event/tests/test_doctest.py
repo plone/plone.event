@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
+from interlude import interact
+from zope.component.testing import tearDown
 
+import doctest
 import os.path
 import unittest
-import doctest
-from zope.component.testing import tearDown
-from interlude import interact
+
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
     'recurrence.txt',
-    'recurrence_support.txt',
+    # 'recurrence_support.txt',
     'recurrence_dateutil.txt',
     'utils.txt',]
 DOCMODS = [

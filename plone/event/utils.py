@@ -323,6 +323,7 @@ def pydt(dt, missing_zone=None):
     >>> import pytz
     >>> at = pytz.timezone('Europe/Vienna')
     >>> dt = at.localize(datetime(2010,10,30))
+    >>> dt
     datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
     >>> pydt(dt)
     datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
