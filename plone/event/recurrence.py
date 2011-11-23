@@ -62,7 +62,6 @@ def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=
     if _from and _until:
         # between doesn't add a ruleset but returns a list
         rset = rset.between(_from, _until, inc=True)
-
     for cnt, date in enumerate(rset):
         # Localize tznaive dates from rrulestr sequence
         date = tz.localize(date)
