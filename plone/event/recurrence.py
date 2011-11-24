@@ -6,12 +6,19 @@ from plone.event.utils import (
         pydt, dt2int, utc, utcoffset_normalize, DSTAUTO, tzdel)
 
 # TODO: make me configurable, somehow.
-MAXCOUNT  = 100000 # Maximum number of occurrences
+MAXCOUNT = 100000  # Maximum number of occurrences
 
 
-def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=None):
-    """ Calculates a sequence of datetime objects from a recurrence rule
-    following the RFC2445 specification, using python-dateutil recurrence rules.
+def recurrence_sequence_ical(
+    start,
+    recrule=None,
+    from_=None,
+    until=None,
+    count=None
+    ):
+    """ Calculates a sequence of datetime objects from
+    a recurrence rule following the RFC2445 specification,
+    using python-dateutil recurrence rules.
 
     @param start:   datetime or DateTime instance of the date from which the
                     recurrence sequence is calculated.
@@ -33,11 +40,11 @@ def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=
     @return: A generator which generates a sequence of datetime instances.
 
     """
-    start = pydt(start) # always use python datetime objects
+    start = pydt(start)  # always use python datetime objects
     from_ = pydt(from_)
     until = pydt(until)
     tz = start.tzinfo
-    start = tzdel(start) # tznaive | start defines tz
+    start = tzdel(start)  # tznaive | start defines tz
     _from = tzdel(from_)
     _until = tzdel(until)
 
@@ -56,7 +63,7 @@ def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=
                               )
     else:
         rset = rrule.rruleset()
-    rset.rdate(start) # RCF2445: always include start date
+    rset.rdate(start)  # RCF2445: always include start date
 
     # limit
     if _from and _until:
@@ -67,10 +74,14 @@ def recurrence_sequence_ical(start, recrule=None, from_=None, until=None, count=
         date = tz.localize(date)
 
         # Limit number of recurrences otherwise calculations take too long
-        if MAXCOUNT and cnt+1 > MAXCOUNT: break
-        if count and cnt+1 > count: break
-        if from_ and utc(date) < utc(from_): continue
-        if until and utc(date) > utc(until): break
+        if MAXCOUNT and cnt+1 > MAXCOUNT:
+            break
+        if count and cnt+1 > count:
+            break
+        if from_ and utc(date) < utc(from_):
+            continue
+        if until and utc(date) > utc(until):
+            break
 
         yield date
     return
@@ -84,11 +95,12 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
     @param start: datetime or DateTime instance of the date from which the
                   recurrence sequence is calculated.
 
-    @param delta: Integer which defines the minutes between each date occurence.
+    @param delta: Integer which defines the minutes
+                  between each date occurence.
 
     @param until: datetime or DateTime instance of the date, until the
-                  recurrence is calculated. If not given, count or MAXDATE limit
-                  the recurrence calculation.
+                  recurrence is calculated. If not given,
+                  count or MAXDATE limit the recurrence calculation.
 
     @param count: Integer which defines the number of occurences. If not given,
                   until or MAXDATE limits the recurrence calculation.
@@ -103,7 +115,8 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
     start = pydt(start)
     yield start
 
-    if delta is None or delta < 1 or until is None: return
+    if delta is None or delta < 1 or until is None:
+        return
 
     until = pydt(until)
 
@@ -115,9 +128,12 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
         after = utcoffset_normalize(after, delta, dst)
 
         # Limit number of recurrences otherwise calculations take too long
-        if MAXCOUNT and cnt+1 > MAXCOUNT: break
-        if count and cnt+1 > count: break
-        if until and utc(after) > utc(until): break
+        if MAXCOUNT and cnt+1 > MAXCOUNT:
+            break
+        if count and cnt+1 > count:
+            break
+        if until and utc(after) > utc(until):
+            break
         cnt += 1
 
         yield after

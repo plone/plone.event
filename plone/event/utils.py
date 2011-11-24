@@ -9,8 +9,8 @@ from datetime import datetime
 from datetime import timedelta
 
 DSTADJUST = 'adjust'
-DSTKEEP   = 'keep'
-DSTAUTO   = 'auto'
+DSTKEEP = 'keep'
+DSTAUTO = 'auto'
 MAX32 = int(2**31 - 1)
 
 
@@ -87,6 +87,7 @@ def isSameTime(event):
     """
     return event.start().time == event.end().time
 
+
 def isSameDay(event):
     """ Test if event starts and ends at same day.
 
@@ -103,6 +104,7 @@ def isSameDay(event):
     return event.start().year() == event.end().year() and \
            event.start().month() == event.end().month() and \
            event.start().day() == event.end().day()
+
 
 def dateStringsForEvent(event):
     # Smarter handling for whole-day events
@@ -135,7 +137,8 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
 
     @param mode: Conversion mode ('utc'|'local'|'float')
         Mode 'utc':   Return datetime string in UTC
-        Mode 'local': Return datetime string as local including a TZID component
+        Mode 'local': Return datetime string as local
+                      including a TZID component
         Mode 'float': Return datetime string as floating (local without TZID
                       component)
 
@@ -185,12 +188,14 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
 
     """
     dt = pydt(dt)
-    if mode == 'utc': dt = utc(dt)
+    if mode == 'utc':
+        dt = utc(dt)
     date = "%s%s%s%s" % (date and dt.strftime("%Y%m%d") or '',
                          date and time and 'T' or '',
                          time and dt.strftime("%H%M%S") or '',
                          mode=='utc' and 'Z' or '')
-    if mode == 'local': return date, dt.tzinfo.zone
+    if mode == 'local':
+        return date, dt.tzinfo.zone
     return date
 
 
@@ -217,11 +222,13 @@ def vformat(s):
 def utctz():
     return pytz.timezone('UTC')
 
+
 def utc(dt):
     """Convert Python datetime to UTC."""
     if dt is None:
         return None
     return dt.astimezone(utctz())
+
 
 def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations.
@@ -251,8 +258,8 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
         raise TypeError('Cannot normalize timezone naive dates')
     assert(dstmode in [DSTADJUST, DSTKEEP, DSTAUTO])
     if delta:
-        assert(isinstance(delta, timedelta)) # Easier in Java
-        delta = delta.seconds + delta.days*24*3600 # total delta in seconds
+        assert(isinstance(delta, timedelta))  # Easier in Java
+        delta = delta.seconds + delta.days*24*3600  # total delta in seconds
         if dstmode==DSTAUTO and delta<24*60*60:
             dstmode = DSTKEEP
         elif dstmode==DSTAUTO:
@@ -261,7 +268,7 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     try:
         if dstmode==DSTKEEP:
             return date.tzinfo.normalize(date)
-        else: # DSTADJUST
+        else:  # DSTADJUST
             return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
     except:
         # TODO: python-datetime converts e.g RDATE:20100119T230000Z to
@@ -312,6 +319,7 @@ def tzdel(dt):
     else:
         return None
 
+
 def pydt(dt, missing_zone=None):
     """Converts a Zope's Products.DateTime in a Python datetime.
 
@@ -356,7 +364,8 @@ def pydt(dt, missing_zone=None):
         dt = datetime(dt.year, dt.month, dt.day)
     if isinstance(dt, datetime):
         tznaive = not bool(getattr(dt, 'tzinfo', False))
-        if tznaive: return missing_zone.localize(dt)
+        if tznaive:
+            return missing_zone.localize(dt)
         return utcoffset_normalize(dt, dstmode=DSTADJUST)
 
     tz = guesstz(dt)
@@ -377,6 +386,7 @@ def pydt(dt, missing_zone=None):
     dt = utcoffset_normalize(dt, dstmode=DSTADJUST)
     # after: datetime.datetime(2011, 3, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
     return dt
+
 
 def guesstz(DT):
     """'Guess' pytz from a zope DateTime.
@@ -437,6 +447,7 @@ def dt2int(dt):
         )
     return value
 
+
 def int2dt(dtint):
     """Returns a datetime object from an integer representation with
     resolution of one minute, relative to utc.
@@ -451,4 +462,3 @@ def int2dt(dtint):
     years = dtint / 60 / 24 / 31 / 12
     return datetime(years, months, days, hours, minutes,
         tzinfo=pytz.timezone('UTC'))
-

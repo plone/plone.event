@@ -12,13 +12,16 @@ DOCFILES = [
     'recurrence.txt',
     # 'recurrence_support.txt',
     'recurrence_dateutil.txt',
-    'utils.txt',]
+    'utils.txt',
+]
 DOCMODS = [
     'plone.event.utils',
-    ]
+]
 
 from DateTime import DateTime
 from plone.event.utils import pydt
+
+
 class FakeEvent(object):
     """ Fake Event for testing.
     """
@@ -50,21 +53,50 @@ class FakeEvent(object):
         self.duration = self.start_date and self.end_date and\
                         self.end_date-self.start_date or None
 
-    def start(self): return self._start
-    def end(self): return self._end
-    def whole_day(self): return self._whole_day
-    def Title(self): return self.title
-    def Description(self): return self.description
-    def CreationDate(self): return self.created
-    def ModificationDate(self): return self.modified
-    def getLocation(self): return self.location
-    def Subject(self): return self.subject
-    def getAttendees(self): return self.attendees
-    def contact_name(self): return self.cname
-    def contact_phone(self): return self.cphone
-    def contact_email(self): return self.cemail
-    def event_url(self): return self.eurl
-    def UID(self): return self.uid
+    def start(self):
+        return self._start
+
+    def end(self):
+        return self._end
+
+    def whole_day(self):
+        return self._whole_day
+
+    def Title(self):
+        return self.title
+
+    def Description(self):
+        return self.description
+
+    def CreationDate(self):
+        return self.created
+
+    def ModificationDate(self):
+        return self.modified
+
+    def getLocation(self):
+        return self.location
+
+    def Subject(self):
+        return self.subject
+
+    def getAttendees(self):
+        return self.attendees
+
+    def contact_name(self):
+        return self.cname
+
+    def contact_phone(self):
+        return self.cphone
+
+    def contact_email(self):
+        return self.cemail
+
+    def event_url(self):
+        return self.eurl
+
+    def UID(self):
+        return self.uid
 
 
 def test_suite():
