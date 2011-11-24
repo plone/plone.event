@@ -6,7 +6,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_start(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 23)
         seq = recurrence_sequence_ical(start)
         results = [res for res in seq]
@@ -14,7 +14,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_recrule_str(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 23)
         recrule = "FREQ=DAILY;INTERVAL=10;COUNT=5"
         seq = recurrence_sequence_ical(start, recrule=recrule)
@@ -23,7 +23,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_recrule_not_str(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 23)
         recrule = mock.Mock()
         seq = recurrence_sequence_ical(start, recrule=recrule)
@@ -32,7 +32,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_recrule_from_until(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 23)
         recrule = mock.Mock()
         from_ = datetime(2011, 11, 01)
@@ -43,7 +43,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_recrule_str_more_than_MAXCOUNT(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 23)
         recrule = "FREQ=DAILY;INTERVAL=10;COUNT=100001"
         seq = recurrence_sequence_ical(start, recrule=recrule)
@@ -52,7 +52,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_recrule_str_more_than_count(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 23)
         recrule = "FREQ=DAILY;INTERVAL=10;COUNT=10"
         count = 5
@@ -62,7 +62,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_recrule_from(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 23)
         recrule = "FREQ=DAILY;INTERVAL=1;COUNT=5"
         from_ = datetime(2011, 11, 25)
@@ -73,7 +73,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
     def test_recrule_until(self):
         from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime 
+        from datetime import datetime
         start = datetime(2011, 11, 24)
         recrule = "FREQ=DAILY;INTERVAL=1;COUNT=5"
         from_ = datetime(2011, 11, 23)

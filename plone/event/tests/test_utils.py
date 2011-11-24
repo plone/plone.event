@@ -93,7 +93,7 @@ class TestUtils(unittest.TestCase):
         dt.parts.return_value = (2011, 11, 24, 11, 39, 00)
         guesstz.return_value = None
         pydt(dt, missing_zone=missing_zone)
-        self.assertEqual(utctz.call_count, 1) 
+        self.assertEqual(utctz.call_count, 1)
 
     def test_dt2int_dt_is_None(self):
         from plone.event.utils import dt2int

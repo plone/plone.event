@@ -1,4 +1,3 @@
-import mock
 import unittest2 as unittest
 
 
@@ -19,7 +18,7 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         start = datetime(2011, 11, 23)
         delta = 0
         until = datetime(2011, 11, 24)
-        td = recurrence_sequence_timedelta(start, until=until)
+        td = recurrence_sequence_timedelta(start, delta=delta, until=until)
         results = [res for res in td]
         self.assertEqual(len(results), 1)
 
