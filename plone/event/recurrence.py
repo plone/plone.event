@@ -12,6 +12,8 @@ MAXCOUNT = 100000  # Maximum number of occurrences
 def recurrence_sequence_ical(
     start,
     recrule=None,
+    rdate=[],
+    exdate=[],
     from_=None,
     until=None,
     count=None
@@ -25,6 +27,12 @@ def recurrence_sequence_ical(
 
     @param recrule: String with RFC2445 compatible recurrence definition,
                     dateutil.rrule or dateutil.rruleset instances.
+
+    @param rdate: list of datetime or DateTime instance of the dates that will be
+                    added to the recurrence set.
+
+    @param exdate: list of datetime or DateTime instance of the dates that will be
+                    removed from the recurrence set.
 
     @param from_:   datetime or DateTime instance of the date, to limit -
                     possibly with until - the result within a timespan -
@@ -47,6 +55,9 @@ def recurrence_sequence_ical(
     start = tzdel(start)  # tznaive | start defines tz
     _from = tzdel(from_)
     _until = tzdel(until)
+    
+    rdate = [tzdel(pydt(a)) for a in rdate]
+    exdate = [tzdel(pydt(a)) for a in exdate]
 
     if recrule and isinstance(recrule, str):
         # RFC2445 string
@@ -64,6 +75,12 @@ def recurrence_sequence_ical(
     else:
         rset = rrule.rruleset()
     rset.rdate(start)  # RCF2445: always include start date
+    
+    for date in rdate:
+        rset.rdate(date)
+
+    for date in exdate:
+        rset.exdate(date)
 
     # limit
     if _from and _until:
