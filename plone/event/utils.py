@@ -89,8 +89,8 @@ def is_same_time(start, end, exact=False):
     False
 
     """
-    start = utc(pydt(start)).time()
-    end = utc(pydt(end)).time()
+    start = pydt(start).time()
+    end = pydt(end).time()
     if exact:
         return start == end
     else:
@@ -109,6 +109,10 @@ def is_same_day(start, end):
     >>> is_same_day(datetime.now(), datetime.now()+timedelta(days=1))
     False
 
+    >>> is_same_day(datetime.now(2011,11,11,0,0,0,),
+    ...             datetime.now(2011,11,11,23,59,59))
+    True
+
     Now with one localized (UTC) datetime:
     >>> is_same_day(pydt(datetime.now()), datetime.now())
     True
@@ -116,8 +120,8 @@ def is_same_day(start, end):
     TODO: tests for different localized dates.
 
     """
-    start = utc(pydt(start))
-    end = utc(pydt(end))
+    start = pydt(start)
+    end = pydt(end)
     return start.date() == end.date()
 
 
