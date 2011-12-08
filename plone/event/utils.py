@@ -70,40 +70,55 @@ def default_timezone():
 
 
 ### Display helpers
-def isSameTime(event):
+def is_same_time(start, end, exact=False):
     """ Test if event starts and ends at same time.
 
-    >>> from plone.event.tests.test_doctest import FakeEvent
-    >>> from plone.event.utils import isSameTime
-    >>> isSameTime(FakeEvent(start='2000/01/01 06:00:00',
-    ...                      end='2010/02/02 06:00:00'))
+    >>> from plone.event.utils import is_same_time, pydt
+    >>> from datetime import datetime, timedelta
+
+    >>> is_same_time(datetime.now(), datetime.now()+timedelta(hours=1))
+    False
+
+    >>> is_same_time(datetime.now(), datetime.now()+timedelta(days=1))
     True
-    >>> from plone.event.tests.test_doctest import FakeEvent
-    >>> from plone.event.utils import isSameTime
-    >>> isSameTime(FakeEvent(start='2000/10/12 06:00:00',
-    ...                      end='2000/10/12 18:00:00'))
+
+    TODO: if this test fails, it might run too fast and microseconds are the
+    same. Rewrite it then AND remove this msg. didn't run through yet 8|
+    Exact:
+    >>> is_same_time(datetime.now(), datetime.now(), exact=True)
     False
 
     """
-    return event.start().time == event.end().time
+    start = utc(pydt(start)).time()
+    end = utc(pydt(end)).time()
+    if exact:
+        return start == end
+    else:
+        return start.hour == end.hour and start.minute == end.minute
 
 
-def isSameDay(event):
+def is_same_day(start, end):
     """ Test if event starts and ends at same day.
 
-    >>> from plone.event.tests.test_doctest import FakeEvent
-    >>> from plone.event.utils import isSameDay
-    >>> isSameDay(FakeEvent(start='2000/10/12 06:00:00',
-    ...                     end='2000/10/12 18:00:00'))
+    >>> from plone.event.utils import is_same_day, pydt
+    >>> from datetime import datetime, timedelta
+
+    >>> is_same_day(datetime.now(), datetime.now()+timedelta(hours=1))
     True
-    >>> isSameDay(FakeEvent(start='2000/10/12 06:00:00',
-    ...                     end='2000/10/13 18:00:00'))
+
+    >>> is_same_day(datetime.now(), datetime.now()+timedelta(days=1))
     False
 
+    Now with one localized (UTC) datetime:
+    >>> is_same_day(pydt(datetime.now()), datetime.now())
+    True
+
+    TODO: tests for different localized dates.
+
     """
-    return event.start().year() == event.end().year() and \
-           event.start().month() == event.end().month() and \
-           event.start().day() == event.end().day()
+    start = utc(pydt(start))
+    end = utc(pydt(end))
+    return start.date() == end.date()
 
 
 def dateStringsForEvent(event):
