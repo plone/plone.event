@@ -481,3 +481,31 @@ def int2dt(dtint):
     years = dtint / 60 / 24 / 31 / 12
     return datetime(years, months, days, hours, minutes,
         tzinfo=pytz.timezone('UTC'))
+
+
+def dt_from_DTstring(datestr):
+    """ Return python datetime instance from a DateTime string representation.
+
+    %Y/%m/%d %H:%M:%S TZINFO
+    or
+    %Y/%m/%d %H:%M:%S.%f TZINFO
+
+    Since strptime doesn't handle pytz zones very well, we need to bypass
+    this limitation.
+
+    """
+    # TODO: implement DT-string with microseconds part.
+    # TODO: file a bug for strptime pytz names handling.
+
+    start_parts = datestr.split(' ')
+    start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
+    tz = pytz.timezone(start_parts[2])
+    start = tz.localize(start) # convert naive date to event's zone
+
+
+def dt_to_zone(dt, tzstring):
+    """ Return a datetime instance converted to the timezone given by the
+    string.
+
+    """
+    return dt.astimezone(pytz.timezone(tzstring))
