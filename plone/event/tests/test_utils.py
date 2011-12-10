@@ -13,41 +13,6 @@ class TestUtils(unittest.TestCase):
         pytz.timezone().zone = 'zone'
         self.assertEqual(default_timezone(), 'zone')
 
-    @mock.patch('plone.event.utils.isSameDay')
-    @mock.patch('plone.event.utils.rfc2445dt')
-    def test_dateStringsForEvent__whole_day_isSameDay(self, rfc2445dt, isSameDay):
-        from plone.event.utils import dateStringsForEvent
-        event = mock.MagicMock()
-        rfc2445dt.return_value = 'str'
-        self.assertEqual(
-            dateStringsForEvent(event),
-            ('str', 'str')
-        )
-
-    @mock.patch('plone.event.utils.isSameDay')
-    @mock.patch('plone.event.utils.rfc2445dt')
-    def test_dateStringsForEvent__whole_day_not_SameDay(self, rfc2445dt, isSameDay):
-        from plone.event.utils import dateStringsForEvent
-        event = mock.MagicMock()
-        rfc2445dt.return_value = 'str'
-        isSameDay.return_value = False
-        self.assertEqual(
-            dateStringsForEvent(event),
-            ('str', 'str')
-        )
-
-    @mock.patch('plone.event.utils.isSameDay')
-    @mock.patch('plone.event.utils.rfc2445dt')
-    def test_dateStringsForEvent__not_whole_day(self, rfc2445dt, isSameDay):
-        from plone.event.utils import dateStringsForEvent
-        event = mock.MagicMock()
-        event.whole_day.return_value = False
-        rfc2445dt.return_value = 'str'
-        self.assertEqual(
-            dateStringsForEvent(event),
-            ('str', 'str')
-        )
-
     def test_utcoffset_normalize(self):
         from plone.event.utils import utcoffset_normalize
         date = mock.Mock()

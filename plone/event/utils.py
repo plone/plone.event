@@ -125,29 +125,6 @@ def is_same_day(start, end):
     return start.date() == end.date()
 
 
-def dateStringsForEvent(event):
-    # Smarter handling for whole-day events
-    if event.whole_day():
-        # For all-day events we must not include the time within
-        # the date-time string
-        start_str = rfc2445dt(event.start(), mode="float", time=False)
-        if isSameDay(event):
-            # one-day events end with the timestamp of the next day
-            # (which is the start data plus 1 day)
-            end_str = rfc2445dt(event.start() + 1, mode="float", time=False)
-        else:
-            # all-day events lasting several days end at the next
-            # day after the end date
-            end_str = rfc2445dt(event.end() + 1, mode="float", time=False)
-    else:
-        # default (as used in Plone)
-        start_str = rfc2445dt(event.start())
-        end_str = rfc2445dt(event.end())
-
-    return start_str, end_str
-
-
-
 ### Timezone helpers
 def utctz():
     return pytz.timezone('UTC')
