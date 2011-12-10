@@ -25,18 +25,12 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'Acquisition',
-        'DateTime',
-        'Products.CMFPlone',
-        'interlude',
+        'setuptools',
         'python-dateutil',
         'pytz',
-        'setuptools',
-        'zope.component',
         'zope.interface',
-        'zope.schema',
     ],
     extras_require={
-        'test': ['DateTime'],
+        'test': ['DateTime', 'interlude', 'mock', 'zope.component'],
     },
 )
