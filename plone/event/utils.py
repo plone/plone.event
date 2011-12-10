@@ -297,25 +297,6 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
         return date
 
 
-def dt2DT(dt):
-    """ Converts a python datetime object back to Zope's DateTime.
-
-    >>> #interact(locals(), use_ipython=False )
-    >>> from datetime import datetime
-    >>> import pytz
-
-    TODO: finish me.
-
-    TODO: see, if recurrences in event browserview are datetimes or
-    DateTimes. display them accordingly to the timezone of the start
-    date - and not UTC
-
-    TODO: this introduces a dependency to DateTime. move it to p.a.event.
-    """
-    from DateTime import DateTime
-    return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.tzname())
-
-
 def tzdel(dt):
     """ Create timezone naive datetime from a timezone aware one by removing
     the timezone component.

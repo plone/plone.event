@@ -57,17 +57,6 @@ class TestUtils(unittest.TestCase):
             date
         )
 
-    def test_dt2DT(self):
-        from plone.event.utils import dt2DT
-        from datetime import datetime
-        dt = datetime(2011, 11, 23)
-        from DateTime import DateTime
-        DT = DateTime(2011, 11, 23)
-        self.assertEqual(
-            dt2DT(dt),
-            DT
-        )
-
     @mock.patch('plone.event.utils.guesstz')
     @mock.patch('plone.event.utils.utctz')
     def test_pydt__missing_zone_is_None(self, utctz, guesstz):
