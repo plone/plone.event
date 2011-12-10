@@ -451,5 +451,3 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
     if mode == 'local':
         return date, dt.tzinfo.zone
     return date
-
-
