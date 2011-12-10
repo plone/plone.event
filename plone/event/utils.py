@@ -147,95 +147,6 @@ def dateStringsForEvent(event):
     return start_str, end_str
 
 
-### RFC2445 export helpers
-def rfc2445dt(dt, mode='utc', date=True, time=True):
-    """ Convert a datetime or DateTime object into an RFC2445 compatible
-    datetime string.
-
-    @param dt: datetime or DateTime object to convert.
-
-    @param mode: Conversion mode ('utc'|'local'|'float')
-        Mode 'utc':   Return datetime string in UTC
-        Mode 'local': Return datetime string as local
-                      including a TZID component
-        Mode 'float': Return datetime string as floating (local without TZID
-                      component)
-
-    @param date: Return date.
-
-    @param time: Return time.
-
-    Usage
-    =====
-
-    >>> from datetime import datetime
-    >>> import pytz # this import actually takes quite a long time!
-    >>> from plone.event.utils import rfc2445dt
-
-    >>> at = pytz.timezone('Europe/Vienna')
-    >>> dt = at.localize(datetime(2010,10,10,10,10))
-    >>> dt
-    datetime.datetime(2010, 10, 10, 10, 10, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
-
-    >>> assert(rfc2445dt(dt) == rfc2445dt(dt, mode='utc'))
-    >>> rfc2445dt(dt)
-    '20101010T081000Z'
-
-    >>> rfc2445dt(dt, mode='local')
-    ('20101010T101000', 'Europe/Vienna')
-
-    >>> rfc2445dt(dt, mode='float')
-    '20101010T101000'
-
-    >>> assert(rfc2445dt(dt, date=True, time=True) == rfc2445dt(dt))
-    >>> rfc2445dt(dt, time=False)
-    '20101010Z'
-    >>> rfc2445dt(dt, date=False)
-    '081000Z'
-
-    RFC2445 dates from DateTime objects
-    -----------------------------------
-    >>> from DateTime import DateTime
-
-    It's summer time! So TZ in Belgrade is GMT+2.
-    >>> rfc2445dt(DateTime('2010/08/31 18:00:00 Europe/Belgrade'))
-    '20100831T160000Z'
-
-    GMT offsets are converted to UTC without any DST adjustments.
-    >>> rfc2445dt(DateTime('2010/08/31 20:15:00 GMT+1'))
-    '20100831T191500Z'
-
-    """
-    dt = pydt(dt)
-    if mode == 'utc':
-        dt = utc(dt)
-    date = "%s%s%s%s" % (date and dt.strftime("%Y%m%d") or '',
-                         date and time and 'T' or '',
-                         time and dt.strftime("%H%M%S") or '',
-                         mode=='utc' and 'Z' or '')
-    if mode == 'local':
-        return date, dt.tzinfo.zone
-    return date
-
-
-def vformat(s):
-    """ Escape special chars for use in vcal/ical files.
-
-    >>> from plone.event.utils import vformat
-    >>> vformat('foo')
-    u'foo'
-    >>> vformat('foo,bar')
-    u'foo\\\\,bar'
-    >>> vformat('foo;bar')
-    u'foo\\\\;bar'
-    >>> vformat('foo:bar')
-    u'foo\\\\:bar'
-    >>> vformat('foo:bar,more')
-    u'foo\\\\:bar\\\\,more'
-    """
-    return s.strip().replace(u',', u'\,').replace(u':', u'\:'
-        ).replace(u';', u'\;')
-
 
 ### Timezone helpers
 def utctz():
@@ -490,3 +401,78 @@ def dt_to_zone(dt, tzstring):
 
     """
     return dt.astimezone(pytz.timezone(tzstring))
+
+
+### RFC2445 export helpers
+def rfc2445dt(dt, mode='utc', date=True, time=True):
+    """ Convert a datetime or DateTime object into an RFC2445 compatible
+    datetime string.
+
+    @param dt: datetime or DateTime object to convert.
+
+    @param mode: Conversion mode ('utc'|'local'|'float')
+        Mode 'utc':   Return datetime string in UTC
+        Mode 'local': Return datetime string as local
+                      including a TZID component
+        Mode 'float': Return datetime string as floating (local without TZID
+                      component)
+
+    @param date: Return date.
+
+    @param time: Return time.
+
+    Usage
+    =====
+
+    >>> from datetime import datetime
+    >>> import pytz # this import actually takes quite a long time!
+    >>> from plone.event.utils import rfc2445dt
+
+    >>> at = pytz.timezone('Europe/Vienna')
+    >>> dt = at.localize(datetime(2010,10,10,10,10))
+    >>> dt
+    datetime.datetime(2010, 10, 10, 10, 10, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
+
+    >>> assert(rfc2445dt(dt) == rfc2445dt(dt, mode='utc'))
+    >>> rfc2445dt(dt)
+    '20101010T081000Z'
+
+    >>> rfc2445dt(dt, mode='local')
+    ('20101010T101000', 'Europe/Vienna')
+
+    >>> rfc2445dt(dt, mode='float')
+    '20101010T101000'
+
+    >>> assert(rfc2445dt(dt, date=True, time=True) == rfc2445dt(dt))
+    >>> rfc2445dt(dt, time=False)
+    '20101010Z'
+    >>> rfc2445dt(dt, date=False)
+    '081000Z'
+
+    RFC2445 dates from DateTime objects
+    -----------------------------------
+    >>> from DateTime import DateTime
+
+    It's summer time! So TZ in Belgrade is GMT+2.
+    >>> rfc2445dt(DateTime('2010/08/31 18:00:00 Europe/Belgrade'))
+    '20100831T160000Z'
+
+    GMT offsets are converted to UTC without any DST adjustments.
+    >>> rfc2445dt(DateTime('2010/08/31 20:15:00 GMT+1'))
+    '20100831T191500Z'
+
+    """
+    # TODO: rfc2445dt might not be necessary. drop me then.
+
+    dt = pydt(dt)
+    if mode == 'utc':
+        dt = utc(dt)
+    date = "%s%s%s%s" % (date and dt.strftime("%Y%m%d") or '',
+                         date and time and 'T' or '',
+                         time and dt.strftime("%H%M%S") or '',
+                         mode=='utc' and 'Z' or '')
+    if mode == 'local':
+        return date, dt.tzinfo.zone
+    return date
+
+
