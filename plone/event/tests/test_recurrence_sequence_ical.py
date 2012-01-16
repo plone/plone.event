@@ -21,20 +21,11 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         results = [res for res in seq]
         self.assertEqual(len(results), 5)
 
-    def test_recrule_not_str(self):
-        from plone.event.recurrence import recurrence_sequence_ical
-        from datetime import datetime
-        start = datetime(2011, 11, 23)
-        recrule = mock.Mock()
-        seq = recurrence_sequence_ical(start, recrule=recrule)
-        results = [res for res in seq]
-        self.assertEqual(len(results), 1)
-
     def test_recrule_from_until(self):
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
         start = datetime(2011, 11, 23)
-        recrule = mock.Mock()
+        recrule = None
         from_ = datetime(2011, 11, 01)
         until = datetime(2011, 12, 31)
         seq = recurrence_sequence_ical(start, recrule=recrule, from_=from_, until=until)
