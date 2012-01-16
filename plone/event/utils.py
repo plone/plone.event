@@ -109,8 +109,8 @@ def is_same_day(start, end):
     >>> is_same_day(datetime.now(), datetime.now()+timedelta(days=1))
     False
 
-    >>> is_same_day(datetime.now(2011,11,11,0,0,0,),
-    ...             datetime.now(2011,11,11,23,59,59))
+    >>> is_same_day(datetime(2011, 11, 11, 0, 0, 0,),
+    ...             datetime(2011, 11, 11, 23, 59, 59))
     True
 
     Now with one localized (UTC) datetime:
