@@ -72,3 +72,12 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         seq = recurrence_sequence_ical(start, recrule=recrule, from_=from_, until=until)
         results = [res for res in seq]
         self.assertEqual(len(results), 4)
+
+    def test_recrule_until_with_timezone(self):
+        from plone.event.recurrence import recurrence_sequence_ical
+        from datetime import datetime
+
+        start = datetime(2011, 11, 24)
+        recrule = "RRULE:FREQ=DAILY;UNTIL=20111130T000000Z"
+        seq = list(recurrence_sequence_ical(start, recrule=recrule))
+        self.assertEqual(len(seq), 7)

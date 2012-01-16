@@ -58,7 +58,7 @@ def recurrence_sequence_ical(
         rset = rrule.rrulestr(recrule,
                               dtstart=start,
                               forceset=True,
-                              # ignoretz=True
+                              ignoretz=True
                               # compatible=True # RFC2445 compatibility
                               )
     else:
