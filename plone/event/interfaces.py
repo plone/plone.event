@@ -91,5 +91,3 @@ class IVEvent(Interface):
     contact_name = Attribute(u"Contact name")
     contact_email = Attribute(u"Contact email")
     contact_phone = Attribute(u"Contact phone")
-
-
