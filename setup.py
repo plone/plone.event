@@ -6,7 +6,7 @@ import os
 
 setup(
     name='plone.event',
-    version='1.0dev',
+    version='1.0a1',
     description="Event and calendaring related tools not bound to Plone",
     long_description=open("README.txt").read() + "\n" +
            open(os.path.join("docs", "HISTORY.txt")).read(),
