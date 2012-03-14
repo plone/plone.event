@@ -127,13 +127,38 @@ def is_same_day(start, end):
 
 ### Timezone helpers
 def utctz():
+    """ Return the UTVC zone as a pytz.UTC instance.
+
+    >>> from plone.event.utils import utctz
+    >>> utctz()
+    <UTC>
+
+    """
     return pytz.timezone('UTC')
 
 
 def utc(dt):
-    """Convert Python datetime to UTC."""
+    """ Convert Python datetime to UTC.
+
+    >>> from datetime import datetime
+    >>> from plone.event.utils import utc
+    >>> utc(datetime(2011,11,11,11,11))
+    datetime.datetime(2011, 11, 11, 11, 11, tzinfo=<UTC>)
+
+    >>> import pytz
+    >>> at = pytz.timezone('Europe/Vienna')
+    >>> dta = datetime(2011,11,11,11,11,tzinfo=at)
+    >>> utc(dta)
+    datetime.datetime(2011, 11, 11, 10, 11, tzinfo=<UTC>)
+
+    utc'ing None returns None
+    >>> utc(None)==None
+    True
+
+    """
     if dt is None:
         return None
+    dt = pydt(dt)
     return dt.astimezone(utctz())
 
 
@@ -217,29 +242,24 @@ def pydt(dt, missing_zone=None):
     >>> from plone.event.utils import pydt
     >>> from datetime import date, datetime
     >>> import pytz
+    
     >>> at = pytz.timezone('Europe/Vienna')
-    >>> dt = at.localize(datetime(2010,10,30))
-    >>> dt
-    datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
-    >>> pydt(dt)
+    >>> pydt(at.localize(datetime(2010,10,30)))
     datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
 
-    >>> dd = date(2010,10,30)
-    >>> dd
-    datetime.date(2010, 10, 30)
-    >>> pydt(dd)
+    >>> pydt(date(2010,10,30))
     datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<UTC>)
 
+    pytz cannot handle GMT offsets.
     >>> from DateTime import DateTime
-    >>> DT = DateTime('2011/11/11 11:11:11 GMT+1')
-    >>> pydt(DT)
+    >>> pydt(DateTime('2011/11/11 11:11:11 GMT+1'))
     datetime.datetime(2011, 11, 11, 10, 11, 11, tzinfo=<UTC>)
 
-    >>> DT2 = DateTime('2011/11/11 11:11:11 Europe/Vienna')
-    >>> DT2
-    DateTime('2011/11/11 11:11:11 Europe/Vienna')
-    >>> pydt(DT2)
+    >>> pydt(DateTime('2011/11/11 11:11:11 Europe/Vienna'))
     datetime.datetime(2011, 11, 11, 11, 11, 11, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
+
+    >>> pydt(DateTime('2005/11/07 18:00:00 Brazil/East'))
+    datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<DstTzInfo 'Brazil/East' BRST-1 day, 22:00:00 DST>)
 
     """
     if dt is None:
@@ -316,8 +336,13 @@ def guesstz(DT):
 
 ### Date as integer representation helpers
 def dt2int(dt):
-    """Calculates an integer from a datetime.
-    Resolution is one minute, always relative to utc
+    """ Calculates an integer from a datetime, resolution is one minute.
+    The datetime is always converted to the UTC zone.
+
+    >>> from plone.event import utils
+    >>> from datetime import datetime
+    >>> utils.dt2int(datetime(2011,11,11,11,11,tzinfo=utils.utctz()))
+    1077760031
 
     """
     if dt is None:
@@ -337,8 +362,18 @@ def dt2int(dt):
 
 
 def int2dt(dtint):
-    """Returns a datetime object from an integer representation with
-    resolution of one minute, relative to utc.
+    """ Returns a datetime object from an integer representation with
+    resolution of one minute. The datetime returned is in the UTC zone.
+
+    >>> from plone.event.utils import int2dt
+    >>> int2dt(1077760031)
+    datetime.datetime(2011, 11, 11, 11, 11, tzinfo=<UTC>)
+
+    Dateconversion with int2dt from anything else than integers does not work
+    >>> int2dt(.0)
+    Traceback (most recent call last):
+    ...
+    ValueError: int2dt expects integer values as arguments.
 
     """
     if not isinstance(dtint, int):
@@ -348,8 +383,7 @@ def int2dt(dtint):
     days = dtint / 60 / 24 % 31
     months = dtint / 60 / 24 / 31 % 12
     years = dtint / 60 / 24 / 31 / 12
-    return datetime(years, months, days, hours, minutes,
-        tzinfo=pytz.timezone('UTC'))
+    return datetime(years, months, days, hours, minutes, tzinfo=utctz())
 
 
 def dt_from_DTstring(datestr):
