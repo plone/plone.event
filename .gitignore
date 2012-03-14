@@ -1,10 +1,7 @@
-bin
-dev
-develop-eggs
-eggs
-parts
-*.egg-info
 .*
+*.egg-info
+*.mo
 *.pyc
-*.wpr
+dist/
+
 !.gitignore
