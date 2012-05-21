@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import os
-import time
 import pytz
-import warnings
+import time
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
@@ -12,6 +12,8 @@ DSTADJUST = 'adjust'
 DSTKEEP = 'keep'
 DSTAUTO = 'auto'
 MAX32 = int(2**31 - 1)
+
+logger = logging.getLogger('plone.event')
 
 
 def default_timezone():
@@ -28,21 +30,24 @@ def default_timezone():
         >>> default_timezone()
         'Europe/Vienna'
 
+        Timezone from time module
         >>> os.environ['TZ'] = ""
-        >>> time.tzname = None
-        >>> import warnings
-        >>> with warnings.catch_warnings(record=True) as w:
-        ...    warnings.simplefilter("always")
-        ...    default_timezone()
-        ...    assert(len(w) == 1)
-        ...    assert(issubclass(w[-1].category, RuntimeWarning))
-        ...    assert("timezone" in str(w[-1].message))
-        'UTC'
-
         >>> time.tzname = ('CET', 'CEST')
         >>> default_timezone()
         'CET'
 
+        Invalid timezone
+        >>> os.environ['TZ'] = "PST"
+        >>> default_timezone()
+        'UTC'
+
+        Invalid timezone
+        >>> os.environ['TZ'] = ""
+        >>> time.tzname = None
+        >>> default_timezone()
+        'UTC'
+
+        Restore the system timezone
         >>> time.tzname = timetz
         >>> if ostz:
         ...     os.environ['TZ'] = ostz
@@ -62,11 +67,17 @@ def default_timezone():
             timezone = zones[0]
         else:
             # Default fallback = UTC
-            warnings.warn("Operating system's timezone cannot be found"\
-                          "- using UTC.", RuntimeWarning)
+            logger.warn("Operating system's timezone cannot be found. "
+                        "Falling back to UTC.")
             timezone = 'UTC'
-    # following statement ensures, that timezone is a valid pytz zone
-    return pytz.timezone(timezone).zone
+    try:
+        # following statement ensures, that timezone is a valid pytz zone
+        return pytz.timezone(timezone).zone
+    except:
+        logger.warn('The system timezone %s is not a valid timezone from '
+                    'the Olson database or pytz. Falling back to UTC for the '
+                    'default timezone.' % timezone)
+        return 'UTC'
 
 
 ### Display helpers
