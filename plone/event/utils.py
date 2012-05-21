@@ -16,7 +16,51 @@ MAX32 = int(2**31 - 1)
 logger = logging.getLogger('plone.event')
 
 
-def default_timezone():
+def validate_timezone(timezone, fallback=None):
+    """ Validate a given timezone identifier. If a fallback is given, return it
+        when the given timezone is not a valid pytz zone. Else raise an 
+        ValueError exception.
+
+    @param timezone: Timezone identifier to be validated against pytz.
+
+    @param fallback: A fallback timezone identifier.
+
+    >>> from plone.event.utils import validate_timezone
+    
+    Validate a valid timezone:
+    >>> validate_timezone('Europe/Vienna')
+    'Europe/Vienna'
+
+    Validate an invalid timezone with fallback:
+    >>> validate_timezone('NOTVALID', 'UTC')
+    'UTC'
+
+    Validate an invalid timezone without fallback:
+    >>> validate_timezone('NOTVALID')
+    Traceback (most recent call last):
+    ...
+    ValueError: The timezone NOTVALID ...
+
+    The fallback itself isn't validated:
+    >>> validate_timezone('NOTVALID', 'NOTVALID')
+    'NOTVALID'
+
+    """
+    try:
+        # following statement ensures, that timezone is a valid pytz/Olson zone
+        return pytz.timezone(timezone).zone
+    except:
+        if fallback:
+            logger.warn('The timezone %s is not a valid timezone from the '
+                        'Olson database or pytz. Falling back to %s.'
+                        % (timezone, fallback))
+            return fallback
+        else:
+            raise ValueError('The timezone %s is not a valid timezone from '
+                             'the Olson database or pytz.' % timezone)
+
+
+def default_timezone(fallback='UTC'):
     """ Retrieve the timezone from the server.
         Default Fallback: UTC
 
@@ -41,11 +85,11 @@ def default_timezone():
         >>> default_timezone()
         'UTC'
 
-        Invalid timezone
+        Invalid timezone with defined fallback
         >>> os.environ['TZ'] = ""
         >>> time.tzname = None
-        >>> default_timezone()
-        'UTC'
+        >>> default_timezone(fallback='CET')
+        'CET'
 
         Restore the system timezone
         >>> time.tzname = timetz
@@ -69,16 +113,7 @@ def default_timezone():
             # Default fallback = UTC
             logger.warn("Operating system's timezone cannot be found. "
                         "Falling back to UTC.")
-            timezone = 'UTC'
-    try:
-        # following statement ensures, that timezone is a valid pytz zone
-        return pytz.timezone(timezone).zone
-    except:
-        logger.warn('The system timezone %s is not a valid timezone from '
-                    'the Olson database or pytz. Falling back to UTC for the '
-                    'default timezone.' % timezone)
-        return 'UTC'
-
+    return validate_timezone(timezone, fallback)
 
 ### Display helpers
 def is_same_time(start, end, exact=False):
@@ -253,7 +288,7 @@ def pydt(dt, missing_zone=None):
     >>> from plone.event.utils import pydt
     >>> from datetime import date, datetime
     >>> import pytz
-    
+
     >>> at = pytz.timezone('Europe/Vienna')
     >>> pydt(at.localize(datetime(2010,10,30)))
     datetime.datetime(2010, 10, 30, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
