@@ -28,13 +28,14 @@ class ICalendarEventComponent(object):
 
         event = self.event
 
+        # TODO: event.text
+
         # TODO: until VTIMETZONE component is added and TZID used, everything is
         #       converted to UTC. use real TZID, when VTIMEZONE is used!
 
         ical.add('dtstamp', utc(pydt(datetime.now())))
         ical.add('created', utc(pydt(event.creation_date)))
 
-        # TODO: UID not present!
         ical.add('uid', event.uid)
         ical.add('last-modified', utc(pydt(event.modification_date)))
         ical.add('summary', event.title)
@@ -79,4 +80,3 @@ class ICalendarEventComponent(object):
                 ical.add('categories', subject)
 
         return ical
-
