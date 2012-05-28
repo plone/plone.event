@@ -88,19 +88,6 @@ class IRecurrenceSupport(Interface):
         pass
 
 
-class IICalendar(Interface):
-    """ Adapter to construct iCalendar instances from ICalendarAccessor
-        objects.
-
-    """
-
-
-class IICalendarEventComponent(Interface):
-    """ Adapter to construct iCalendar components from IEvent objects.
-
-    """
-
-
 class IVEvent(Interface):
     """ RFC5545 Event schema
 
