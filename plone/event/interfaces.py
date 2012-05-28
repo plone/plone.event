@@ -14,6 +14,15 @@ class IEventRecurrence(Interface):
     """
 
 
+class IOccurrence(Interface):
+    """ Marker interface for an occurrence item, which represents a
+        single occurrence.
+    """
+
+    start = Attribute(u"Occurrence start date")
+    end = Attribute(u"Occurrence end date")
+
+
 class ICalendarAccessor(Interface):
     """ Generic calendar accessor adapter interface.
 
@@ -86,6 +95,17 @@ class IRecurrenceSupport(Interface):
                               Python datetime.
         """
         pass
+
+
+class IICalendar(Interface):
+    """ Adapter, which is used to construct an icalendar object.
+    """
+
+
+class IICalendarEventComponent(Interface):
+    """ Adapter, which is used to construct an event component object for
+    icalendar.
+    """
 
 
 class IVEvent(Interface):
