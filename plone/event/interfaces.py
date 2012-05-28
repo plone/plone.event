@@ -76,8 +76,8 @@ class IRecurrenceSupport(Interface):
     """
 
     def occurrences(self, range_start, range_end):
-        """ Return a list of IEventAccessor wrapper objects with custom
-            attributes of the specific occurrence changed.
+        """ Return a list of IOccurrence objects with custom attributes of the
+            specific occurrence set.
 
             @param range_start: Search for occurrences after this date.
                                 Python datetime.
