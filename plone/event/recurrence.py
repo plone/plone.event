@@ -5,8 +5,8 @@ from dateutil import rrule
 from plone.event.utils import (
         pydt, dt2int, utc, utcoffset_normalize, DSTAUTO, tzdel)
 
-# TODO: make me configurable, somehow.
-MAXCOUNT = 100000  # Maximum number of occurrences
+# TODO: make me configurable
+MAXCOUNT = 1000  # Maximum number of occurrences
 
 
 def recurrence_sequence_ical(
