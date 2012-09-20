@@ -20,24 +20,30 @@ def recurrence_sequence_ical(
     a recurrence rule following the RFC2445 specification,
     using python-dateutil recurrence rules.
 
-    @param start:   datetime or DateTime instance of the date from which the
+    :param start:   datetime or DateTime instance of the date from which the
                     recurrence sequence is calculated.
+    :type start: datetime
 
-    @param recrule: String with RFC2445 compatible recurrence definition,
+    :param recrule: String with RFC2445 compatible recurrence definition,
                     dateutil.rrule or dateutil.rruleset instances.
+    :type recrule: string
 
-    @param from_:   datetime or DateTime instance of the date, to limit -
+    :param from_:   datetime or DateTime instance of the date, to limit -
                     possibly with until - the result within a timespan -
                     The Date Horizon.
+    :type from_: datetime
 
-    @param until:   datetime or DateTime instance of the date, until the
+    :param until:   datetime or DateTime instance of the date, until the
                     recurrence is calculated. If not given, count or MAXDATE
                     limit the recurrence calculation.
+    :type until: datetime
 
-    @param count:   Integer which defines the number of occurences. If not
+    :param count:   Integer which defines the number of occurences. If not
                     given, until or MAXDATE limits the recurrence calculation.
+    :type count: integer
 
-    @return: A generator which generates a sequence of datetime instances.
+    :returns: A generator which generates a sequence of datetime instances.
+    :rtype: generator
 
     """
     start = pydt(start)  # always use python datetime objects
@@ -92,24 +98,30 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
     """ Calculates a sequence of datetime objects from a timedelta integer,
     which defines the minutes between each occurence.
 
-    @param start: datetime or DateTime instance of the date from which the
+    :param start: datetime or DateTime instance of the date from which the
                   recurrence sequence is calculated.
+    :type start: datetime
 
-    @param delta: Integer which defines the minutes
+    :param delta: Integer which defines the minutes
                   between each date occurence.
+    :type delta: integer
 
-    @param until: datetime or DateTime instance of the date, until the
+    :param until: datetime or DateTime instance of the date, until the
                   recurrence is calculated. If not given,
                   count or MAXDATE limit the recurrence calculation.
+    :type until: datetime
 
-    @param count: Integer which defines the number of occurences. If not given,
+    :param count: Integer which defines the number of occurences. If not given,
                   until or MAXDATE limits the recurrence calculation.
+    :param count: integer
 
-    @param dst:   Daylight Saving Time crossing behavior. DSTAUTO, DSTADJUST or
+    :param dst:   Daylight Saving Time crossing behavior. DSTAUTO, DSTADJUST or
                   DSTKEEP. For more information, see
                   plone.event.utils.utcoffset_normalize.
+    :param dst: string
 
-    @return: A generator which generates a sequence of datetime instances.
+    :return: A generator which generates a sequence of datetime instances.
+    :rtype: generator
 
     """
     start = pydt(start)
@@ -143,6 +155,11 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
 def recurrence_int_sequence(sequence):
     """ Generates a sequence of integer representations from a sequence of
     dateime instances.
+
+    :param sequence: An iterable sequence of datetime instances.
+    :type sequence: iterable
+    :returns: Generator of integer representations of datetime instances.
+    :rtype: generator
 
     """
     for dt in sequence:

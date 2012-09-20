@@ -18,15 +18,21 @@ logger = logging.getLogger('plone.event')
 
 def validated_timezone(timezone, fallback=None):
     """ Validate a given timezone identifier. If a fallback is given, return it
-        when the given timezone is not a valid pytz zone. Else raise an 
+        when the given timezone is not a valid pytz zone. Else raise an
         ValueError exception.
 
-    @param timezone: Timezone identifier to be validated against pytz.
+    :param timezone: Timezone identifier to be validated against pytz.
+    :type timezone: string
 
-    @param fallback: A fallback timezone identifier.
+    :param fallback: A fallback timezone identifier.
+    :type fallback: string
+
+    :returns: A valid pytz timezone identifier.
+    :rtype: string
+    :raises: ValueError
 
     >>> from plone.event.utils import validated_timezone
-    
+
     Validate a valid timezone:
     >>> validated_timezone('Europe/Vienna')
     'Europe/Vienna'
@@ -63,6 +69,12 @@ def validated_timezone(timezone, fallback=None):
 def default_timezone(fallback='UTC'):
     """ Retrieve the timezone from the server.
         Default Fallback: UTC
+
+        :param fallback: A fallback timezone identifier.
+        :type fallback: string
+
+        :returns: A timezone identifier.
+        :rtype: string
 
         >>> from plone.event.utils import default_timezone
         >>> import os
