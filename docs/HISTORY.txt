@@ -5,6 +5,10 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
+- Reduce MAXCOUNT for recurrences from 100000 to 1000. Indexing unlimited
+  recurrences took too long.
+  [thet]
+
 - Added dedicated timezone validator with fallback zone.
   [thet]
 
