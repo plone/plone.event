@@ -36,10 +36,10 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
         start = datetime(2011, 11, 23)
-        recrule = "FREQ=DAILY;INTERVAL=10;COUNT=100001"
+        recrule = "FREQ=DAILY;INTERVAL=10;COUNT=1001"
         seq = recurrence_sequence_ical(start, recrule=recrule)
         results = [res for res in seq]
-        self.assertEqual(len(results), 100000)
+        self.assertEqual(len(results), 1000)
 
     def test_recrule_str_more_than_count(self):
         from plone.event.recurrence import recurrence_sequence_ical
