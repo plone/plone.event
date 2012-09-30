@@ -13,9 +13,13 @@ class MockObject(object):
 
 class TestAdapters(unittest.TestCase):
 
-    def setUp():
+    def setUp(self):
+        import zope.component
+        context = xmlconfig.file('meta.zcml', zope.component)
+        xmlconfig.file('configure.zcml', zope.component, context=context)
+
         import plone.event
-        xmlconfig("configure.zcml", plone.event)
+        xmlconfig.file("configure.zcml", plone.event, context=context)
 
     def test_event_accessor(self):
         obj = MockObject()
