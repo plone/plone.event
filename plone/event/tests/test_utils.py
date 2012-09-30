@@ -49,6 +49,10 @@ class TestUtils(unittest.TestCase):
         pydt(dt, missing_zone=missing_zone)
         self.assertEqual(utctz.call_count, 1)
 
+    def test_pydt__wrong_type(self):
+        from plone.event.utils import pydt
+        self.assertEqual(pydt('wrongtype'), None)
+
     def test_dt2int_dt_is_None(self):
         from plone.event.utils import dt2int
         self.assertFalse(dt2int(None))

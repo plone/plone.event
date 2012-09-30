@@ -2,8 +2,12 @@ Changelog
 =========
 
 
-1.0a2 (unreleased)
+1.0b1 (unreleased)
 ------------------
+
+- In pydt conversion util function, test for Zope DateTime via class name.
+  Return Null, if something else than a datetime or DateTime object is given.
+  [thet]
 
 - Reduce MAXCOUNT for recurrences from 100000 to 1000. Indexing unlimited
   recurrences took too long.
