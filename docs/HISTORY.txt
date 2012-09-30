@@ -5,6 +5,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Include default IEventAccessor adapter.
+  [thet]
+
 - In pydt conversion util function, test for Zope DateTime via class name.
   Return Null, if something else than a datetime or DateTime object is given.
   [thet]
