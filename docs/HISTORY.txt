@@ -5,6 +5,9 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Let pydt preserve microseconds when converting from Zope DateTime.
+  [thet]
+
 - Include default IEventAccessor adapter.
   [thet]
 

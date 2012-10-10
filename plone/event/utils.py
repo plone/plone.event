@@ -319,6 +319,10 @@ def pydt(dt, missing_zone=None):
     >>> pydt(DateTime('2005/11/07 18:00:00 Brazil/East'))
     datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<DstTzInfo 'Brazil/East' BRST-1 day, 22:00:00 DST>)
 
+    Test with microseconds
+    >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'))
+    datetime.datetime(2012, 10, 10, 10, 10, 10, 123456, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
+
     """
     if dt is None:
         return None
@@ -344,11 +348,22 @@ def pydt(dt, missing_zone=None):
             tz = missing_zone
 
         year, month, day, hour, min, sec = dt.parts()[:6]
-        # seconds (parts[6]) is a float, so we map to int
+
+        # seconds (parts[6]) is a float, so we do modulo for microseconds and
+        # map then to int
+        #
+        # there are precision problems when doing the modulo math
+        # (Python 2.7.3 on Ubuntu 12.04):
+        # >>> 10.123456%1*1000000
+        # 123455.99999999913
+        # >>> round(10.123456%1*1000000,0)
+        # 123456.0
+        micro = int(round(sec%1 * 1000000))
         sec = int(sec)
+
         # There is a problem with timezone Europe/Paris
         # tz is equal to <DstTzInfo 'Europe/Paris' PMT+0:09:00 STD>
-        dt = datetime(year, month, day, hour, min, sec, tzinfo=tz)
+        dt = datetime(year, month, day, hour, min, sec, micro, tzinfo=tz)
         # before:
         # datetime.datetime(2011, 3, 14, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' PMT+0:09:00 STD>)
         # dt = dt.tzinfo.normalize(dt)
