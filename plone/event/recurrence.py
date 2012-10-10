@@ -16,9 +16,11 @@ def recurrence_sequence_ical(
     until=None,
     count=None
     ):
-    """ Calculates a sequence of datetime objects from
-    a recurrence rule following the RFC2445 specification,
-    using python-dateutil recurrence rules.
+
+    """Calculates a sequence of datetime objects from a recurrence rule
+    following the RFC2445 specification, using python-dateutil recurrence
+    rules.  The resolution of the resulting datetime objects is one second,
+    since python-dateutil rrulestr doesn't support microseconds.
 
     :param start:   datetime or DateTime instance of the date from which the
                     recurrence sequence is calculated.
@@ -46,9 +48,10 @@ def recurrence_sequence_ical(
     :rtype: generator
 
     """
-    start = pydt(start)  # always use python datetime objects
-    from_ = pydt(from_)
-    until = pydt(until)
+    # Always use python datetime objects and remove the microseconds
+    start = pydt(start, microseconds=False)
+    from_ = pydt(from_, microseconds=False)
+    until = pydt(until, microseconds=False)
     tz = start.tzinfo
     start = tzdel(start)  # tznaive | start defines tz
     _from = tzdel(from_)

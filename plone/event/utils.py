@@ -291,7 +291,7 @@ def tzdel(dt):
         return None
 
 
-def pydt(dt, missing_zone=None):
+def pydt(dt, missing_zone=None, microseconds=True):
     """Converts a Zope's Products.DateTime in a Python datetime.
 
     @param dt: date, datetime or DateTime object
@@ -323,20 +323,31 @@ def pydt(dt, missing_zone=None):
     >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'))
     datetime.datetime(2012, 10, 10, 10, 10, 10, 123456, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
 
+    Test with microseconds set to False
+    >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'), microseconds=False)
+    datetime.datetime(2012, 10, 10, 10, 10, 10, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
+
+    >>> pydt(datetime(2012, 10, 10, 20, 20, 20, 123456, tzinfo=at), microseconds=False)
+    datetime.datetime(2012, 10, 10, 20, 20, 20, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
+
     """
     if dt is None:
         return None
+
+    ret = None
 
     if missing_zone is None:
         missing_zone = utctz()
 
     if isinstance(dt, date) and not isinstance(dt, datetime):
         dt = datetime(dt.year, dt.month, dt.day)
+
     if isinstance(dt, datetime):
         tznaive = not bool(getattr(dt, 'tzinfo', False))
         if tznaive:
-            return missing_zone.localize(dt)
-        return utcoffset_normalize(dt, dstmode=DSTADJUST)
+            ret = missing_zone.localize(dt)
+        else:
+            ret = utcoffset_normalize(dt, dstmode=DSTADJUST)
 
     if "DateTime" in str(dt.__class__):
         # Zope DateTime
@@ -370,10 +381,12 @@ def pydt(dt, missing_zone=None):
         # after: datetime.datetime(2011, 3, 14, 15, 10, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
         dt = utcoffset_normalize(dt, dstmode=DSTADJUST)
         # after: datetime.datetime(2011, 3, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
-        return dt
+        ret = dt
 
-    # unknown type
-    return None
+    if ret and microseconds == False:
+        ret = ret.replace(microsecond=0)
+
+    return ret
 
 
 def guesstz(DT):

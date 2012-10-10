@@ -5,6 +5,10 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- Remove microseconds for recurrence_sequence_ical, since python-datetime
+  rrulestr does not support microseconds.
+  [thet]
+
 - Let pydt preserve microseconds when converting from Zope DateTime.
   [thet]
 
