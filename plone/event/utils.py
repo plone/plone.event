@@ -408,17 +408,10 @@ def guesstz(DT):
     unfortunatly
     >>> guesstz(DateTime('2010-01-01 GMT+1'))
     """
-    if DT.timezoneNaive():
-        return utctz()
     tzname = DT.timezone()
 
-    # In the Olson timezone database, Etc/GMT+1 seems not to be the same as
-    # GMT+1. The UTC offsets are different. Therefore a conversion from GMT
-    # to a pytz equivalent is not easily possible.
-    #    # DateTime timezones not fully compatible with pytz
-    #    # see http://pypi.python.org/pypi/DateTime
-    #    if tzname.startswith('GMT'):
-    #        tzname = 'Etc/%s' % tzname
+    # Please note, the GMT offset based timezone informations in DateTime are
+    # not compatible with Etc/GMT based from pytz. They have different offsets.
     try:
         tz = pytz.timezone(tzname)
         return tz

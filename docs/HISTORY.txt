@@ -5,6 +5,11 @@ Changelog
 1.0b1 (unreleased)
 ------------------
 
+- In plone.event.utils.guesstz, don't return UTC timezone for timezoneNaive
+  DateTime objects. Let the callee decide what to do with timezoneNaive
+  DateTime.
+  [thet]
+
 - Remove microseconds for recurrence_sequence_ical, since python-datetime
   rrulestr does not support microseconds.
   [thet]
