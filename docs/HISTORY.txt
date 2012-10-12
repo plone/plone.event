@@ -1,8 +1,7 @@
 Changelog
 =========
 
-
-1.0b1 (unreleased)
+1.0b1 (2012-10-12)
 ------------------
 
 - In plone.event.utils.guesstz, don't return UTC timezone for timezoneNaive
