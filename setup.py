@@ -18,7 +18,7 @@ setup(
     keywords='Plone calendar calendaring event recurring',
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',
-    url='https://github.com/collective/plone.event',
+    url='https://github.com/plone/plone.event',
     license='GPL',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['plone'],
