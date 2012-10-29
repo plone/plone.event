@@ -1,15 +1,13 @@
 from setuptools import find_packages
 from setuptools import setup
 
-import os
-
 
 setup(
     name='plone.event',
     version='1.0dev',
     description="Event and calendaring related tools not bound to Plone",
-    long_description=open("README.txt").read() + "\n" +
-           open(os.path.join("docs", "HISTORY.txt")).read(),
+    long_description=open("README.rst").read() + "\n" +
+           open(("CHANGES.rst")).read(),
     # Get more strings from http://pypi.python.org/pypi?%:action=list_classifiers
     classifiers=[
         "Framework :: Plone",
