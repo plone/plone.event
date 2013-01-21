@@ -107,6 +107,10 @@ class IICalendarEventComponent(Interface):
     icalendar.
     """
 
+class IICalendarTimezoneComponent(Interface):
+    """ Adapter, which is used to construct a timezone component object for
+    icalendar.
+    """
 
 class IVEvent(Interface):
     """ RFC5545 Event schema
