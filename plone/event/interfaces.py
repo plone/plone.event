@@ -103,15 +103,8 @@ class IICalendar(Interface):
 
     """
 
-
 class IICalendarEventComponent(Interface):
     """Adapter, which is used to construct an event component object for
-    icalendar.
-
-    """
-
-class IICalendarTimezoneComponent(Interface):
-    """Adapter, which is used to construct a timezone component object for
     icalendar.
 
     """
