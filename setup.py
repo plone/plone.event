@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='plone.event',
-    version='1.0dev',
+    version='1.0b2',
     description="Event and calendaring related tools not bound to Plone",
     long_description=open("README.rst").read() + "\n" +
            open(("CHANGES.rst")).read(),

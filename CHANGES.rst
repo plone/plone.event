@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0b2 (2012-02-08)
+------------------
 
-- Nothing changed yet.
+- Package metadata updated.
+  [thet]
 
 
 1.0b1 (2012-10-12)
