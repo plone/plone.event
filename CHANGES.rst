@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b2 (2012-02-08)
+1.0b2 (2013-02-08)
 ------------------
 
 - Package metadata updated.
