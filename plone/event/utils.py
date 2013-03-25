@@ -291,6 +291,77 @@ def tzdel(dt):
         return None
 
 
+def is_date(value):
+    """Checks, if given value is a date.
+
+    :param value: The value to check.
+    :type value: object
+    :returns: True, if value is a date (and not a datetime), false otherwise.
+    :rtype: Boolean
+
+    >>> from plone.event.utils import is_date
+    >>> from datetime import datetime, date
+    >>> is_date(date.today())
+    True
+    >>> is_date(datetime.now())
+    False
+    >>> is_date(42)
+    False
+    """
+    return type(value) is date
+
+def is_datetime(value):
+    """Checks, if given value is a datetime.
+
+    :param value: The value to check.
+    :type value: object
+    :returns: True, if value is a datetime (and not a date), false otherwise.
+    :rtype: Boolean
+
+    >>> from plone.event.utils import is_datetime
+    >>> from datetime import datetime, date
+    >>> is_datetime(date.today())
+    False
+    >>> is_datetime(datetime.now())
+    True
+    >>> is_datetime(42)
+    False
+    """
+    return type(value) is datetime
+
+def date_to_datetime(value):
+    """Converts date objects to datetime objects.
+
+    :param value: Date to convert to datetime.
+    :type value: date
+    :returns: datetime.
+    :rtype: datetime
+
+    >>> from plone.event.utils import date_to_datetime
+    >>> from datetime import datetime, date
+    >>> date_to_datetime(date(2013,3,25))
+    datetime.datetime(2013, 3, 25, 0, 0)
+
+    >>> date_to_datetime(datetime(2013,3,25,10,10,10))
+    datetime.datetime(2013, 3, 25, 10, 10, 10)
+
+    >>> date_to_datetime(42)
+    Traceback (most recent call last):
+    ...
+    ValueError: Value must be a date or datetime object.
+
+
+    """
+
+    if is_date(value):
+        return datetime(value.year, value.month, value.day)
+    elif is_datetime(value):
+        return value
+    else:
+        raise ValueError("Value must be a date or datetime object.")
+        return None
+
+
 def pydt(dt, missing_zone=None, microseconds=True):
     """Converts a Zope's Products.DateTime in a Python datetime.
 

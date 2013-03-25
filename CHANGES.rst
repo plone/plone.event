@@ -4,6 +4,9 @@ Changelog
 1.0b2 (2013-02-08)
 ------------------
 
+- Add date_to_datetime, is_date, is_datetime to plone.event.utils.
+  [thet]
+
 - Package metadata updated.
   [thet]
 
