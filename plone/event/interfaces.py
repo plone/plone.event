@@ -95,7 +95,6 @@ class IRecurrenceSupport(Interface):
         :type range_end: Python datetime.
 
         """
-        pass
 
 
 class IICalendar(Interface):
@@ -103,11 +102,13 @@ class IICalendar(Interface):
 
     """
 
+
 class IICalendarEventComponent(Interface):
     """Adapter, which is used to construct an event component object for
     icalendar.
 
     """
+
 
 class IVEvent(Interface):
     """RFC5545 Event schema
