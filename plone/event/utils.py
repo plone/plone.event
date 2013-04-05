@@ -127,6 +127,7 @@ def default_timezone(fallback='UTC'):
                         "Falling back to UTC.")
     return validated_timezone(timezone, fallback)
 
+
 ### Display helpers
 def is_same_time(start, end, exact=False):
     """ Test if event starts and ends at same time.
@@ -310,6 +311,7 @@ def is_date(value):
     """
     return type(value) is date
 
+
 def is_datetime(value):
     """Checks, if given value is a datetime.
 
@@ -328,6 +330,7 @@ def is_datetime(value):
     False
     """
     return type(value) is datetime
+
 
 def date_to_datetime(value):
     """Converts date objects to datetime objects.
@@ -359,7 +362,6 @@ def date_to_datetime(value):
         return value
     else:
         raise ValueError("Value must be a date or datetime object.")
-        return None
 
 
 def pydt(dt, missing_zone=None, microseconds=True):
@@ -541,26 +543,6 @@ def int2dt(dtint):
     months = dtint / 60 / 24 / 31 % 12
     years = dtint / 60 / 24 / 31 / 12
     return datetime(years, months, days, hours, minutes, tzinfo=utctz())
-
-
-def dt_from_DTstring(datestr):
-    """ Return python datetime instance from a DateTime string representation.
-
-    %Y/%m/%d %H:%M:%S TZINFO
-    or
-    %Y/%m/%d %H:%M:%S.%f TZINFO
-
-    Since strptime doesn't handle pytz zones very well, we need to bypass
-    this limitation.
-
-    """
-    # TODO: implement DT-string with microseconds part.
-    # TODO: file a bug for strptime pytz names handling.
-
-    start_parts = datestr.split(' ')
-    start = datetime.strptime(' '.join(start_parts)[0:2], '%Y/%m/%d %H:%M:%S')
-    tz = pytz.timezone(start_parts[2])
-    start = tz.localize(start) # convert naive date to event's zone
 
 
 def dt_to_zone(dt, tzstring):
