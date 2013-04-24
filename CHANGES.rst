@@ -1,11 +1,18 @@
 Changelog
 =========
 
-1.0b2 (2013-02-08)
+1.0b3 (2013-04-24)
 ------------------
+
+- Raise test coverage to 100%.
+  [thet]
 
 - Add date_to_datetime, is_date, is_datetime to plone.event.utils.
   [thet]
+
+
+1.0b2 (2013-02-08)
+------------------
 
 - Package metadata updated.
   [thet]
