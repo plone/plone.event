@@ -58,6 +58,7 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         delta = 1
         until = datetime(2011, 11, 24)
         count = 20
-        td = recurrence_sequence_timedelta(start, delta=delta, until=until, count=count)
+        td = recurrence_sequence_timedelta(start, delta=delta,
+                                           until=until, count=count)
         results = [res for res in td]
         self.assertEqual(len(results), 21)

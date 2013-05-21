@@ -8,8 +8,8 @@ import zope.interface
 
 class MockObject(object):
     """ Mock object
-
     """
+
 
 class TestAdapters(unittest.TestCase):
 
@@ -24,10 +24,10 @@ class TestAdapters(unittest.TestCase):
     def test_event_accessor(self):
         obj = MockObject()
         tz = pytz.timezone("Europe/Vienna")
-        obj.start = datetime(2012,12,12,10,0,tzinfo=tz)
-        obj.end = datetime(2012,12,12,12,0,tzinfo=tz)
+        obj.start = datetime(2012, 12, 12, 10, 0, tzinfo=tz)
+        obj.end = datetime(2012, 12, 12, 12, 0, tzinfo=tz)
         zope.interface.alsoProvides(obj, IEvent)
-        
+
         # Create accessor
         acc = IEventAccessor(obj)
 

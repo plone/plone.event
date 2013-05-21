@@ -11,7 +11,7 @@ from datetime import timedelta
 DSTADJUST = 'adjust'
 DSTKEEP = 'keep'
 DSTAUTO = 'auto'
-MAX32 = int(2**31 - 1)
+MAX32 = int(2 ** 31 - 1)
 
 logger = logging.getLogger('plone.event')
 
@@ -241,24 +241,23 @@ def utc(dt):
 def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     """Fixes invalid UTC offsets from recurrence calculations.
 
-    @param date: datetime instance to normalize.
+    :param date: datetime instance to normalize.
 
-    @param delta: datetime.timedelta instance.
-    Mode DSTADJUST: When crossing daylight saving time changes, the start time
-        of the date before DST change will be the same in value as afterwards.
-        It is adjusted relative to UTC. So 8:00 GMT+1 before will also result in
-        8:00 GMT+2 afterwards. This is what humans might expect when recurring
-        rules are defined.
-    Mode DSTKEEP: When crossing daylight saving time changes, the start time of
-        the date before and after DST change will be the same relative to UTC.
-        So, 8:00 GMT+1 before will result in 7:00 GMT+2 afterwards. This
-        behavior might be what machines expect, when recurrence rules are
-        defined.
-    Mode DSTAUTO:
-        If the relative delta between two occurences of a reucurrence sequence
-        is less than a day, DSTKEEP will be used - otherwise DSTADJUST. This
-        behavior is the default.
-
+    :param delta: datetime.timedelta instance.
+                  Mode DSTADJUST: When crossing daylight saving time changes,
+                  the start time of the date before DST change will be the same
+                  in value as afterwards.  It is adjusted relative to UTC. So
+                  8:00 GMT+1 before will also result in 8:00 GMT+2 afterwards.
+                  This is what humans might expect when recurring rules are
+                  defined.
+                  Mode DSTKEEP: When crossing daylight saving time changes, the
+                  start time of the date before and after DST change will be
+                  the same relative to UTC.  So, 8:00 GMT+1 before will result
+                  in 7:00 GMT+2 afterwards. This behavior might be what
+                  machines expect, when recurrence rules are defined.
+                  Mode DSTAUTO: If the relative delta between two occurences of
+                  a reucurrence sequence is less than a day, DSTKEEP will be
+                  used - otherwise DSTADJUST. This behavior is the default.
     """
     try:
         assert(bool(date.tzinfo))
@@ -267,14 +266,14 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
     assert(dstmode in [DSTADJUST, DSTKEEP, DSTAUTO])
     if delta:
         assert(isinstance(delta, timedelta))  # Easier in Java
-        delta = delta.seconds + delta.days*24*3600  # total delta in seconds
-        if dstmode==DSTAUTO and delta<24*60*60:
+        delta = delta.seconds + delta.days * 24 * 3600  # total delta in secs
+        if dstmode == DSTAUTO and delta < 24 * 60 * 60:
             dstmode = DSTKEEP
-        elif dstmode==DSTAUTO:
+        elif dstmode == DSTAUTO:
             dstmode = DSTADJUST
 
     try:
-        if dstmode==DSTKEEP:
+        if dstmode == DSTKEEP:
             return date.tzinfo.normalize(date)
         else:  # DSTADJUST
             return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
@@ -466,7 +465,7 @@ def pydt(dt, missing_zone=None, exact=False):
         # 123455.99999999913
         # >>> round(10.123456%1*1000000,0)
         # 123456.0
-        micro = int(round(sec%1 * 1000000))
+        micro = int(round(sec % 1 * 1000000))
         sec = int(sec)
 
         # There is a problem with timezone Europe/Paris

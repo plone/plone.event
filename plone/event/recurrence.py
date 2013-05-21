@@ -83,9 +83,9 @@ def recurrence_sequence_ical(
         date = tz.localize(date)
 
         # Limit number of recurrences otherwise calculations take too long
-        if MAXCOUNT and cnt+1 > MAXCOUNT:
+        if MAXCOUNT and cnt + 1 > MAXCOUNT:
             break
-        if count and cnt+1 > count:
+        if count and cnt + 1 > count:
             break
         if from_ and utc(date) < utc(from_):
             continue
@@ -143,9 +143,9 @@ def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
         after = utcoffset_normalize(after, delta, dst)
 
         # Limit number of recurrences otherwise calculations take too long
-        if MAXCOUNT and cnt+1 > MAXCOUNT:
+        if MAXCOUNT and cnt + 1 > MAXCOUNT:
             break
-        if count and cnt+1 > count:
+        if count and cnt + 1 > count:
             break
         if until and utc(after) > utc(until):
             break

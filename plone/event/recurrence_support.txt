@@ -7,6 +7,17 @@ plone.event RecurrenceSupport event adapter unit tests
     >>> from datetime import datetime
     >>> import pytz
 
+    >>> class FakeEvent(object):
+    ...    """ Fake Event for testing.
+    ...    """
+    ...    def __init__(self, start_date=None, end_date=None, recurrence=None):
+    ...        self.start_date = start_date
+    ...        self.end_date = end_date
+    ...        self.recurrence = recurrence
+    ...        self.duration = self.start_date and self.end_date and\
+    ...                        self.end_date - self.start_date or None
+
+
 test occurences generation and limiting results
     >>> start = datetime(2011,05,16,9,0,0,0)
     >>> end = datetime(2011,05,16,10,0,0,0)

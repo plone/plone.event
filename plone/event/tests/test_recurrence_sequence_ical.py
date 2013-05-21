@@ -1,4 +1,3 @@
-import mock
 import unittest2 as unittest
 
 
@@ -28,7 +27,8 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         recrule = None
         from_ = datetime(2011, 11, 01)
         until = datetime(2011, 12, 31)
-        seq = recurrence_sequence_ical(start, recrule=recrule, from_=from_, until=until)
+        seq = recurrence_sequence_ical(start, recrule=recrule,
+                                       from_=from_, until=until)
         results = [res for res in seq]
         self.assertEqual(len(results), 1)
 
@@ -58,7 +58,8 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         recrule = "FREQ=DAILY;INTERVAL=1;COUNT=5"
         from_ = datetime(2011, 11, 25)
         until = datetime(2011, 11, 27)
-        seq = recurrence_sequence_ical(start, recrule=recrule, from_=from_, until=until)
+        seq = recurrence_sequence_ical(start, recrule=recrule,
+                                       from_=from_, until=until)
         results = [res for res in seq]
         self.assertEqual(len(results), 3)
 
@@ -69,7 +70,8 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         recrule = "FREQ=DAILY;INTERVAL=1;COUNT=5"
         from_ = datetime(2011, 11, 23)
         until = datetime(2011, 11, 27)
-        seq = recurrence_sequence_ical(start, recrule=recrule, from_=from_, until=until)
+        seq = recurrence_sequence_ical(start, recrule=recrule,
+                                       from_=from_, until=until)
         results = [res for res in seq]
         self.assertEqual(len(results), 4)
 
