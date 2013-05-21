@@ -132,6 +132,16 @@ def default_timezone(fallback='UTC'):
 def is_same_time(start, end, exact=False):
     """ Test if event starts and ends at same time.
 
+    :param start: The start datetime.
+    :type start: Python datetime or Zope DateTime
+    :param end: The end datetime.
+    :type end: Python datetime or Zope DateTime
+    :param exact: If True, the resolution goes down to microseconds. If False,
+                  the resolution are seconds. Defaul is False.
+    :type exact: Boolean
+    :returns: True, if start and end have the same time, otherwise False.
+    :rtype: Boolean.
+
     >>> from plone.event.utils import is_same_time, pydt
     >>> from datetime import datetime, timedelta
 
@@ -141,19 +151,26 @@ def is_same_time(start, end, exact=False):
     >>> is_same_time(datetime.now(), datetime.now()+timedelta(days=1))
     True
 
-    TODO: if this test fails, it might run too fast and microseconds are the
-    same. Rewrite it then AND remove this msg. didn't run through yet 8|
-    Exact:
-    >>> is_same_time(datetime.now(), datetime.now(), exact=True)
+    Resolution is one second
+    >>> is_same_time(datetime(2013, 5, 21, 10, 59, 58),
+    ...              datetime(2013, 5, 21, 10, 59, 59),
+    ...              exact=False)
     False
 
+    Exact:
+    >>> now = datetime.now()
+    >>> is_same_time(now, now, exact=True)
+    True
+
     """
-    start = pydt(start).time()
-    end = pydt(end).time()
+    start = pydt(start, microseconds=exact).time()
+    end = pydt(end, microseconds=exact).time()
     if exact:
         return start == end
     else:
-        return start.hour == end.hour and start.minute == end.minute
+        return start.hour == end.hour and\
+            start.minute == end.minute and\
+            start.second == end.second
 
 
 def is_same_day(start, end):
