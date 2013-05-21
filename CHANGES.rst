@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.0b4 (unreleased)
+------------------
+
+- Change of pydt signature: exact instead of microseconds and set the defaul to
+  False.
+  [thet]
+
+
 1.0b3 (2013-04-24)
 ------------------
 

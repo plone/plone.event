@@ -49,9 +49,9 @@ def recurrence_sequence_ical(
 
     """
     # Always use python datetime objects and remove the microseconds
-    start = pydt(start, microseconds=False)
-    from_ = pydt(from_, microseconds=False)
-    until = pydt(until, microseconds=False)
+    start = pydt(start, exact=False)
+    from_ = pydt(from_, exact=False)
+    until = pydt(until, exact=False)
     tz = start.tzinfo
     start = tzdel(start)  # tznaive | start defines tz
     _from = tzdel(from_)

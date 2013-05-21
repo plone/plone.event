@@ -163,8 +163,8 @@ def is_same_time(start, end, exact=False):
     True
 
     """
-    start = pydt(start, microseconds=exact).time()
-    end = pydt(end, microseconds=exact).time()
+    start = pydt(start, exact=exact).time()
+    end = pydt(end, exact=exact).time()
     if exact:
         return start == end
     else:
@@ -381,11 +381,18 @@ def date_to_datetime(value):
         raise ValueError("Value must be a date or datetime object.")
 
 
-def pydt(dt, missing_zone=None, microseconds=True):
+def pydt(dt, missing_zone=None, exact=False):
     """Converts a Zope's Products.DateTime in a Python datetime.
 
-    @param dt: date, datetime or DateTime object
-    @param missing_zone: A pytz zone to be used, if no timezone is present.
+    :param dt: date, datetime or DateTime object
+    :type dt: Python date, datetime or Zope DateTime
+    :param missing_zone: A pytz zone to be used, if no timezone is present.
+    :type missing_zone: String
+    :param exact: If True, the resolution goes down to microseconds. If False,
+                  the resolution are seconds. Defaul is False.
+    :type exact: Boolean
+    :returns: Python datetime with timezone information.
+    :rtype: Python datetime
 
     >>> from plone.event.utils import pydt
     >>> from datetime import date, datetime
@@ -409,15 +416,15 @@ def pydt(dt, missing_zone=None, microseconds=True):
     >>> pydt(DateTime('2005/11/07 18:00:00 Brazil/East'))
     datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<DstTzInfo 'Brazil/East' BRST-1 day, 22:00:00 DST>)
 
-    Test with microseconds
-    >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'))
+    Test with exact set to True
+    >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'), exact=True)
     datetime.datetime(2012, 10, 10, 10, 10, 10, 123456, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
 
-    Test with microseconds set to False
-    >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'), microseconds=False)
+    Test with exact set to False
+    >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'), exact=False)
     datetime.datetime(2012, 10, 10, 10, 10, 10, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
 
-    >>> pydt(datetime(2012, 10, 10, 20, 20, 20, 123456, tzinfo=at), microseconds=False)
+    >>> pydt(datetime(2012, 10, 10, 20, 20, 20, 123456, tzinfo=at), exact=False)
     datetime.datetime(2012, 10, 10, 20, 20, 20, tzinfo=<DstTzInfo 'Europe/Vienna' CEST+2:00:00 DST>)
 
     """
@@ -473,7 +480,7 @@ def pydt(dt, missing_zone=None, microseconds=True):
         # after: datetime.datetime(2011, 3, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
         ret = dt
 
-    if ret and microseconds == False:
+    if ret and exact == False:
         ret = ret.replace(microsecond=0)
 
     return ret
