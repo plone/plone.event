@@ -25,11 +25,27 @@ from plone.event.utils import pydt
 class FakeEvent(object):
     """ Fake Event for testing.
     """
-    def __init__(self, uid=None, title=None, description=None, start=None,
-                 end=None, whole_day=None, created=None, modified=None,
-                 location=None, subject=[], attendees=[], contact_name=None,
-                 contact_phone=None, contact_email=None, event_url=None,
-                 recurrence=None, start_date=None, end_date=None):
+    def __init__(self,
+        attendees=[],
+        contact_email=None,
+        contact_name=None,
+        contact_phone=None,
+        created=None,
+        description=None,
+        end=None,
+        end_date=None,
+        event_url=None,
+        location=None,
+        modified=None,
+        open_end=None,
+        recurrence=None,
+        start=None,
+        start_date=None,
+        subject=[],
+        title=None,
+        uid=None,
+        whole_day=None,
+    ):
         # start_date and end_date can be directly set with datetime values, if
         # no start or end DateTime is set.
         self.uid = uid
@@ -40,6 +56,7 @@ class FakeEvent(object):
         self._end = end and DateTime(end) or None
         self.end_date = end and pydt(self._end) or end_date
         self._whole_day = whole_day
+        self._open_end = open_end
         self.created = created
         self.modified = modified
         self.location = location
@@ -61,6 +78,9 @@ class FakeEvent(object):
 
     def whole_day(self):
         return self._whole_day
+
+    def open_end(self):
+        return self._open_end
 
     def Title(self):
         return self.title

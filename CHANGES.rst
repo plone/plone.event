@@ -4,6 +4,10 @@ Changelog
 1.0b4 (unreleased)
 ------------------
 
+- Add open_end attribute to IEventAccessor interface definition to mark events
+  without a defined end time.
+  [thet]
+
 - Change of pydt signature: exact instead of microseconds and set the defaul to
   False.
   [thet]

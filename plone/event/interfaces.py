@@ -67,6 +67,7 @@ class IEventAccessor(Interface):
     start = Attribute(u"Event start date as Python datetime.")
     end = Attribute(u"Event end date as Python datetime.")
     whole_day = Attribute(u"Event lasts whole day.")
+    open_end = Attribute(u"Event has no defined end time.")
     timezone = Attribute(u"Timezone of the event. A pytz timezone identifier.")
     recurrence = Attribute(u"RFC5545 compatible recurrence definition.")
     location = Attribute(u"Location of the event.")
@@ -170,10 +171,10 @@ class IVEvent(Interface):
 
     dtstamp = Attribute(u"Timestamp")
     uid = Attribute(u"Unique identifier")
-    klass = Attribute(u"Class") # class
+    klass = Attribute(u"Class")  # class
     created = Attribute(u"Created")
     geo = Attribute(u"Geo")
-    last_mod = Attribute(u"Last Modified") # last-mod
+    last_mod = Attribute(u"Last Modified")  # last-mod
     organizer = Attribute(u"Organizer")
     priority = Attribute(u"Priority")
     seq = Attribute(u"Seq")
@@ -185,19 +186,5 @@ class IVEvent(Interface):
     rstatus = Attribute(u"Rstatus")
     related = Attribute(u"Related")
     resources = Attribute(u"Resources")
-    x_prop = Attribute(u"X Prop") # x-prop
-    iana_prop = Attribute(u"Iana Prop") # iana-prop
-
-
-    start = Attribute(u"Event start date")
-    end = Attribute(u"Event end date")
-    timezone = Attribute(u"Timezone of the event")
-    recurrence = Attribute(u"RFC5545 compatible recurrence definition")
-    whole_day = Attribute(u"Event lasts whole day")
-    location = Attribute(u"Location of the event")
-    text = Attribute(u"Summary of the event")
-    attendees = Attribute(u"List of attendees")
-    event_url = Attribute(u"Website of the event")
-    contact_name = Attribute(u"Contact name")
-    contact_email = Attribute(u"Contact email")
-    contact_phone = Attribute(u"Contact phone")
+    x_prop = Attribute(u"X Prop")  # x-prop
+    iana_prop = Attribute(u"Iana Prop")  # iana-prop
