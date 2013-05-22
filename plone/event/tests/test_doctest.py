@@ -11,7 +11,6 @@ DOCFILES = [
     'recurrence.txt',
     'recurrence_dateutil.txt',
     'utils.txt',
-    # 'recurrence_support.txt',
 ]
 DOCMODS = [
     'plone.event.utils',
