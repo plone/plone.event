@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b4 (unreleased)
+1.0b4 (2013-05-27)
 ------------------
 
 - Add open_end attribute to IEventAccessor interface definition to mark events
