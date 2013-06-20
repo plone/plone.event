@@ -78,7 +78,8 @@ def recurrence_sequence_ical(
     # THIS HACK ensures, that RDATE occurrences don't always start at 0:00.
     # The recurrence widget's RDATE should better include utc time information.
     t0 = None
-    has_rdate = 'RDATE' in recrule  # Only do for the bug-case
+    has_rdate = recrule and 'RDATE' in recrule or False  # Only for the bug to
+                                                         # fix
 
     # limit
     if _from and _until:
