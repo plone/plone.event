@@ -74,11 +74,27 @@ def recurrence_sequence_ical(
         rset = rrule.rruleset()
     rset.rdate(start)  # RCF2445: always include start date
 
+    # TODO BUGFIX WRONG RDATE TIME
+    # THIS HACK ensures, that RDATE occurrences don't always start at 0:00.
+    # The recurrence widget's RDATE should better include utc time information.
+    t0 = None
+    has_rdate = 'RDATE' in recrule  # Only do for the bug-case
+
     # limit
     if _from and _until:
         # between doesn't add a ruleset but returns a list
         rset = rset.between(_from, _until, inc=True)
     for cnt, date in enumerate(rset):
+
+        # BUGFIX WRONG RDATE TIME, see above
+        if not t0:
+            # set initial time information once.
+            t0 = date.time()
+        if has_rdate:
+            t1 = date.time()
+            if t0 != t1:
+                date = date.replace(hour=t0.hour, minute=t0.minute)
+
         # Localize tznaive dates from rrulestr sequence
         date = tz.localize(date)
 

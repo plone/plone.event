@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.0b5 (unreleased)
+------------------
+
+- Handle the case, that plone.formwidget.recurrence doesn't currently set the
+  time for RDATE definitions and recurrence_sequence_ical returns therefore
+  also the time set to 0:00. Until the recurrence widget fixes that, we do this
+  bugfix here. When the widget even supports setting custom times for
+  occurrences, this fix must be removed.
+  [thet]
+
+
 1.0b4 (2013-05-27)
 ------------------
 
