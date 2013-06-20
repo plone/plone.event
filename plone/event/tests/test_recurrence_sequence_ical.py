@@ -20,6 +20,21 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         results = [res for res in seq]
         self.assertEqual(len(results), 5)
 
+    def test_recrule_str_rdate(self):
+        """Test, if an RDATE date has the correct time set.
+            See: "BUGFIX WRONG RDATE TIME" in recurrence.py
+        """
+        from plone.event.recurrence import recurrence_sequence_ical
+        from datetime import datetime
+        start = datetime(2011, 11, 23)
+        recrule =\
+"""FREQ=DAILY;INTERVAL=1;COUNT=3;
+RDATE=20111129T000000"""
+        seq = recurrence_sequence_ical(start, recrule=recrule)
+        results = [res for res in seq]
+        self.assertEqual(len(results), 4)
+        self.assertEqual(results[0].time(), results[-1].time())
+
     def test_recrule_from_until(self):
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
