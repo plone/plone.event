@@ -35,6 +35,22 @@ RDATE:20111129T000000"""
         self.assertEqual(len(results), 4)
         self.assertEqual(results[0].time(), results[-1].time())
 
+    def test_recrule_str_exdate(self):
+        """Test, if an EXDATE date are not in the resulting recurrence set.
+        """
+        from plone.event.recurrence import recurrence_sequence_ical
+        from datetime import datetime
+        start = datetime(2013, 6, 29, 10, 10)
+        recrule = u'RRULE:FREQ=DAILY;COUNT=4\r\nEXDATE:20130630,20130701\r\nRDATE:20130706,20130809'
+        seq = recurrence_sequence_ical(start, recrule=recrule)
+        res = [res for res in seq]
+        res_test = [datetime(2013, 6, 29, 10, 10),
+                    datetime(2013, 7, 2, 10, 10),
+                    datetime(2013, 7, 6, 10, 10),
+                    datetime(2013, 8, 9, 10, 10)]
+        self.assertEqual(len(res), 4)
+        self.assertEqual(res, res_test)
+
     def test_recrule_from_until(self):
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
