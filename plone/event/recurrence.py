@@ -66,8 +66,8 @@ def recurrence_sequence_ical(
         # widget) are handled correctly.
         #
         # Following fixes are made:
-        # - The UNTIL date should be included in the recurrence set (fix sets
-        #   it to the end of the day)
+        # - The UNTIL date should be included in the recurrence set, as defined
+        #   by RFC5545 (fix sets it to the end of the day)
         # - RDATE definitions should have the same time as the start date.
         # - EXDATE definitions should exclude occurrences on the specific date
         #   only the same time as the start date.
