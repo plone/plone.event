@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import re
 import datetime
 from dateutil import rrule
 from plone.event.utils import (
@@ -57,6 +57,14 @@ def recurrence_sequence_ical(
     _from = tzdel(from_)
     _until = tzdel(until)
 
+
+    # TODO BUGFIX WRONG RDATE TIME
+    # THIS HACK ensures, that RDATE occurrences don't always start at 0:00.
+    # The recurrence widget's RDATE should better include utc time information.
+    t0 = start.time()  # set initial time information.
+    has_rdate = recrule and 'RDATE' in recrule or False  # Only for the bug to
+                                                         # fix
+
     if recrule:
         # RFC2445 string
         # forceset: always return a rruleset
@@ -74,12 +82,6 @@ def recurrence_sequence_ical(
         rset = rrule.rruleset()
     rset.rdate(start)  # RCF2445: always include start date
 
-    # TODO BUGFIX WRONG RDATE TIME
-    # THIS HACK ensures, that RDATE occurrences don't always start at 0:00.
-    # The recurrence widget's RDATE should better include utc time information.
-    t0 = None
-    has_rdate = recrule and 'RDATE' in recrule or False  # Only for the bug to
-                                                         # fix
 
     # limit
     if _from and _until:
@@ -88,9 +90,6 @@ def recurrence_sequence_ical(
     for cnt, date in enumerate(rset):
 
         # BUGFIX WRONG RDATE TIME, see above
-        if not t0:
-            # set initial time information once.
-            t0 = date.time()
         if has_rdate:
             t1 = date.time()
             if t0 != t1:
