@@ -58,7 +58,6 @@ def recurrence_sequence_ical(
     _until = tzdel(until)
 
 
-
     if recrule:
         # TODO BUGFIX WRONG TIME DEFINITIONS
         # THIS HACK ensures, that UNTIL, RDATE and EXDATE definitions with
