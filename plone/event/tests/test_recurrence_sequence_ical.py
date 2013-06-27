@@ -51,6 +51,23 @@ RDATE:20111129T000000"""
         self.assertEqual(len(res), 4)
         self.assertEqual(res, res_test)
 
+    def test_recrule_str_until(self):
+        """Test, if UNTIL stops the sequence at the end of the day, even if
+        it's set to 0:00 by the recurrence widget.
+        """
+        from plone.event.recurrence import recurrence_sequence_ical
+        from datetime import datetime
+        start = datetime(2013, 6, 29, 10, 10)
+        recrule = u'RRULE:FREQ=DAILY;UNTIL=20130702T000000'
+        seq = recurrence_sequence_ical(start, recrule=recrule)
+        res = [res for res in seq]
+        res_test = [datetime(2013, 6, 29, 10, 10),
+                    datetime(2013, 6, 30, 10, 10),
+                    datetime(2013, 7, 1, 10, 10),
+                    datetime(2013, 7, 2, 10, 10)]
+        self.assertEqual(len(res), 4)
+        self.assertEqual(res, res_test)
+
     def test_recrule_from_until(self):
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
