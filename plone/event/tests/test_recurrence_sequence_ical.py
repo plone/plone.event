@@ -41,7 +41,7 @@ RDATE:20111129T000000"""
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
         start = datetime(2013, 6, 29, 10, 10)
-        recrule = u'RRULE:FREQ=DAILY;COUNT=4\r\nEXDATE:20130630,20130701\r\nRDATE:20130706,20130809'
+        recrule = u'RRULE:FREQ=DAILY;COUNT=4\r\nEXDATE:20130630T000000,20130701T000000\r\nRDATE:20130706T000000,20130809T000000'
         seq = recurrence_sequence_ical(start, recrule=recrule)
         res = [res for res in seq]
         res_test = [datetime(2013, 6, 29, 10, 10),
