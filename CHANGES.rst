@@ -5,10 +5,14 @@ Changelog
 ------------------
 
 - Handle the case, that plone.formwidget.recurrence doesn't currently set the
-  time for RDATE definitions and recurrence_sequence_ical returns therefore
-  also the time set to 0:00. Until the recurrence widget fixes that, we do this
-  bugfix here. When the widget even supports setting custom times for
-  occurrences, this fix must be removed.
+  times for UNTIL, RDATE and EXDATE definitions, what lead into wrong (or
+  better, unexpected) recurrence results with recurrence_sequence_ical. We now
+  replace the T000000 time definitions in the recurrence string with the time
+  of the start date for RDATE and EXDATE definitions and with the time of the
+  end of the day for UNTIL definitions (and so including a possible occurrence
+  on the UNTIL date, as defined by RFC5545).
+  This bugfix should be kept in here until the recurrence widget fixes that or
+  when it supports setting custom times for UNTIL, RDATE and EXDATE parts.
   [thet]
 
 

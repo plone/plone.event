@@ -40,14 +40,16 @@ RDATE:20111129T000000"""
         """
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
-        start = datetime(2013, 6, 29, 10, 10)
+        import pytz
+        at = pytz.timezone("Europe/Vienna")
+        start = at.localize(datetime(2013, 6, 29, 10, 10))
         recrule = u'RRULE:FREQ=DAILY;COUNT=4\r\nEXDATE:20130630T000000,20130701T000000\r\nRDATE:20130706T000000,20130809T000000'
         seq = recurrence_sequence_ical(start, recrule=recrule)
         res = [res for res in seq]
-        res_test = [datetime(2013, 6, 29, 10, 10),
-                    datetime(2013, 7, 2, 10, 10),
-                    datetime(2013, 7, 6, 10, 10),
-                    datetime(2013, 8, 9, 10, 10)]
+        res_test = [at.localize(datetime(2013, 6, 29, 10, 10)),
+                    at.localize(datetime(2013, 7, 2, 10, 10)),
+                    at.localize(datetime(2013, 7, 6, 10, 10)),
+                    at.localize(datetime(2013, 8, 9, 10, 10))]
         self.assertEqual(len(res), 4)
         self.assertEqual(res, res_test)
 
@@ -57,14 +59,16 @@ RDATE:20111129T000000"""
         """
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
-        start = datetime(2013, 6, 29, 10, 10)
+        import pytz
+        at = pytz.timezone("Europe/Vienna")
+        start = at.localize(datetime(2013, 6, 29, 10, 10))
         recrule = u'RRULE:FREQ=DAILY;UNTIL=20130702T000000'
         seq = recurrence_sequence_ical(start, recrule=recrule)
         res = [res for res in seq]
-        res_test = [datetime(2013, 6, 29, 10, 10),
-                    datetime(2013, 6, 30, 10, 10),
-                    datetime(2013, 7, 1, 10, 10),
-                    datetime(2013, 7, 2, 10, 10)]
+        res_test = [at.localize(datetime(2013, 6, 29, 10, 10)),
+                    at.localize(datetime(2013, 6, 30, 10, 10)),
+                    at.localize(datetime(2013, 7, 1, 10, 10)),
+                    at.localize(datetime(2013, 7, 2, 10, 10))]
         self.assertEqual(len(res), 4)
         self.assertEqual(res, res_test)
 

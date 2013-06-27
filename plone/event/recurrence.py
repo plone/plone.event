@@ -58,14 +58,29 @@ def recurrence_sequence_ical(
     _until = tzdel(until)
 
 
-    # TODO BUGFIX WRONG RDATE TIME
-    # THIS HACK ensures, that RDATE occurrences don't always start at 0:00.
-    # The recurrence widget's RDATE should better include utc time information.
-    t0 = start.time()  # set initial time information.
-    has_rdate = recrule and 'RDATE' in recrule or False  # Only for the bug to
-                                                         # fix
 
     if recrule:
+        # TODO BUGFIX WRONG TIME DEFINITIONS
+        # THIS HACK ensures, that UNTIL, RDATE and EXDATE definitions with
+        # incorrect time (currently always set to 0:00 by the recurrence
+        # widget) are handled correctly.
+        #
+        # Following fixes are made:
+        # - The UNTIL date should be included in the recurrence set (fix sets
+        #   it to the end of the day)
+        # - RDATE definitions should have the same time as the start date.
+        # - EXDATE definitions should exclude occurrences on the specific date
+        #   only the same time as the start date.
+        # In the long term ,the recurrence widget should be able to set the
+        # time for UNTIL, RDATE and EXDATE.
+        t0 = start.time()  # set initial time information.
+        # First, replace all times in the recurring rule with starttime
+        t0str = u'T%02d%02d%02d' % (t0.hour, t0.minute, t0.second)
+        recrule = re.sub(r'T[0-9]{6}', t0str, recrule)
+        # Then, replace only the until time to the end of the day
+        recrule = re.sub(r'(UNTIL[^T]*[0-9]{8})T([0-9]{6})', r'\1T235959',
+                         recrule)
+
         # RFC2445 string
         # forceset: always return a rruleset
         # dtstart: optional used when no dtstart is in RFC2445 string
@@ -88,13 +103,6 @@ def recurrence_sequence_ical(
         # between doesn't add a ruleset but returns a list
         rset = rset.between(_from, _until, inc=True)
     for cnt, date in enumerate(rset):
-
-        # BUGFIX WRONG RDATE TIME, see above
-        if has_rdate:
-            t1 = date.time()
-            if t0 != t1:
-                date = date.replace(hour=t0.hour, minute=t0.minute)
-
         # Localize tznaive dates from rrulestr sequence
         date = tz.localize(date)
 
