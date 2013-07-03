@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0b5 (unreleased)
-------------------
+1.0rc1 (2013-07-03)
+-------------------
 
 - Handle the case, that plone.formwidget.recurrence doesn't currently set the
   times for UNTIL, RDATE and EXDATE definitions, what lead into wrong (or

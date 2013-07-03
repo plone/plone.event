@@ -2,9 +2,12 @@ from setuptools import find_packages
 from setuptools import setup
 
 
+version = '1.0rc1'
+
+
 setup(
     name='plone.event',
-    version='1.0b4',
+    version=version,
     description="Event and calendaring related tools not bound to Plone",
     long_description=open("README.rst").read() + "\n" +
            open(("CHANGES.rst")).read(),
