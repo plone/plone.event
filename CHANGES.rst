@@ -23,8 +23,8 @@ Changelog
   without a defined end time.
   [thet]
 
-- Change of pydt signature: exact instead of microseconds and set the defaul to
-  False.
+- Change of pydt signature: exact instead of microseconds and set the default
+  to False.
   [thet]
 
 

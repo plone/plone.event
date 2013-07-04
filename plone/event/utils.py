@@ -137,7 +137,7 @@ def is_same_time(start, end, exact=False):
     :param end: The end datetime.
     :type end: Python datetime or Zope DateTime
     :param exact: If True, the resolution goes down to microseconds. If False,
-                  the resolution are seconds. Defaul is False.
+                  the resolution are seconds. Default is False.
     :type exact: Boolean
     :returns: True, if start and end have the same time, otherwise False.
     :rtype: Boolean.
@@ -388,7 +388,7 @@ def pydt(dt, missing_zone=None, exact=False):
     :param missing_zone: A pytz zone to be used, if no timezone is present.
     :type missing_zone: String
     :param exact: If True, the resolution goes down to microseconds. If False,
-                  the resolution are seconds. Defaul is False.
+                  the resolution are seconds. Default is False.
     :type exact: Boolean
     :returns: Python datetime with timezone information.
     :rtype: Python datetime
