@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.0dev (unreleased)
+-------------------
+
+- Add duration parameter to recurrence_sequence_ical to include events, which
+  started before the queried timerange.
+  [thet]
+
+
 1.0rc1 (2013-07-03)
 -------------------
 

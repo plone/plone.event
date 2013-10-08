@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
-import re
-import datetime
 from dateutil import rrule
-from plone.event.utils import (
-        pydt, dt2int, utc, utcoffset_normalize, DSTAUTO, tzdel)
+from plone.event.utils import DSTAUTO
+from plone.event.utils import dt2int
+from plone.event.utils import pydt
+from plone.event.utils import tzdel
+from plone.event.utils import utc
+from plone.event.utils import utcoffset_normalize
+
+import datetime
+import re
+
 
 # TODO: make me configurable
 MAXCOUNT = 1000  # Maximum number of occurrences
 
 
-def recurrence_sequence_ical(
-    start,
-    recrule=None,
-    from_=None,
-    until=None,
-    count=None
-    ):
+def recurrence_sequence_ical(start, recrule=None,
+                             from_=None, until=None,
+                             count=None, duration=None):
 
     """Calculates a sequence of datetime objects from a recurrence rule
     following the RFC2445 specification, using python-dateutil recurrence
@@ -24,25 +26,30 @@ def recurrence_sequence_ical(
 
     :param start:   datetime or DateTime instance of the date from which the
                     recurrence sequence is calculated.
-    :type start: datetime
+    :type start: datetime.datetime
 
-    :param recrule: String with RFC2445 compatible recurrence definition,
-                    dateutil.rrule or dateutil.rruleset instances.
+    :param recrule: Optional string with RFC2445 compatible recurrence
+                    definition, dateutil.rrule or dateutil.rruleset instances.
     :type recrule: string
 
-    :param from_:   datetime or DateTime instance of the date, to limit -
-                    possibly with until - the result within a timespan -
-                    The Date Horizon.
-    :type from_: datetime
+    :param from_:   Optional datetime or DateTime instance of the date, to
+                    limit the result within a timespan.
+    :type from_: datetime.datetime
 
-    :param until:   datetime or DateTime instance of the date, until the
-                    recurrence is calculated. If not given, count or MAXDATE
-                    limit the recurrence calculation.
-    :type until: datetime
+    :param until:   Optional datetime or DateTime instance of the date, until
+                    the recurrence is calculated. If not given, count or
+                    MAXDATE limit the recurrence calculation.
+    :type until: datetime.datetime
 
-    :param count:   Integer which defines the number of occurences. If not
-                    given, until or MAXDATE limits the recurrence calculation.
+    :param count:   Optional integer which defines the number of occurences.
+                    If not given, until or MAXDATE limits the recurrence
+                    calculation.
     :type count: integer
+
+    :param duration: Optional timedelta instance, which is used to calculate
+                     if a occurence datetime plus duration is within the
+                     queried timerange.
+    :type duration:  datetime.timedelta
 
     :returns: A generator which generates a sequence of datetime instances.
     :rtype: generator
@@ -56,7 +63,10 @@ def recurrence_sequence_ical(
     start = tzdel(start)  # tznaive | start defines tz
     _from = tzdel(from_)
     _until = tzdel(until)
-
+    if duration:
+        assert(isinstance(duration, datetime.timedelta))
+    else:
+        duration = datetime.timedelta(0)
 
     if recrule:
         # TODO BUGFIX WRONG TIME DEFINITIONS
@@ -96,11 +106,10 @@ def recurrence_sequence_ical(
         rset = rrule.rruleset()
     rset.rdate(start)  # RCF2445: always include start date
 
-
     # limit
     if _from and _until:
         # between doesn't add a ruleset but returns a list
-        rset = rset.between(_from, _until, inc=True)
+        rset = rset.between(_from-duration, _until, inc=True)
     for cnt, date in enumerate(rset):
         # Localize tznaive dates from rrulestr sequence
         date = tz.localize(date)
@@ -110,7 +119,7 @@ def recurrence_sequence_ical(
             break
         if count and cnt + 1 > count:
             break
-        if from_ and utc(date) < utc(from_):
+        if from_ and utc(date)+duration < utc(from_):
             continue
         if until and utc(date) > utc(until):
             break

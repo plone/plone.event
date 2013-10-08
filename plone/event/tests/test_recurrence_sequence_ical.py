@@ -127,6 +127,22 @@ RDATE:20111129T000000"""
         results = [res for res in seq]
         self.assertEqual(len(results), 4)
 
+    def test_recrule_from_until_with_duration(self):
+        """Should include events ranging into the queried timerange.
+        """
+        from plone.event.recurrence import recurrence_sequence_ical
+        from datetime import datetime
+        from datetime import timedelta
+        start = datetime(2011, 11, 23)
+        recrule = "FREQ=DAILY;INTERVAL=1;COUNT=5"
+        from_ = datetime(2011, 11, 26)
+        until = datetime(2011, 11, 27)
+        seq = recurrence_sequence_ical(start, recrule=recrule,
+                                       from_=from_, until=until,
+                                       duration=timedelta(days=2))
+        results = [res for res in seq]
+        self.assertEqual(len(results), 4)
+
     def test_recrule_until_with_timezone(self):
         from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
