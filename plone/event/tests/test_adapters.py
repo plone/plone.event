@@ -32,9 +32,9 @@ class TestAdapters(unittest.TestCase):
         acc = IEventAccessor(obj)
 
         # Accessor getters
-        self.assertEquals(acc.start, obj.start)
-        self.assertEquals(acc.end, obj.end)
-        self.assertEquals(acc.duration, obj.end - obj.start)
+        self.assertEqual(acc.start, obj.start)
+        self.assertEqual(acc.end, obj.end)
+        self.assertEqual(acc.duration, obj.end - obj.start)
 
         # Accessor setters
         start = datetime(2013, 4, 5, 16, 31, tzinfo=tz)
