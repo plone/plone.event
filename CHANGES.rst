@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0.rcdev (unreleased)
+----------------------
 
 - Add duration parameter to recurrence_sequence_ical to include events, which
   started before the queried timerange.
