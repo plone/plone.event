@@ -176,13 +176,19 @@ def is_same_time(start, end, exact=False):
 def is_same_day(start, end):
     """ Test if event starts and ends at same day.
 
-    >>> from plone.event.utils import is_same_day, pydt
+    >>> from plone.event.utils import is_same_day, utc
     >>> from datetime import datetime, timedelta
 
-    >>> is_same_day(datetime.now(), datetime.now()+timedelta(hours=1))
+    >>> is_same_day(
+    ...     datetime(2013, 11, 06, 10, 0, 0),
+    ...     datetime(2013, 11, 06, 10, 0, 0) + timedelta(hours=1)
+    ... )
     True
 
-    >>> is_same_day(datetime.now(), datetime.now()+timedelta(days=1))
+    >>> is_same_day(
+    ...     datetime(2013, 11, 06, 10, 0, 0),
+    ...     datetime(2013, 11, 06, 10, 0, 0) + timedelta(days=1)
+    ... )
     False
 
     >>> is_same_day(datetime(2011, 11, 11, 0, 0, 0,),
@@ -190,11 +196,11 @@ def is_same_day(start, end):
     True
 
     Now with one localized (UTC) datetime:
-    >>> is_same_day(pydt(datetime.now()), datetime.now())
+    >>> is_same_day(
+    ...     utc(datetime(2013, 11, 06, 10, 0, 0)),
+    ...     datetime(2013, 11, 06, 10, 0, 0)
+    ... )
     True
-
-    TODO: tests for different localized dates.
-
     """
     start = pydt(start)
     end = pydt(end)
