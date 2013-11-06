@@ -180,14 +180,14 @@ def is_same_day(start, end):
     >>> from datetime import datetime, timedelta
 
     >>> is_same_day(
-    ...     datetime(2013, 11, 06, 10, 0, 0),
-    ...     datetime(2013, 11, 06, 10, 0, 0) + timedelta(hours=1)
+    ...     datetime(2013, 11, 6, 10, 0, 0),
+    ...     datetime(2013, 11, 6, 10, 0, 0) + timedelta(hours=1)
     ... )
     True
 
     >>> is_same_day(
-    ...     datetime(2013, 11, 06, 10, 0, 0),
-    ...     datetime(2013, 11, 06, 10, 0, 0) + timedelta(days=1)
+    ...     datetime(2013, 11, 6, 10, 0, 0),
+    ...     datetime(2013, 11, 6, 10, 0, 0) + timedelta(days=1)
     ... )
     False
 
@@ -197,8 +197,8 @@ def is_same_day(start, end):
 
     Now with one localized (UTC) datetime:
     >>> is_same_day(
-    ...     utc(datetime(2013, 11, 06, 10, 0, 0)),
-    ...     datetime(2013, 11, 06, 10, 0, 0)
+    ...     utc(datetime(2013, 11, 6, 10, 0, 0)),
+    ...     datetime(2013, 11, 6, 10, 0, 0)
     ... )
     True
     """
