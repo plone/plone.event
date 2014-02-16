@@ -84,7 +84,7 @@ def recurrence_sequence_ical(start, recrule=None,
         # time for UNTIL, RDATE and EXDATE.
         t0 = start.time()  # set initial time information.
         # First, replace all times in the recurring rule with starttime
-        t0str = u'T%02d%02d%02d' % (t0.hour, t0.minute, t0.second)
+        t0str = 'T%02d%02d%02d' % (t0.hour, t0.minute, t0.second)
         # Replace any times set to 000000 with start time, not all
         # rrules are set by a specific broken widget.  Don't waste time
         # subbing if the start time is already 000000.
