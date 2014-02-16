@@ -43,7 +43,7 @@ RDATE:20111129T000000"""
         import pytz
         at = pytz.timezone("Europe/Vienna")
         start = at.localize(datetime(2013, 6, 29, 10, 10))
-        recrule = u'RRULE:FREQ=DAILY;COUNT=4\r\nEXDATE:20130630T000000,20130701T000000\r\nRDATE:20130706T000000,20130809T000000'
+        recrule = 'RRULE:FREQ=DAILY;COUNT=4\r\nEXDATE:20130630T000000,20130701T000000\r\nRDATE:20130706T000000,20130809T000000'
         seq = recurrence_sequence_ical(start, recrule=recrule)
         res = [res for res in seq]
         res_test = [at.localize(datetime(2013, 6, 29, 10, 10)),
@@ -62,7 +62,7 @@ RDATE:20111129T000000"""
         import pytz
         at = pytz.timezone("Europe/Vienna")
         start = at.localize(datetime(2013, 6, 29, 10, 10))
-        recrule = u'RRULE:FREQ=DAILY;UNTIL=20130702T000000'
+        recrule = 'RRULE:FREQ=DAILY;UNTIL=20130702T000000'
         seq = recurrence_sequence_ical(start, recrule=recrule)
         res = [res for res in seq]
         res_test = [at.localize(datetime(2013, 6, 29, 10, 10)),
