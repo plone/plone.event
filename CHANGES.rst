@@ -1,6 +1,23 @@
 Changelog
 =========
 
+1.1dev (unreleased)
+-------------------
+
+- Fix tests, where they broke with unicode recurrence strings and unicode date
+  formating strings.
+  [thet]
+
+- Make rrule munging hack only apply to RDATEs, EXDATEs and UNTILs which have
+  null times, otherwise the DateRecurrenceIndex is broken for those who are
+  generating RRULES using a non-broken widget. This will still result in broken
+  RRULEs for some edge cases (where an RDATE is explicitly set for midnight on
+  a RRULE with a DTSTART which is not), but that's better than breaking valid
+  RRULES which are not generated improperly.
+  This code should go into the broken widget itself or its DataManager/Field.
+  [alecpm]
+
+
 1.0 (2013-11-06)
 ----------------
 
