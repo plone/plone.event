@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.1dev (unreleased)
--------------------
+1.1 (2014-02-11)
+----------------
 
 - Fix tests, where they broke with unicode recurrence strings and unicode date
   formating strings.

@@ -2,8 +2,6 @@
 plone.event recurrence tests
 ============================
 
-#    >>> interact( locals() )
-
 
 recurrence_sequence_ical - rrulestr test
 ========================================

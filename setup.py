@@ -2,7 +2,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = '1.0'
+version = '1.1'
 
 
 setup(
@@ -28,9 +28,15 @@ setup(
         'setuptools',
         'python-dateutil',
         'pytz',
+        'zope.component',
         'zope.interface',
     ],
     extras_require={
-        'test': ['DateTime', 'interlude', 'mock', 'zope.component'],
+        'test': [
+            'DateTime',
+            'mock',
+            'unittest2',
+            'zope.configuration',
+        ],
     },
 )
