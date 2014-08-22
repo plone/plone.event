@@ -2,8 +2,8 @@ Problems with the python-dateutil package
 =========================================
 
 python-dateutil is used for all recurrence calculations in plone.app.event
-(PLIP10886). It is insanely flexible, but it does not implement every bit of the 
-iCalendar (RFC2445 or the newer RFC5545) specification. The limitations 
+(PLIP10886). It is insanely flexible, but it does not implement every bit of the
+iCalendar (RFC2445 or the newer RFC5545) specification. The limitations
 
 Our workaround to this limitations is, that we do all calculations with
 python-dateutil with timezone-naive dates and convert them to the correct

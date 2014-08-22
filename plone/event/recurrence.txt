@@ -162,7 +162,7 @@ a constant, is configurable (TODO) or - for this test - set from outside...
 
 recurrence_sequence_timedelta test
 ==================================
-    >>> from plone.event.utils import DSTKEEP, DSTADJUST, DSTAUTO 
+    >>> from plone.event.utils import DSTKEEP, DSTADJUST, DSTAUTO
     >>> from plone.event.recurrence import recurrence_sequence_timedelta
     >>> from datetime import timedelta
 
