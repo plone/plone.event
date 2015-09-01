@@ -4,7 +4,17 @@ Changelog
 1.2dev (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fixed ``guesstz`` test to work with old and new ``pytz`` versions.
+  pytz 2014.2 and earlier say::
+
+    <DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>
+
+  and pytz 2014.3 and later say::
+
+    <DstTzInfo 'Europe/Vienna' LMT+1:05:00 STD>
+
+  where ``LMT`` stands for Local Mean Time.
+  [maurits]
 
 
 1.1 (2014-02-11)

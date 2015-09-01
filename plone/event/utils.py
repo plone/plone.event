@@ -503,8 +503,8 @@ def guesstz(DT):
     >>> from plone.event.utils import guesstz
 
     Timezones with the same name as in the Olson DB can easily be guessed.
-    >>> guesstz(DateTime('2010-01-01 Europe/Vienna'))
-    <DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>
+    >>> guesstz(DateTime('2010-01-01 Europe/Vienna')).zone
+    'Europe/Vienna'
 
     GMT timezones which are popular with DateTime cannot be guessed,
     unfortunatly
