@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.2dev (unreleased)
--------------------
+1.2 (2015-09-09)
+----------------
 
 - Fixed ``guesstz`` test to work with old and new ``pytz`` versions.
   pytz 2014.2 and earlier say::
