@@ -35,7 +35,6 @@ setup(
         'test': [
             'DateTime',
             'mock',
-            'unittest2',
             'zope.configuration',
         ],
     },

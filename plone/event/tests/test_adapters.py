@@ -1,8 +1,8 @@
-import unittest2 as unittest
 from zope.configuration import xmlconfig
 from plone.event.interfaces import IEvent, IEventAccessor
 from datetime import datetime
 import pytz
+import unittest
 import zope.interface
 
 
