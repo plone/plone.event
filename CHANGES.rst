@@ -4,7 +4,8 @@ Changelog
 1.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Remove unittest2 dependency.
+  [gforcada]
 
 
 1.2 (2015-09-09)
