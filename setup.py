@@ -1,19 +1,19 @@
 from setuptools import find_packages
 from setuptools import setup
 
-
 version = '1.3.dev0'
-
 
 setup(
     name='plone.event',
     version=version,
     description="Event and calendaring related tools not bound to Plone",
-    long_description=open("README.rst").read() + "\n" +
-           open(("CHANGES.rst")).read(),
+    long_description=(open("README.rst").read() + "\n" +
+                      open(("CHANGES.rst")).read()),
     classifiers=[
         "Framework :: Plone",
+        "Framework :: Plone :: 5.0",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
     ],
     keywords='Plone calendar calendaring event recurring',
     author='Plone Foundation',
