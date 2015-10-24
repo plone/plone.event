@@ -3,4 +3,5 @@
 *.py?
 .*
 dist/
+!.gitattributes
 !.gitignore
