@@ -1,9 +1,10 @@
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from zope.component import adapts
-from zope.interface import implements
+from zope.interface import implementer
 
 
+@implementer(IEventAccessor)
 class EventAccessor(object):
     """Simple event accessor adapter implementation for generic events, which
     follow the IEvent interface closely.
@@ -11,7 +12,6 @@ class EventAccessor(object):
     Concrete implementations adapt a content type to the IEvent specification.
 
     """
-    implements(IEventAccessor)
     adapts(IEvent)
 
     def __init__(self, context):
