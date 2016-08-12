@@ -4,10 +4,6 @@ Changelog
 1.4 (unreleased)
 ----------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Use zope.interface decorator.
