@@ -297,7 +297,7 @@ def tzdel(dt):
 
     >>> from plone.event.utils import tzdel, utctz
     >>> from datetime import datetime
-    >>> dt = utctz().localize(datetime(2011, 05, 21, 12, 25))
+    >>> dt = utctz().localize(datetime(2011, 5, 21, 12, 25))
 
     Remove the timezone:
     >>> tzdel(dt)
@@ -567,10 +567,10 @@ def int2dt(dtint):
     if not isinstance(dtint, int):
         raise ValueError('int2dt expects integer values as arguments.')
     minutes = dtint % 60
-    hours = dtint / 60 % 24
-    days = dtint / 60 / 24 % 31
-    months = dtint / 60 / 24 / 31 % 12
-    years = dtint / 60 / 24 / 31 / 12
+    hours = dtint // 60 % 24
+    days = dtint // 60 // 24 % 31
+    months = dtint // 60 // 24 // 31 % 12
+    years = dtint // 60 // 24 // 31 // 12
     return datetime(years, months, days, hours, minutes, tzinfo=utctz())
 
 

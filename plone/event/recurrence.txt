@@ -12,13 +12,13 @@ Basic
 When no recurrence rule is given, the start date should be returned.
     >>> from plone.event.recurrence import recurrence_sequence_ical
     >>> from datetime import datetime
-    >>> dates = recurrence_sequence_ical(start=datetime(2010,01,01,0,0))
+    >>> dates = recurrence_sequence_ical(start=datetime(2010, 1, 1, 0, 0))
     >>> list(dates)
     [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<UTC>)]
 
 Timezone naive dates are converted to utc.
     >>> dates = recurrence_sequence_ical(
-    ...     start=datetime(2010,01,01,0,0),
+    ...     start=datetime(2010, 1, 1, 0, 0),
     ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")
     >>> list(dates)
     [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<UTC>),
@@ -31,7 +31,7 @@ The same with the timezone set beforehand.
     >>> import pytz
     >>> at = pytz.timezone('Europe/Vienna')
     >>> dates = recurrence_sequence_ical(
-    ...     start=at.localize(datetime(2010,01,01,0,0)),
+    ...     start=at.localize(datetime(2010, 1, 1, 0, 0)),
     ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")
     >>> list(dates)
     [datetime.datetime(2010, 1, 1, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
@@ -42,7 +42,7 @@ The same with the timezone set beforehand.
 
 Get the integer representations from this recurrence rule
     >>> dates = recurrence_sequence_ical(
-    ...     start=at.localize(datetime(2010,01,01,0,0)),
+    ...     start=at.localize(datetime(2010, 1, 1, 0, 0)),
     ...     recrule="""RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5""")
     >>> from plone.event.recurrence import recurrence_int_sequence
     >>> list(recurrence_int_sequence(dates))
@@ -94,7 +94,7 @@ datetime.datetime(2010, 10, 31, 4, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
 Multiple Ruleset
 ----------------
 
-    >>> start = at.localize(datetime(2010,01,01,0,0))
+    >>> start = at.localize(datetime(2010, 1, 1, 0, 0))
     >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100110T000000
     ... RDATE:20100120T000000
     ... EXRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20100110T000000
@@ -121,8 +121,8 @@ setting.
 
 ...init
     >>> rulestr = """RRULE:FREQ=DAILY;INTERVAL=1"""
-    >>> start = at.localize(datetime(2010,01,01,0,0))
-    >>> until = at.localize(datetime(2010,01,02,0,0))
+    >>> start = at.localize(datetime(2010, 1, 1, 0, 0))
+    >>> until = at.localize(datetime(2010, 1, 2, 0, 0))
 
 ...until
     >>> dates = recurrence_sequence_ical(start, recrule=rulestr, until=until)
@@ -167,7 +167,7 @@ recurrence_sequence_timedelta test
     >>> from datetime import timedelta
 
 The simplest case is to just have a one-time event.
-    >>> start = datetime(2008,01,01,0,0,0,0,pytz.timezone('CET'))
+    >>> start = datetime(2008, 1, 1, 0, 0, 0, 0, pytz.timezone('CET'))
     >>> dates = recurrence_sequence_timedelta(start)
     >>> list(dates)
     [datetime.datetime(2008, 1, 1, 0, 0, tzinfo=<DstTzInfo 'CET' CET+1:00:00 STD>)]
@@ -207,8 +207,8 @@ different daylight saving time behaviours
 
 First lets change from winter to summertime (EU rules with CET):
 
-    >>> start = datetime(2008,03,29,21,0,0,0,pytz.timezone('CET'))
-    >>> until = datetime(2008,03,30,21,0,0,0,pytz.timezone('CET')) - timedelta(microseconds=1)
+    >>> start = datetime(2008, 3, 29, 21, 0, 0, 0, pytz.timezone('CET'))
+    >>> until = datetime(2008, 3, 30, 21, 0, 0, 0, pytz.timezone('CET')) - timedelta(microseconds=1)
 
     >>> from plone.event.utils import utcoffset_normalize, DSTADJUST
     >>> until = utcoffset_normalize(until, dstmode=DSTADJUST)
@@ -251,8 +251,8 @@ is wrong! 1:00 CET is the same as 2:00 CEST!
 
 Anyway, we want this behaviour on a day-level, see next example, a event should
 recurr every day 11:00am.
-    >>> start = datetime(2008,03,29,11,0,0,0,pytz.timezone('CET'))
-    >>> until = datetime(2008,03,31,11,0,0,0,pytz.timezone('CET'))
+    >>> start = datetime(2008, 3, 29, 11, 0, 0, 0, pytz.timezone('CET'))
+    >>> until = datetime(2008, 3, 31, 11, 0, 0, 0, pytz.timezone('CET'))
     >>> until = utcoffset_normalize(until, dstmode=DSTADJUST)
     >>> dates = recurrence_sequence_timedelta(start, delta=24*60, until=until, dst=DSTADJUST)
     >>> list(dates)
@@ -268,8 +268,8 @@ see what DSTKEEP does:
 
 Here the correct behaviour on day level with DSTKEEP.
 
-    >>> start = datetime(2008,03,29,21,0,0,0,pytz.timezone('CET'))
-    >>> until = datetime(2008,03,30,21,0,0,0,pytz.timezone('CET')) - timedelta(microseconds=1)
+    >>> start = datetime(2008, 3, 29, 21, 0, 0, 0, pytz.timezone('CET'))
+    >>> until = datetime(2008, 3, 30, 21, 0, 0, 0, pytz.timezone('CET')) - timedelta(microseconds=1)
     >>> until = utcoffset_normalize(until, dstmode=DSTADJUST)
 
     >>> dates = recurrence_sequence_timedelta(start, delta=60, until=until, dst=DSTKEEP)
@@ -306,8 +306,8 @@ with DSTAUTO, which is the default behaviour.
 
 Here the correct behaviour on day level or above: DSTADJUST is choosen.
 
-    >>> start = datetime(2008,03,29,11,0,0,0,pytz.timezone('CET'))
-    >>> until = datetime(2008,03,31,11,0,0,0,pytz.timezone('CET'))
+    >>> start = datetime(2008, 3, 29, 11, 0, 0, 0, pytz.timezone('CET'))
+    >>> until = datetime(2008, 3, 31, 11, 0, 0, 0, pytz.timezone('CET'))
     >>> until = utcoffset_normalize(until, dstmode=DSTADJUST)
     >>> until
     datetime.datetime(2008, 3, 31, 11, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)
@@ -321,8 +321,8 @@ Here the correct behaviour on day level or above: DSTADJUST is choosen.
 
 The correct behaviour on below day level: DSTKEEP is choosen.
 
-    >>> start = datetime(2008,03,29,21,0,0,0,pytz.timezone('CET'))
-    >>> until = datetime(2008,03,30,21,0,0,0,pytz.timezone('CET')) - timedelta(microseconds=1)
+    >>> start = datetime(2008, 3, 29, 21, 0, 0, 0, pytz.timezone('CET'))
+    >>> until = datetime(2008, 3, 30, 21, 0, 0, 0, pytz.timezone('CET')) - timedelta(microseconds=1)
     >>> until = utcoffset_normalize(until, dstmode=DSTADJUST)
     >>> dates = recurrence_sequence_timedelta(start, delta=60, until=until)
     >>> len(list(dates))

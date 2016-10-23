@@ -63,7 +63,7 @@ the date 2010-10-31, 23:30 in UTC, which is 2010-11-01, 0:30 in Austria, UTC+1
 If we let the sequence start from 1st November, the 1st November is correctly
 substracted, since the sequence has all correct timezones.
 
-    >>> start = at.localize(datetime(2010,11,01,0,30))
+    >>> start = at.localize(datetime(2010, 11, 1, 0, 30))
     >>> list(rrule.rrulestr(recrule, dtstart=start, forceset=True))
     [datetime.datetime(2010, 11, 2, 0, 30, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>),
         datetime.datetime(2010, 11, 3, 0, 30, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
@@ -94,7 +94,7 @@ Using the VALUE parameter in DTSTART or any other date component does not work.
 The value parameter can be used to distinguish between DATE and DATE-TIME.
 Please note, that DATE-TIME is the default.
 
-    >>> start = at.localize(datetime(2010,01,01,0,0))
+    >>> start = at.localize(datetime(2010, 1, 1, 0, 0))
     >>> recrule = """DTSTART;VALUE=DATE:20101029"""
     >>> list(rrule.rrulestr(recrule, dtstart=start, forceset=True))
     Traceback (most recent call last):
@@ -114,7 +114,7 @@ General imports used in here
 
 Timezone aware parsing regarding RFC2445 does not work
 
-    >>> start = at.localize(datetime(2010,01,01,0,0))
+    >>> start = at.localize(datetime(2010, 1, 1, 0, 0))
     >>> recrule = """DTSTART;TZID=Europe/Vienna:20101029T090000
     ... RRULE:FREQ=DAILY;INTERVAL=1;COUNT=4
     ... """
@@ -126,7 +126,7 @@ Timezone aware parsing regarding RFC2445 does not work
 
 Mixing timezone aware and naive dates also breaks (this is not a bug)
 
-    >>> start=at.localize(datetime(2010,01,01,0,0))
+    >>> start=at.localize(datetime(2010, 1, 1, 0, 0))
     >>> recrule="""RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20100104T000000"""
     >>> list(rrule.rrulestr(recrule, dtstart=start, forceset=True))
     Traceback (most recent call last):
