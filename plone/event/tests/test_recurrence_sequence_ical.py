@@ -77,7 +77,7 @@ RDATE:20111129T000000"""
         from datetime import datetime
         start = datetime(2011, 11, 23)
         recrule = None
-        from_ = datetime(2011, 11, 01)
+        from_ = datetime(2011, 11, 1)
         until = datetime(2011, 12, 31)
         seq = recurrence_sequence_ical(start, recrule=recrule,
                                        from_=from_, until=until)

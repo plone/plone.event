@@ -11,6 +11,7 @@ Breaking changes:
 New features:
 
 - *add item here*
+- Support Python 3.
 
 Bug fixes:
 

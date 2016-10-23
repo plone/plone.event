@@ -1,5 +1,5 @@
 import mock
-import unittest2 as unittest
+import unittest
 
 
 class TestUtils(unittest.TestCase):
