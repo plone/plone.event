@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 
 import logging
 import os
 import pytz
 import time
-from datetime import date
-from datetime import datetime
-from datetime import timedelta
+
 
 DSTADJUST = 'adjust'
 DSTKEEP = 'keep'
 DSTAUTO = 'auto'
-MAX32 = int(2 ** 31 - 1)
+MAX32 = int(2**31 - 1)
 
 logger = logging.getLogger('plone.event')
 
@@ -55,15 +56,21 @@ def validated_timezone(timezone, fallback=None):
     try:
         # following statement ensures, that timezone is a valid pytz/Olson zone
         return pytz.timezone(timezone).zone
-    except:
+    except Exception:
         if fallback:
-            logger.warn('The timezone %s is not a valid timezone from the '
-                        'Olson database or pytz. Falling back to %s.'
-                        % (timezone, fallback))
+            logger.warn(
+                'The timezone {0} is not a valid timezone from the '
+                'Olson database or pytz. Falling back to {1}.'.format(
+                    timezone,
+                    fallback,
+                )
+            )
             return fallback
         else:
-            raise ValueError('The timezone %s is not a valid timezone from '
-                             'the Olson database or pytz.' % timezone)
+            raise ValueError(
+                'The timezone {0} is not a valid timezone from '
+                'the Olson database or pytz.'.format(timezone)
+            )
 
 
 def default_timezone(fallback='UTC'):
@@ -123,12 +130,14 @@ def default_timezone(fallback='UTC'):
             timezone = zones[0]
         else:
             # Default fallback = UTC
-            logger.warn("Operating system's timezone cannot be found. "
-                        "Falling back to UTC.")
+            logger.warn(
+                'Operating system\'s timezone cannot be found. '
+                'Falling back to UTC.'
+            )
     return validated_timezone(timezone, fallback)
 
 
-### Display helpers
+# Display helpers
 def is_same_time(start, end, exact=False):
     """ Test if event starts and ends at same time.
 
@@ -207,7 +216,7 @@ def is_same_day(start, end):
     return start.date() == end.date()
 
 
-### Timezone helpers
+# Timezone helpers
 def utctz():
     """ Return the UTVC zone as a pytz.UTC instance.
 
@@ -266,12 +275,12 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
                   used - otherwise DSTADJUST. This behavior is the default.
     """
     try:
-        assert(bool(date.tzinfo))
-    except:
+        assert (bool(date.tzinfo))
+    except Exception:
         raise TypeError('Cannot normalize timezone naive dates')
-    assert(dstmode in [DSTADJUST, DSTKEEP, DSTAUTO])
+    assert (dstmode in [DSTADJUST, DSTKEEP, DSTAUTO])
     if delta:
-        assert(isinstance(delta, timedelta))  # Easier in Java
+        assert (isinstance(delta, timedelta))  # Easier in Java
         delta = delta.seconds + delta.days * 24 * 3600  # total delta in secs
         if dstmode == DSTAUTO and delta < 24 * 60 * 60:
             dstmode = DSTKEEP
@@ -283,7 +292,7 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
             return date.tzinfo.normalize(date)
         else:  # DSTADJUST
             return date.replace(tzinfo=date.tzinfo.normalize(date).tzinfo)
-    except:
+    except Exception:
         # TODO: python-datetime converts e.g RDATE:20100119T230000Z to
         # datetime.datetime(2010, 1, 19, 23, 0, tzinfo=tzutc())
         # should that be a real utc zoneinfo?
@@ -383,7 +392,7 @@ def date_to_datetime(value):
     elif is_datetime(value):
         return value
     else:
-        raise ValueError("Value must be a date or datetime object.")
+        raise ValueError('Value must be a date or datetime object.')
 
 
 def pydt(dt, missing_zone=None, exact=False):
@@ -451,7 +460,7 @@ def pydt(dt, missing_zone=None, exact=False):
         else:
             ret = utcoffset_normalize(dt, dstmode=DSTADJUST)
 
-    if "DateTime" in str(dt.__class__):
+    if 'DateTime' in str(dt.__class__):
         # Zope DateTime
         # TODO: do we need to support subclasses of DateTime too? the check
         #       above would fail.
@@ -478,14 +487,17 @@ def pydt(dt, missing_zone=None, exact=False):
         # tz is equal to <DstTzInfo 'Europe/Paris' PMT+0:09:00 STD>
         dt = datetime(year, month, day, hour, min, sec, micro, tzinfo=tz)
         # before:
-        # datetime.datetime(2011, 3, 14, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' PMT+0:09:00 STD>)
+        # datetime.datetime(2011, 3, 14, 14, 19,
+        # tzinfo=<DstTzInfo 'Europe/Paris' PMT+0:09:00 STD>)
         # dt = dt.tzinfo.normalize(dt)
-        # after: datetime.datetime(2011, 3, 14, 15, 10, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
+        # after: datetime.datetime(2011, 3, 14, 15, 10,
+        # tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
         dt = utcoffset_normalize(dt, dstmode=DSTADJUST)
-        # after: datetime.datetime(2011, 3, 14, 19, tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
+        # after: datetime.datetime(2011, 3, 14, 19,
+        # tzinfo=<DstTzInfo 'Europe/Paris' CET+1:00:00 STD>
         ret = dt
 
-    if ret and exact == False:
+    if ret and exact is False:
         ret = ret.replace(microsecond=0)
 
     return ret
@@ -522,7 +534,7 @@ def guesstz(DT):
     return None
 
 
-### Date as integer representation helpers
+# Date as integer representation helpers
 def dt2int(dt):
     """ Calculates an integer from a datetime, resolution is one minute.
     The datetime is always converted to the UTC zone.
@@ -537,14 +549,15 @@ def dt2int(dt):
         return 0
     # TODO: if dt has not timezone information, guess and set it
     dt = utc(dt)
-    value = (((dt.year*12+dt.month)*31+dt.day)*24+dt.hour)*60+dt.minute
+    value = (((dt.year * 12 + dt.month) * 31 + dt.day) * 24 + dt.hour
+             ) * 60 + dt.minute
 
     # TODO: unit test me
     if value > MAX32:
         # value must be integer fitting in the 32bit range
         raise OverflowError(
-            """%s is not within the range of indexable dates,<<
-            exceeding 32bit range.""" % dt
+            """{0} is not within the range of indexable dates,<<
+            exceeding 32bit range.""".format(dt)
         )
     return value
 
@@ -582,7 +595,7 @@ def dt_to_zone(dt, tzstring):
     return dt.astimezone(pytz.timezone(tzstring))
 
 
-### RFC2445 export helpers
+# RFC2445 export helpers
 def rfc2445dt(dt, mode='utc', date=True, time=True):
     """ Convert a datetime or DateTime object into an RFC2445 compatible
     datetime string.
@@ -646,10 +659,12 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
     dt = pydt(dt)
     if mode == 'utc':
         dt = utc(dt)
-    date = "%s%s%s%s" % (date and dt.strftime("%Y%m%d") or '',
-                         date and time and 'T' or '',
-                         time and dt.strftime("%H%M%S") or '',
-                         mode=='utc' and 'Z' or '')
+    date = '{0}{1}{2}{3}'.format(
+        date and dt.strftime('%Y%m%d') or '',
+        date and time and 'T' or '',
+        time and dt.strftime('%H%M%S') or '',
+        mode == 'utc' and 'Z' or '',
+    )
     if mode == 'local':
         return date, dt.tzinfo.zone
     return date

@@ -1,14 +1,27 @@
+# -*- coding: utf-8 -*-
 from setuptools import find_packages
 from setuptools import setup
 
+
 version = '1.3.3.dev0'
+
+a = (
+    'bla',
+    'bli',
+    'bli',
+    'bli',
+    'bli',
+    'bli',
+    'bliaad asdf asd asd asda sd asd asd sd ',
+)
 
 setup(
     name='plone.event',
     version=version,
     description="Event and calendaring related tools not bound to Plone",
-    long_description=(open("README.rst").read() + "\n" +
-                      open(("CHANGES.rst")).read()),
+    long_description=(
+        open("README.rst").read() + "\n" + open(("CHANGES.rst")).read()
+    ),
     classifiers=[
         "Framework :: Plone",
         "Framework :: Plone :: 5.0",
@@ -33,11 +46,9 @@ setup(
         'zope.component',
         'zope.interface',
     ],
-    extras_require={
-        'test': [
-            'DateTime',
-            'mock',
-            'zope.configuration',
-        ],
-    },
+    extras_require={'test': [
+        'DateTime',
+        'mock',
+        'zope.configuration',
+    ], },
 )
