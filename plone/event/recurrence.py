@@ -15,10 +15,14 @@ import re
 MAXCOUNT = 1000  # Maximum number of occurrences
 
 
-def recurrence_sequence_ical(start, recrule=None,
-                             from_=None, until=None,
-                             count=None, duration=None):
-
+def recurrence_sequence_ical(
+        start,
+        recrule=None,
+        from_=None,
+        until=None,
+        count=None,
+        duration=None,
+):
     """Calculates a sequence of datetime objects from a recurrence rule
     following the RFC2445 specification, using python-dateutil recurrence
     rules.  The resolution of the resulting datetime objects is one second,
@@ -64,7 +68,7 @@ def recurrence_sequence_ical(start, recrule=None,
     _from = tzdel(from_)
     _until = tzdel(until)
     if duration:
-        assert(isinstance(duration, datetime.timedelta))
+        assert (isinstance(duration, datetime.timedelta))
     else:
         duration = datetime.timedelta(0)
 
@@ -84,15 +88,18 @@ def recurrence_sequence_ical(start, recrule=None,
         # time for UNTIL, RDATE and EXDATE.
         t0 = start.time()  # set initial time information.
         # First, replace all times in the recurring rule with starttime
-        t0str = 'T%02d%02d%02d' % (t0.hour, t0.minute, t0.second)
+        t0str = 'T{0:02d}{1:02d}{2:02d}'.format(t0.hour, t0.minute, t0.second)
         # Replace any times set to 000000 with start time, not all
         # rrules are set by a specific broken widget.  Don't waste time
         # subbing if the start time is already 000000.
         if t0str != 'T000000':
             recrule = re.sub(r'T000000', t0str, recrule)
         # Then, replace incorrect until times with the end of the day
-        recrule = re.sub(r'(UNTIL[^T]*[0-9]{8})T(000000)', r'\1T235959',
-                         recrule)
+        recrule = re.sub(
+            r'(UNTIL[^T]*[0-9]{8})T(000000)',
+            r'\1T235959',
+            recrule,
+        )
 
         # RFC2445 string
         # forceset: always return a rruleset
@@ -100,12 +107,13 @@ def recurrence_sequence_ical(start, recrule=None,
         #          dtstart is given as timezone naive time. timezones are
         #          applied afterwards, since rrulestr doesn't normalize
         #          timezones over DST boundaries
-        rset = rrule.rrulestr(recrule,
-                              dtstart=start,
-                              forceset=True,
-                              ignoretz=True
-                              # compatible=True # RFC2445 compatibility
-                              )
+        rset = rrule.rrulestr(
+            recrule,
+            dtstart=start,
+            forceset=True,
+            ignoretz=True,
+            # compatible=True # RFC2445 compatibility
+        )
     else:
         rset = rrule.rruleset()
     rset.rdate(start)  # RCF2445: always include start date
@@ -113,7 +121,7 @@ def recurrence_sequence_ical(start, recrule=None,
     # limit
     if _from and _until:
         # between doesn't add a ruleset but returns a list
-        rset = rset.between(_from-duration, _until, inc=True)
+        rset = rset.between(_from - duration, _until, inc=True)
     for cnt, date in enumerate(rset):
         # Localize tznaive dates from rrulestr sequence
         date = tz.localize(date)
@@ -123,7 +131,7 @@ def recurrence_sequence_ical(start, recrule=None,
             break
         if count and cnt + 1 > count:
             break
-        if from_ and utc(date)+duration < utc(from_):
+        if from_ and utc(date) + duration < utc(from_):
             continue
         if until and utc(date) > utc(until):
             break
@@ -132,8 +140,13 @@ def recurrence_sequence_ical(start, recrule=None,
     return
 
 
-def recurrence_sequence_timedelta(start, delta=None, until=None, count=None,
-                                  dst=DSTAUTO):
+def recurrence_sequence_timedelta(
+        start,
+        delta=None,
+        until=None,
+        count=None,
+        dst=DSTAUTO,
+):
     """ Calculates a sequence of datetime objects from a timedelta integer,
     which defines the minutes between each occurence.
 

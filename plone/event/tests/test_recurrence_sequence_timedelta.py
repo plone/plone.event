@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 import unittest
 
 
 class TestRecurrenceSequenceTimedelta(unittest.TestCase):
-
     def test_delta_None(self):
         from plone.event.recurrence import recurrence_sequence_timedelta
         from datetime import datetime
@@ -58,7 +58,11 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         delta = 1
         until = datetime(2011, 11, 24)
         count = 20
-        td = recurrence_sequence_timedelta(start, delta=delta,
-                                           until=until, count=count)
+        td = recurrence_sequence_timedelta(
+            start,
+            delta=delta,
+            until=until,
+            count=count,
+        )
         results = [res for res in td]
         self.assertEqual(len(results), 21)

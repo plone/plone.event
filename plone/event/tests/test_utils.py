@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
 import mock
 import unittest
 
 
 class TestUtils(unittest.TestCase):
-
     @mock.patch('plone.event.utils.pytz')
     @mock.patch('plone.event.utils.os')
     def test_default_timezone(self, os, pytz):
@@ -17,10 +17,7 @@ class TestUtils(unittest.TestCase):
         from plone.event.utils import utcoffset_normalize
         date = mock.Mock()
         date.replace = mock.Mock(side_effect=KeyError)
-        self.assertEqual(
-            utcoffset_normalize(date),
-            date
-        )
+        self.assertEqual(utcoffset_normalize(date), date)
 
     @mock.patch('plone.event.utils.guesstz')
     @mock.patch('plone.event.utils.utctz')

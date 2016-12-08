@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
 import mock
 import unittest
 
 
 class TestRecurrenceIntSequence(unittest.TestCase):
-
     @mock.patch('plone.event.recurrence.dt2int')
     def test_recrule_str_(self, dt2int):
         from plone.event.recurrence import recurrence_int_sequence
