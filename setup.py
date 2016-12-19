@@ -5,16 +5,6 @@ from setuptools import setup
 
 version = '1.3.4.dev0'
 
-a = (
-    'bla',
-    'bli',
-    'bli',
-    'bli',
-    'bli',
-    'bli',
-    'bliaad asdf asd asd asda sd asd asd sd ',
-)
-
 setup(
     name='plone.event',
     version=version,
