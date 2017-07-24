@@ -428,7 +428,7 @@ def pydt(dt, missing_zone=None, exact=False):
     datetime.datetime(2011, 11, 11, 11, 11, 11, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
 
     >>> pydt(DateTime('2005/11/07 18:00:00 Brazil/East'))
-    datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<DstTzInfo 'Brazil/East' BRST-1 day, 22:00:00 DST>)
+    datetime.datetime(2005, 11, 7, 18, 0, tzinfo=<DstTzInfo 'Brazil/East' ...-1 day, 22:00:00 DST>)
 
     Test with exact set to True
     >>> pydt(DateTime('2012/10/10 10:10:10.123456 Europe/Vienna'), exact=True)
