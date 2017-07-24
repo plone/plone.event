@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- fix test to work with newer pytz.
+  [jensens]
 
 
 1.3.3 (2016-12-19)
