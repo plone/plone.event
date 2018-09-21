@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Update trove classifiers.
+  [thet]
 
 Bug fixes:
 
