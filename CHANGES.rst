@@ -1,12 +1,13 @@
 Changelog
 =========
 
-1.3.5 (unreleased)
+1.4.0 (unreleased)
 ------------------
 
 Breaking changes:
 
-- *add item here*
+- Needs icalender >4.0.2 which depends on python-dateutil 2.7.3 which has itself some minor but breaking changes comparedto the 2.6-series.
+  [jensens]
 
 New features:
 
@@ -15,7 +16,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Test fixes for improved icalender >4.0.2
+  [jensens]
 
 
 1.3.4 (2017-08-04)

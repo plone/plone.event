@@ -8,9 +8,9 @@ import unittest
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
-    'recurrence.txt',
-    'recurrence_dateutil.txt',
-    'utils.txt',
+    'recurrence.rst',
+    'recurrence_dateutil.rst',
+    'utils.rst',
 ]
 DOCMODS = ['plone.event.utils', ]
 
