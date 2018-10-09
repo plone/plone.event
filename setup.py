@@ -34,7 +34,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'python-dateutil >4.0.2',
+        'python-dateutil',  # >4.0.2
         'pytz',
         'zope.component',
         'zope.interface',
