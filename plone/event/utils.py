@@ -9,16 +9,16 @@ import pytz
 import time
 
 
-DSTADJUST = 'adjust'
-DSTKEEP = 'keep'
-DSTAUTO = 'auto'
+DSTADJUST = "adjust"
+DSTKEEP = "keep"
+DSTAUTO = "auto"
 MAX32 = int(2**31 - 1)
 
-logger = logging.getLogger('plone.event')
+logger = logging.getLogger("plone.event")
 
 
 def validated_timezone(timezone, fallback=None):
-    """ Validate a given timezone identifier. If a fallback is given, return it
+    """Validate a given timezone identifier. If a fallback is given, return it
         when the given timezone is not a valid pytz zone. Else raise an
         ValueError exception.
 
@@ -59,8 +59,8 @@ def validated_timezone(timezone, fallback=None):
     except Exception:
         if fallback:
             logger.warn(
-                'The timezone {0} is not a valid timezone from the '
-                'Olson database or pytz. Falling back to {1}.'.format(
+                "The timezone {0} is not a valid timezone from the "
+                "Olson database or pytz. Falling back to {1}.".format(
                     timezone,
                     fallback,
                 )
@@ -68,61 +68,61 @@ def validated_timezone(timezone, fallback=None):
             return fallback
         else:
             raise ValueError(
-                'The timezone {0} is not a valid timezone from '
-                'the Olson database or pytz.'.format(timezone)
+                "The timezone {0} is not a valid timezone from "
+                "the Olson database or pytz.".format(timezone)
             )
 
 
-def default_timezone(fallback='UTC'):
-    """ Retrieve the timezone from the server.
-        Default Fallback: UTC
+def default_timezone(fallback="UTC"):
+    """Retrieve the timezone from the server.
+    Default Fallback: UTC
 
-        :param fallback: A fallback timezone identifier.
-        :type fallback: string
+    :param fallback: A fallback timezone identifier.
+    :type fallback: string
 
-        :returns: A timezone identifier.
-        :rtype: string
+    :returns: A timezone identifier.
+    :rtype: string
 
-        >>> from plone.event.utils import default_timezone
-        >>> import os
-        >>> import time
-        >>> timetz = time.tzname
-        >>> ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
+    >>> from plone.event.utils import default_timezone
+    >>> import os
+    >>> import time
+    >>> timetz = time.tzname
+    >>> ostz = 'TZ' in os.environ.keys() and os.environ['TZ'] or None
 
-        >>> os.environ['TZ'] = "Europe/Vienna"
-        >>> default_timezone()
-        'Europe/Vienna'
+    >>> os.environ['TZ'] = "Europe/Vienna"
+    >>> default_timezone()
+    'Europe/Vienna'
 
-        Timezone from time module
-        >>> os.environ['TZ'] = ""
-        >>> time.tzname = ('CET', 'CEST')
-        >>> default_timezone()
-        'CET'
+    Timezone from time module
+    >>> os.environ['TZ'] = ""
+    >>> time.tzname = ('CET', 'CEST')
+    >>> default_timezone()
+    'CET'
 
-        Invalid timezone
-        >>> os.environ['TZ'] = "PST"
-        >>> default_timezone()
-        'UTC'
+    Invalid timezone
+    >>> os.environ['TZ'] = "PST"
+    >>> default_timezone()
+    'UTC'
 
-        Invalid timezone with defined fallback
-        >>> os.environ['TZ'] = ""
-        >>> time.tzname = None
-        >>> default_timezone(fallback='CET')
-        'CET'
+    Invalid timezone with defined fallback
+    >>> os.environ['TZ'] = ""
+    >>> time.tzname = None
+    >>> default_timezone(fallback='CET')
+    'CET'
 
-        Restore the system timezone
-        >>> time.tzname = timetz
-        >>> if ostz:
-        ...     os.environ['TZ'] = ostz
-        ... else:
-        ...     del os.environ['TZ']
+    Restore the system timezone
+    >>> time.tzname = timetz
+    >>> if ostz:
+    ...     os.environ['TZ'] = ostz
+    ... else:
+    ...     del os.environ['TZ']
 
     """
 
     timezone = None
-    if 'TZ' in os.environ.keys():
+    if "TZ" in os.environ.keys():
         # Timezone from OS env var
-        timezone = os.environ['TZ']
+        timezone = os.environ["TZ"]
     if not timezone:
         # Timezone from python time
         zones = time.tzname
@@ -131,15 +131,14 @@ def default_timezone(fallback='UTC'):
         else:
             # Default fallback = UTC
             logger.warn(
-                'Operating system\'s timezone cannot be found. '
-                'Falling back to UTC.'
+                "Operating system's timezone cannot be found. " "Falling back to UTC."
             )
     return validated_timezone(timezone, fallback)
 
 
 # Display helpers
 def is_same_time(start, end, exact=False):
-    """ Test if event starts and ends at same time.
+    """Test if event starts and ends at same time.
 
     :param start: The start datetime.
     :type start: Python datetime or Zope DateTime
@@ -177,13 +176,15 @@ def is_same_time(start, end, exact=False):
     if exact:
         return start == end
     else:
-        return start.hour == end.hour and\
-            start.minute == end.minute and\
-            start.second == end.second
+        return (
+            start.hour == end.hour
+            and start.minute == end.minute
+            and start.second == end.second
+        )
 
 
 def is_same_day(start, end):
-    """ Test if event starts and ends at same day.
+    """Test if event starts and ends at same day.
 
     >>> from plone.event.utils import is_same_day, utc
     >>> from datetime import datetime, timedelta
@@ -218,18 +219,18 @@ def is_same_day(start, end):
 
 # Timezone helpers
 def utctz():
-    """ Return the UTVC zone as a pytz.UTC instance.
+    """Return the UTVC zone as a pytz.UTC instance.
 
     >>> from plone.event.utils import utctz
     >>> utctz()
     <UTC>
 
     """
-    return pytz.timezone('UTC')
+    return pytz.timezone("UTC")
 
 
 def utc(dt):
-    """ Convert Python datetime to UTC.
+    """Convert Python datetime to UTC.
 
     >>> from datetime import datetime
     >>> from plone.event.utils import utc
@@ -250,6 +251,8 @@ def utc(dt):
     if dt is None:
         return None
     dt = pydt(dt)
+    if dt is None:
+        return None
     return dt.astimezone(utctz())
 
 
@@ -275,12 +278,12 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
                   used - otherwise DSTADJUST. This behavior is the default.
     """
     try:
-        assert (bool(date.tzinfo))
+        assert bool(date.tzinfo)
     except Exception:
-        raise TypeError('Cannot normalize timezone naive dates')
-    assert (dstmode in [DSTADJUST, DSTKEEP, DSTAUTO])
+        raise TypeError("Cannot normalize timezone naive dates")
+    assert dstmode in [DSTADJUST, DSTKEEP, DSTAUTO]
     if delta:
-        assert (isinstance(delta, timedelta))  # Easier in Java
+        assert isinstance(delta, timedelta)  # Easier in Java
         delta = delta.seconds + delta.days * 24 * 3600  # total delta in secs
         if dstmode == DSTAUTO and delta < 24 * 60 * 60:
             dstmode = DSTKEEP
@@ -301,7 +304,7 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
 
 
 def tzdel(dt):
-    """ Create timezone naive datetime from a timezone aware one by removing
+    """Create timezone naive datetime from a timezone aware one by removing
     the timezone component.
 
     >>> from plone.event.utils import tzdel, utctz
@@ -392,7 +395,7 @@ def date_to_datetime(value):
     elif is_datetime(value):
         return value
     else:
-        raise ValueError('Value must be a date or datetime object.')
+        raise ValueError("Value must be a date or datetime object.")
 
 
 def pydt(dt, missing_zone=None, exact=False):
@@ -454,13 +457,13 @@ def pydt(dt, missing_zone=None, exact=False):
         dt = datetime(dt.year, dt.month, dt.day)
 
     if isinstance(dt, datetime):
-        tznaive = not bool(getattr(dt, 'tzinfo', False))
+        tznaive = not bool(getattr(dt, "tzinfo", False))
         if tznaive:
             ret = missing_zone.localize(dt)
         else:
             ret = utcoffset_normalize(dt, dstmode=DSTADJUST)
 
-    if 'DateTime' in str(dt.__class__):
+    if "DateTime" in str(dt.__class__):
         # Zope DateTime
         # TODO: do we need to support subclasses of DateTime too? the check
         #       above would fail.
@@ -536,7 +539,7 @@ def guesstz(DT):
 
 # Date as integer representation helpers
 def dt2int(dt):
-    """ Calculates an integer from a datetime, resolution is one minute.
+    """Calculates an integer from a datetime, resolution is one minute.
     The datetime is always converted to the UTC zone.
 
     >>> from plone.event import utils
@@ -549,21 +552,22 @@ def dt2int(dt):
         return 0
     # TODO: if dt has not timezone information, guess and set it
     dt = utc(dt)
-    value = (((dt.year * 12 + dt.month) * 31 + dt.day) * 24 + dt.hour
-             ) * 60 + dt.minute
+    value = (((dt.year * 12 + dt.month) * 31 + dt.day) * 24 + dt.hour) * 60 + dt.minute
 
     # TODO: unit test me
     if value > MAX32:
         # value must be integer fitting in the 32bit range
         raise OverflowError(
             """{0} is not within the range of indexable dates,<<
-            exceeding 32bit range.""".format(dt)
+            exceeding 32bit range.""".format(
+                dt
+            )
         )
     return value
 
 
 def int2dt(dtint):
-    """ Returns a datetime object from an integer representation with
+    """Returns a datetime object from an integer representation with
     resolution of one minute. The datetime returned is in the UTC zone.
 
     >>> from plone.event.utils import int2dt
@@ -578,7 +582,7 @@ def int2dt(dtint):
 
     """
     if not isinstance(dtint, int):
-        raise ValueError('int2dt expects integer values as arguments.')
+        raise ValueError("int2dt expects integer values as arguments.")
     minutes = dtint % 60
     hours = dtint // 60 % 24
     days = dtint // 60 // 24 % 31
@@ -588,7 +592,7 @@ def int2dt(dtint):
 
 
 def dt_to_zone(dt, tzstring):
-    """ Return a datetime instance converted to the timezone given by the
+    """Return a datetime instance converted to the timezone given by the
     string.
 
     """
@@ -596,8 +600,8 @@ def dt_to_zone(dt, tzstring):
 
 
 # RFC2445 export helpers
-def rfc2445dt(dt, mode='utc', date=True, time=True):
-    """ Convert a datetime or DateTime object into an RFC2445 compatible
+def rfc2445dt(dt, mode="utc", date=True, time=True):
+    """Convert a datetime or DateTime object into an RFC2445 compatible
     datetime string.
 
     @param dt: datetime or DateTime object to convert.
@@ -657,14 +661,14 @@ def rfc2445dt(dt, mode='utc', date=True, time=True):
     # TODO: rfc2445dt might not be necessary. drop me then.
 
     dt = pydt(dt)
-    if mode == 'utc':
+    if mode == "utc":
         dt = utc(dt)
-    date = '{0}{1}{2}{3}'.format(
-        date and dt.strftime('%Y%m%d') or '',
-        date and time and 'T' or '',
-        time and dt.strftime('%H%M%S') or '',
-        mode == 'utc' and 'Z' or '',
+    date = "{0}{1}{2}{3}".format(
+        date and dt.strftime("%Y%m%d") or "",
+        date and time and "T" or "",
+        time and dt.strftime("%H%M%S") or "",
+        mode == "utc" and "Z" or "",
     )
-    if mode == 'local':
+    if mode == "local":
         return date, dt.tzinfo.zone
     return date
