@@ -1,3 +1,0 @@
-Fix AttributeError: 'NoneType' object has no attribute 'astimezone'.
-Fixes `issue 13 <https://github.com/plone/plone.event/issues/13>`_.
-[gogobd]

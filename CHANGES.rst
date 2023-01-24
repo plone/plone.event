@@ -8,6 +8,19 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.2 (2023-01-24)
+------------------
+1.4.2 (2023-01-24)
+------------------
+
+Bug fixes:
+
+
+- Fix AttributeError: 'NoneType' object has no attribute 'astimezone'.
+  Fixes `issue 13 <https://github.com/plone/plone.event/issues/13>`_.
+  [gogobd] (#13)
+
+
 1.4.1 (2020-04-20)
 ------------------
 
