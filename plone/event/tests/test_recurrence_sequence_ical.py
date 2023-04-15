@@ -3,16 +3,16 @@ import unittest
 
 class TestRecurrenceSequenceIcal(unittest.TestCase):
     def test_start(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23)
         seq = recurrence_sequence_ical(start)
         results = [res for res in seq]
         self.assertEqual(len(results), 1)
 
     def test_recrule_str(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23)
         recrule = 'FREQ=DAILY;INTERVAL=10;COUNT=5'
         seq = recurrence_sequence_ical(start, recrule=recrule)
@@ -23,8 +23,8 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         """Test, if an RDATE date has the correct time set.
             See: "BUGFIX WRONG RDATE TIME" in recurrence.py
         """
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23, 10, 10)
         recrule = """FREQ=DAILY;INTERVAL=1;COUNT=3
 RDATE:20111129T000000"""
@@ -36,8 +36,9 @@ RDATE:20111129T000000"""
     def test_recrule_str_exdate(self):
         """Test, if an EXDATE date are not in the resulting recurrence set.
         """
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
+
         import pytz
         at = pytz.timezone('Europe/Vienna')
         start = at.localize(datetime(2013, 6, 29, 10, 10))
@@ -57,8 +58,9 @@ RDATE:20111129T000000"""
         """Test, if UNTIL stops the sequence at the end of the day, even if
         it's set to 0:00 by the recurrence widget.
         """
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
+
         import pytz
         at = pytz.timezone('Europe/Vienna')
         start = at.localize(datetime(2013, 6, 29, 10, 10))
@@ -75,8 +77,8 @@ RDATE:20111129T000000"""
         self.assertEqual(res, res_test)
 
     def test_recrule_from_until(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23)
         recrule = None
         from_ = datetime(2011, 11, 1)
@@ -91,8 +93,8 @@ RDATE:20111129T000000"""
         self.assertEqual(len(results), 1)
 
     def test_recrule_str_more_than_MAXCOUNT(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23)
         recrule = 'FREQ=DAILY;INTERVAL=10;COUNT=1001'
         seq = recurrence_sequence_ical(start, recrule=recrule)
@@ -100,8 +102,8 @@ RDATE:20111129T000000"""
         self.assertEqual(len(results), 1000)
 
     def test_recrule_str_more_than_count(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23)
         recrule = 'FREQ=DAILY;INTERVAL=10;COUNT=10'
         count = 5
@@ -110,8 +112,8 @@ RDATE:20111129T000000"""
         self.assertEqual(len(results), 5)
 
     def test_recrule_from(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23)
         recrule = 'FREQ=DAILY;INTERVAL=1;COUNT=5'
         from_ = datetime(2011, 11, 25)
@@ -126,8 +128,8 @@ RDATE:20111129T000000"""
         self.assertEqual(len(results), 3)
 
     def test_recrule_until(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 24)
         recrule = 'FREQ=DAILY;INTERVAL=1;COUNT=5'
         from_ = datetime(2011, 11, 23)
@@ -144,9 +146,9 @@ RDATE:20111129T000000"""
     def test_recrule_from_until_with_duration(self):
         """Should include events ranging into the queried timerange.
         """
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
         from datetime import timedelta
+        from plone.event.recurrence import recurrence_sequence_ical
         start = datetime(2011, 11, 23)
         recrule = 'FREQ=DAILY;INTERVAL=1;COUNT=5'
         from_ = datetime(2011, 11, 26)
@@ -162,8 +164,8 @@ RDATE:20111129T000000"""
         self.assertEqual(len(results), 4)
 
     def test_recrule_until_with_timezone(self):
-        from plone.event.recurrence import recurrence_sequence_ical
         from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
 
         start = datetime(2011, 11, 24)
         recrule = 'RRULE:FREQ=DAILY;UNTIL=20111130T000000Z'
