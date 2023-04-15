@@ -14,7 +14,7 @@ class EventAccessor:
     """
 
     def __init__(self, context):
-        object.__setattr__(self, 'context', context)
+        object.__setattr__(self, "context", context)
 
     def __getattr__(self, name):
         return getattr(self.context, name)

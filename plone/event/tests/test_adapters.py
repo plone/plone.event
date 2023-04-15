@@ -15,15 +15,17 @@ class MockObject:
 class TestAdapters(unittest.TestCase):
     def setUp(self):
         import zope.component
-        context = xmlconfig.file('meta.zcml', zope.component)
-        xmlconfig.file('configure.zcml', zope.component, context=context)
+
+        context = xmlconfig.file("meta.zcml", zope.component)
+        xmlconfig.file("configure.zcml", zope.component, context=context)
 
         import plone.event
-        xmlconfig.file('configure.zcml', plone.event, context=context)
+
+        xmlconfig.file("configure.zcml", plone.event, context=context)
 
     def test_event_accessor(self):
         obj = MockObject()
-        tz = pytz.timezone('Europe/Vienna')
+        tz = pytz.timezone("Europe/Vienna")
         obj.start = datetime(2012, 12, 12, 10, 0, tzinfo=tz)
         obj.end = datetime(2012, 12, 12, 12, 0, tzinfo=tz)
         zope.interface.alsoProvides(obj, IEvent)
@@ -48,9 +50,9 @@ class TestAdapters(unittest.TestCase):
         acc.something = True
         self.assertTrue(acc.something == obj.something is True)
         del acc.something
-        self.assertTrue(hasattr(acc, 'something') is False)
-        self.assertTrue(hasattr(obj, 'something') is False)
+        self.assertTrue(hasattr(acc, "something") is False)
+        self.assertTrue(hasattr(obj, "something") is False)
 
         del acc.start
-        self.assertTrue(hasattr(acc, 'start') is False)
-        self.assertTrue(hasattr(obj, 'start') is False)
+        self.assertTrue(hasattr(acc, "start") is False)
+        self.assertTrue(hasattr(obj, "start") is False)

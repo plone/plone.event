@@ -7,11 +7,13 @@ import unittest
 
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
-    'recurrence.rst',
-    'recurrence_dateutil.rst',
-    'utils.rst',
+    "recurrence.rst",
+    "recurrence_dateutil.rst",
+    "utils.rst",
 ]
-DOCMODS = ['plone.event.utils', ]
+DOCMODS = [
+    "plone.event.utils",
+]
 
 
 def test_suite():
@@ -19,24 +21,19 @@ def test_suite():
     suite.addTests(
         [
             doctest.DocFileSuite(
-                os.path.join(os.path.dirname(__file__), '..', docfile),
+                os.path.join(os.path.dirname(__file__), "..", docfile),
                 module_relative=False,
                 optionflags=OPTIONFLAGS,
-                tearDown=tearDown
+                tearDown=tearDown,
             )
             for docfile in DOCFILES
         ]
     )
     suite.addTests(
-        [
-            doctest.DocTestSuite(
-                docmod, optionflags=OPTIONFLAGS
-            )
-            for docmod in DOCMODS
-        ]
+        [doctest.DocTestSuite(docmod, optionflags=OPTIONFLAGS) for docmod in DOCMODS]
     )
     return suite
 
 
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+if __name__ == "__main__":
+    unittest.main(defaultTest="test_suite")
