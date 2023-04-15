@@ -41,7 +41,6 @@ setup(
     extras_require={
         "test": [
             "DateTime",
-            "mock",
             "zope.configuration",
         ],
     },
