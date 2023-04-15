@@ -55,7 +55,7 @@ class IEventAccessor(Interface):
 
     # reference
     url = Attribute(
-        "Cannonical, unique url of the event. External events "
+        "Canonical, unique url of the event. External events "
         "are referenced by the origin url unless explicitly set."
     )
 
@@ -80,7 +80,7 @@ class IEventAccessor(Interface):
 
 
 class IRecurrenceSupport(Interface):
-    """Event type recurrence adatper."""
+    """Event type recurrence adapter."""
 
     def occurrences(self, range_start, range_end):
         """Return a list of IOccurrence objects with custom attributes of the

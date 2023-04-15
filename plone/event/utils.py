@@ -272,7 +272,7 @@ def utcoffset_normalize(date, delta=None, dstmode=DSTAUTO):
                   the same relative to UTC.  So, 8:00 GMT+1 before will result
                   in 7:00 GMT+2 afterwards. This behavior might be what
                   machines expect, when recurrence rules are defined.
-                  Mode DSTAUTO: If the relative delta between two occurences of
+                  Mode DSTAUTO: If the relative delta between two occurrences of
                   a reucurrence sequence is less than a day, DSTKEEP will be
                   used - otherwise DSTADJUST. This behavior is the default.
     """
@@ -508,7 +508,7 @@ def pydt(dt, missing_zone=None, exact=False):
 def guesstz(DT):
     """'Guess' pytz from a zope DateTime.
 
-    !!! theres no real good method to guess the timezone.
+    !!! there is no real good method to guess the timezone.
     DateTime was build somewhere in 1998 long before python had a working
     datetime implementation available and still stucks with this incomplete
     implementation.
@@ -521,12 +521,12 @@ def guesstz(DT):
     'Europe/Vienna'
 
     GMT timezones which are popular with DateTime cannot be guessed,
-    unfortunatly
+    unfortunately
     >>> guesstz(DateTime('2010-01-01 GMT+1'))
     """
     tzname = DT.timezone()
 
-    # Please note, the GMT offset based timezone informations in DateTime are
+    # Please note, the GMT offset based timezone information in DateTime are
     # not compatible with Etc/GMT based from pytz. They have different offsets.
     try:
         tz = pytz.timezone(tzname)

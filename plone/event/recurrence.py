@@ -44,13 +44,13 @@ def recurrence_sequence_ical(
                     MAXDATE limit the recurrence calculation.
     :type until: datetime.datetime
 
-    :param count:   Optional integer which defines the number of occurences.
+    :param count:   Optional integer which defines the number of occurrences.
                     If not given, until or MAXDATE limits the recurrence
                     calculation.
     :type count: integer
 
     :param duration: Optional timedelta instance, which is used to calculate
-                     if a occurence datetime plus duration is within the
+                     if a occurrence datetime plus duration is within the
                      queried timerange.
     :type duration:  datetime.timedelta
 
@@ -147,14 +147,14 @@ def recurrence_sequence_timedelta(
     dst=DSTAUTO,
 ):
     """Calculates a sequence of datetime objects from a timedelta integer,
-    which defines the minutes between each occurence.
+    which defines the minutes between each occurrence.
 
     :param start: datetime or DateTime instance of the date from which the
                   recurrence sequence is calculated.
     :type start: datetime
 
     :param delta: Integer which defines the minutes
-                  between each date occurence.
+                  between each date occurrence.
     :type delta: integer
 
     :param until: datetime or DateTime instance of the date, until the
@@ -162,7 +162,7 @@ def recurrence_sequence_timedelta(
                   count or MAXDATE limit the recurrence calculation.
     :type until: datetime
 
-    :param count: Integer which defines the number of occurences. If not given,
+    :param count: Integer which defines the number of occurrences. If not given,
                   until or MAXDATE limits the recurrence calculation.
     :param count: integer
 
