@@ -149,7 +149,7 @@ def is_same_time(start, end, exact=False):
     :returns: True, if start and end have the same time, otherwise False.
     :rtype: Boolean.
 
-    >>> from plone.event.utils import is_same_time, pydt
+    >>> from plone.event.utils import is_same_time
     >>> from datetime import datetime, timedelta
 
     >>> is_same_time(datetime.now(), datetime.now()+timedelta(hours=1))
