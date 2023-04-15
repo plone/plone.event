@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
@@ -59,8 +58,8 @@ def validated_timezone(timezone, fallback=None):
     except Exception:
         if fallback:
             logger.warn(
-                "The timezone {0} is not a valid timezone from the "
-                "Olson database or pytz. Falling back to {1}.".format(
+                "The timezone {} is not a valid timezone from the "
+                "Olson database or pytz. Falling back to {}.".format(
                     timezone,
                     fallback,
                 )
@@ -68,7 +67,7 @@ def validated_timezone(timezone, fallback=None):
             return fallback
         else:
             raise ValueError(
-                "The timezone {0} is not a valid timezone from "
+                "The timezone {} is not a valid timezone from "
                 "the Olson database or pytz.".format(timezone)
             )
 
@@ -558,7 +557,7 @@ def dt2int(dt):
     if value > MAX32:
         # value must be integer fitting in the 32bit range
         raise OverflowError(
-            """{0} is not within the range of indexable dates,<<
+            """{} is not within the range of indexable dates,<<
             exceeding 32bit range.""".format(
                 dt
             )
@@ -663,7 +662,7 @@ def rfc2445dt(dt, mode="utc", date=True, time=True):
     dt = pydt(dt)
     if mode == "utc":
         dt = utc(dt)
-    date = "{0}{1}{2}{3}".format(
+    date = "{}{}{}{}".format(
         date and dt.strftime("%Y%m%d") or "",
         date and time and "T" or "",
         time and dt.strftime("%H%M%S") or "",

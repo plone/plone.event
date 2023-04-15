@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.component.testing import tearDown
 
 import doctest

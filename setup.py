@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from setuptools import find_packages
 from setuptools import setup
 
@@ -10,7 +9,7 @@ setup(
     version=version,
     description="Event and calendaring related tools not bound to Plone",
     long_description=(
-        open("README.rst").read() + "\n" + open(("CHANGES.rst")).read()
+        open("README.rst").read() + "\n" + open("CHANGES.rst").read()
     ),
     classifiers=[
         "Development Status :: 5 - Production/Stable",

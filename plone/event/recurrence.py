@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from dateutil import rrule
 from plone.event.utils import DSTAUTO
 from plone.event.utils import dt2int
@@ -88,7 +87,7 @@ def recurrence_sequence_ical(
         # time for UNTIL, RDATE and EXDATE.
         t0 = start.time()  # set initial time information.
         # First, replace all times in the recurring rule with starttime
-        t0str = 'T{0:02d}{1:02d}{2:02d}'.format(t0.hour, t0.minute, t0.second)
+        t0str = f'T{t0.hour:02d}{t0.minute:02d}{t0.second:02d}'
         # Replace any times set to 000000 with start time, not all
         # rrules are set by a specific broken widget.  Don't waste time
         # subbing if the start time is already 000000.

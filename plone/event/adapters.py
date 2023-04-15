@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
 from zope.component import adapter
@@ -7,7 +6,7 @@ from zope.interface import implementer
 
 @implementer(IEventAccessor)
 @adapter(IEvent)
-class EventAccessor(object):
+class EventAccessor:
     """Simple event accessor adapter implementation for generic events, which
     follow the IEvent interface closely.
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from plone.event.interfaces import IEvent
 from plone.event.interfaces import IEventAccessor
@@ -9,7 +8,7 @@ import unittest
 import zope.interface
 
 
-class MockObject(object):
+class MockObject:
     """Mock object"""
 
 
