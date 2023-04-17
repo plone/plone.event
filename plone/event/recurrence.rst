@@ -65,7 +65,7 @@ Timezone aware Daylight Saving Time dates crossing
         datetime.datetime(2010, 11, 1, 9, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
 
-Note, that recurrence_sequence_ical calculates occurences timezone naively and
+Note, that recurrence_sequence_ical calculates occurrences timezone naively and
 applies timezones afterwards. This leads into a problem in corner cases:
     >>> list(recurrence_sequence_ical(
     ...      start=at.localize(datetime(2010,10,30,23,0,0,0)),
@@ -109,10 +109,10 @@ Multiple Ruleset
         datetime.datetime(2010, 1, 20, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
 
-Limiting number of occurences
+Limiting number of occurrences
 -----------------------------
 
-Until (date until recurrence happens) and count (Number of occurences) can also
+Until (date until recurrence happens) and count (Number of occurrences) can also
 be given in recurrence_sequence_ical, instead of defining it in the rrule.
 But defining it in a rrule gives more flexibility since you can set it for each
 rrule individually.
@@ -301,10 +301,10 @@ Here the correct behaviour on day level with DSTKEEP.
         datetime.datetime(2008, 3, 30, 19, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>),
         datetime.datetime(2008, 3, 30, 20, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)]
 
-Usally we want an clever behaviour, dependend on delta. This is implemented
+Usually we want a clever behaviour, dependent on delta. This is implemented
 with DSTAUTO, which is the default behaviour.
 
-Here the correct behaviour on day level or above: DSTADJUST is choosen.
+Here the correct behaviour on day level or above: DSTADJUST is chosen.
 
     >>> start = datetime(2008, 3, 29, 11, 0, 0, 0, pytz.timezone('CET'))
     >>> until = datetime(2008, 3, 31, 11, 0, 0, 0, pytz.timezone('CET'))
@@ -319,7 +319,7 @@ Here the correct behaviour on day level or above: DSTADJUST is choosen.
         datetime.datetime(2008, 3, 31, 11, 0, tzinfo=<DstTzInfo 'CET' CEST+2:00:00 DST>)]
 
 
-The correct behaviour on below day level: DSTKEEP is choosen.
+The correct behaviour on below day level: DSTKEEP is chosen.
 
     >>> start = datetime(2008, 3, 29, 21, 0, 0, 0, pytz.timezone('CET'))
     >>> until = datetime(2008, 3, 30, 21, 0, 0, 0, pytz.timezone('CET')) - timedelta(microseconds=1)
@@ -398,7 +398,7 @@ timezones works.
     >>> seqDT[0] == seqdt[0]
     True
 
-Does integer represenation work?
+Does integer representation work?
     >>> seqDT = list(recurrence_int_sequence(recurrence_sequence_timedelta(DT, 0, None)))
     >>> seqdt = list(recurrence_int_sequence(recurrence_sequence_timedelta(dt, 0, None)))
 

@@ -44,7 +44,7 @@ time in a way, that it's value will be the same as before normalizing.
     >>> utcoffset_normalize(date2, dstmode=DSTADJUST)
     datetime.datetime(2010, 11, 10, 0, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)
 
-With DSTKEEP, normalizing will also keep the time as originaly set by UTC
+With DSTKEEP, normalizing will also keep the time as originally set by UTC
 offset - time's value will change.
     >>> utcoffset_normalize(date2, dstmode=DSTKEEP)
     datetime.datetime(2010, 11, 9, 23, 0, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)

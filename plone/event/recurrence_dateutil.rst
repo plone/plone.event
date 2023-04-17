@@ -49,12 +49,12 @@ This issue is corrected by plone.event.util.utcoffset_normalize:
 
 
 It's safer to let rrule calculate timezone naive dates and localizing them
-afterwards than letting rrule substracting (EXDATE) timezone correct dates from
+afterwards than letting rrule subtracting (EXDATE) timezone correct dates from
 a possibly timezone incorrect recurrence sequence. This issue will be gone, if
 rrule does TZ normalizing itself before applying EXDATE to the recurrence
 sequence.
 
-See here... This is our recurrence rule. We want to substract from the sequence
+See here... This is our recurrence rule. We want to subtract from the sequence
 the date 2010-10-31, 23:30 in UTC, which is 2010-11-01, 0:30 in Austria, UTC+1
 
 ::
@@ -63,7 +63,7 @@ the date 2010-10-31, 23:30 in UTC, which is 2010-11-01, 0:30 in Austria, UTC+1
     ...              EXDATE:20101031T233000Z"""
 
 If we let the sequence start from 1st November, the 1st November is correctly
-substracted, since the sequence has all correct timezones.
+subtracted, since the sequence has all correct timezones.
 
 ::
 
@@ -73,7 +73,7 @@ substracted, since the sequence has all correct timezones.
         datetime.datetime(2010, 11, 3, 0, 30, tzinfo=<DstTzInfo 'Europe/Vienna' CET+1:00:00 STD>)]
 
 But if we start from 30th October, where UTC+2 offset is still active, the
-sequence has incorrect timezones and substracting does not work as expected
+sequence has incorrect timezones and subtracting does not work as expected
 anymore.
 
 ::

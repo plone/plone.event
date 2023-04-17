@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from dateutil import rrule
 from plone.event.utils import DSTAUTO
 from plone.event.utils import dt2int
@@ -16,12 +15,12 @@ MAXCOUNT = 1000  # Maximum number of occurrences
 
 
 def recurrence_sequence_ical(
-        start,
-        recrule=None,
-        from_=None,
-        until=None,
-        count=None,
-        duration=None,
+    start,
+    recrule=None,
+    from_=None,
+    until=None,
+    count=None,
+    duration=None,
 ):
     """Calculates a sequence of datetime objects from a recurrence rule
     following the RFC2445 specification, using python-dateutil recurrence
@@ -45,13 +44,13 @@ def recurrence_sequence_ical(
                     MAXDATE limit the recurrence calculation.
     :type until: datetime.datetime
 
-    :param count:   Optional integer which defines the number of occurences.
+    :param count:   Optional integer which defines the number of occurrences.
                     If not given, until or MAXDATE limits the recurrence
                     calculation.
     :type count: integer
 
     :param duration: Optional timedelta instance, which is used to calculate
-                     if a occurence datetime plus duration is within the
+                     if a occurrence datetime plus duration is within the
                      queried timerange.
     :type duration:  datetime.timedelta
 
@@ -68,7 +67,7 @@ def recurrence_sequence_ical(
     _from = tzdel(from_)
     _until = tzdel(until)
     if duration:
-        assert (isinstance(duration, datetime.timedelta))
+        assert isinstance(duration, datetime.timedelta)
     else:
         duration = datetime.timedelta(0)
 
@@ -88,16 +87,16 @@ def recurrence_sequence_ical(
         # time for UNTIL, RDATE and EXDATE.
         t0 = start.time()  # set initial time information.
         # First, replace all times in the recurring rule with starttime
-        t0str = 'T{0:02d}{1:02d}{2:02d}'.format(t0.hour, t0.minute, t0.second)
+        t0str = f"T{t0.hour:02d}{t0.minute:02d}{t0.second:02d}"
         # Replace any times set to 000000 with start time, not all
         # rrules are set by a specific broken widget.  Don't waste time
         # subbing if the start time is already 000000.
-        if t0str != 'T000000':
-            recrule = re.sub(r'T000000', t0str, recrule)
+        if t0str != "T000000":
+            recrule = re.sub(r"T000000", t0str, recrule)
         # Then, replace incorrect until times with the end of the day
         recrule = re.sub(
-            r'(UNTIL[^T]*[0-9]{8})T(000000)',
-            r'\1T235959',
+            r"(UNTIL[^T]*[0-9]{8})T(000000)",
+            r"\1T235959",
             recrule,
         )
 
@@ -141,21 +140,21 @@ def recurrence_sequence_ical(
 
 
 def recurrence_sequence_timedelta(
-        start,
-        delta=None,
-        until=None,
-        count=None,
-        dst=DSTAUTO,
+    start,
+    delta=None,
+    until=None,
+    count=None,
+    dst=DSTAUTO,
 ):
-    """ Calculates a sequence of datetime objects from a timedelta integer,
-    which defines the minutes between each occurence.
+    """Calculates a sequence of datetime objects from a timedelta integer,
+    which defines the minutes between each occurrence.
 
     :param start: datetime or DateTime instance of the date from which the
                   recurrence sequence is calculated.
     :type start: datetime
 
     :param delta: Integer which defines the minutes
-                  between each date occurence.
+                  between each date occurrence.
     :type delta: integer
 
     :param until: datetime or DateTime instance of the date, until the
@@ -163,7 +162,7 @@ def recurrence_sequence_timedelta(
                   count or MAXDATE limit the recurrence calculation.
     :type until: datetime
 
-    :param count: Integer which defines the number of occurences. If not given,
+    :param count: Integer which defines the number of occurrences. If not given,
                   until or MAXDATE limits the recurrence calculation.
     :param count: integer
 
@@ -205,7 +204,7 @@ def recurrence_sequence_timedelta(
 
 
 def recurrence_int_sequence(sequence):
-    """ Generates a sequence of integer representations from a sequence of
+    """Generates a sequence of integer representations from a sequence of
     dateime instances.
 
     :param sequence: An iterable sequence of datetime instances.

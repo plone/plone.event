@@ -108,10 +108,10 @@ Fixes:
 ----------------
 
 - Fix tests, where they broke with unicode recurrence strings and unicode date
-  formating strings.
+  formatting strings.
   [thet]
 
-- Make rrule munging hack only apply to RDATEs, EXDATEs and UNTILs which have
+- Make rrule munging hack only apply to `RDATE`, `EXDATE` and `UNTIL` which have
   null times, otherwise the DateRecurrenceIndex is broken for those who are
   generating RRULES using a non-broken widget. This will still result in broken
   RRULEs for some edge cases (where an RDATE is explicitly set for midnight on
