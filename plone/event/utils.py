@@ -57,7 +57,7 @@ def validated_timezone(timezone, fallback=None):
         return pytz.timezone(timezone).zone
     except Exception:
         if fallback:
-            logger.warn(
+            logger.warning(
                 "The timezone {} is not a valid timezone from the "
                 "Olson database or pytz. Falling back to {}.".format(
                     timezone,
@@ -129,8 +129,8 @@ def default_timezone(fallback="UTC"):
             timezone = zones[0]
         else:
             # Default fallback = UTC
-            logger.warn(
-                "Operating system's timezone cannot be found. " "Falling back to UTC."
+            logger.warning(
+                "Operating system's timezone cannot be found. Falling back to UTC."
             )
     return validated_timezone(timezone, fallback)
 
