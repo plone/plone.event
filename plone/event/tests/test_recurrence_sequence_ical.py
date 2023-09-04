@@ -184,6 +184,7 @@ RDATE:20111129T000000"""
     def test_recrule_with_dtstart(self):
         from datetime import datetime
         from plone.event.recurrence import recurrence_sequence_ical
+
         import pytz
 
         at = pytz.timezone("Europe/Vienna")
