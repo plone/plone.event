@@ -180,3 +180,17 @@ RDATE:20111129T000000"""
         recrule = "RRULE:FREQ=DAILY;UNTIL=20111130T000000Z"
         seq = list(recurrence_sequence_ical(start, recrule=recrule))
         self.assertEqual(len(seq), 7)
+
+    def test_recrule_with_dtstart(self):
+        from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
+        import pytz
+
+        at = pytz.timezone("Europe/Vienna")
+        start = at.localize(datetime(2023, 9, 4, 1, 0))
+        # DTSTART is ignored, because start is ever explicitly given
+        recrule = "DTSTART:20230903T180000Z\nRRULE:FREQ=DAILY;UNTIL=20230905T230000Z"
+        seq = list(recurrence_sequence_ical(start, recrule=recrule))
+        self.assertEqual(len(seq), 2)
+        self.assertEqual(seq[0], at.localize(datetime(2023, 9, 4, 1, 0)))
+        self.assertEqual(seq[1], at.localize(datetime(2023, 9, 5, 1, 0)))
