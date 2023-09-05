@@ -72,6 +72,11 @@ def recurrence_sequence_ical(
         duration = datetime.timedelta(0)
 
     if recrule:
+        # We want the recurrence be calculated ignoring the DTSTART, 
+        # which is defined by the event's own start.
+        #‌ Also set the UNTIL time to the end of the day to include the last
+        # occurrence for sure.
+        #
         # start is a mandatory parameter for this function, remove DTSTART
         # from recrule
         recrule = re.sub(r"DTSTART:[^;\n]*[;\n]", "", recrule, re.MULTILINE)
