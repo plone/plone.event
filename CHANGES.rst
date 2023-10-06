@@ -8,6 +8,22 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.1 (2023-10-07)
+------------------
+
+Bug fixes:
+
+
+- Ignore dtstart and until time in rrule in recurrence_sequence_ical [mamico] (#23)
+
+
+Internal:
+
+
+- Update configuration files.
+  [plone devs] (b940914a, cfffba8c)
+
+
 2.0.0 (2023-04-19)
 ------------------
 
