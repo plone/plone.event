@@ -195,3 +195,25 @@ RDATE:20111129T000000"""
         self.assertEqual(len(seq), 2)
         self.assertEqual(seq[0], at.localize(datetime(2023, 9, 4, 1, 0)))
         self.assertEqual(seq[1], at.localize(datetime(2023, 9, 5, 1, 0)))
+
+    def test_recrule_with_exclude(self):
+        from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
+
+        import pytz
+
+        at = pytz.timezone("UTC")
+        recrule = (
+            "RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20240428T100000Z\n"
+            "EXDATE:20240423T100000Z,20240425T100000Z"
+        )
+
+        # EXDATE with same time as start date should be excluded
+        start = at.localize(datetime(2024, 4, 22, 10, 0))
+        seq = list(recurrence_sequence_ical(start, recrule=recrule))
+        self.assertEqual(len(seq), 5)
+
+        # even EXDATE with different time as start date should be excluded
+        start = at.localize(datetime(2024, 4, 22, 14, 0))
+        seq = list(recurrence_sequence_ical(start, recrule=recrule))
+        self.assertEqual(len(seq), 5)

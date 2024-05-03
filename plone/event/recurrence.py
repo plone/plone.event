@@ -108,6 +108,18 @@ def recurrence_sequence_ical(
             recrule,
         )
 
+        # The time of EXDATE, according to previous comments, should be the
+        # same as the start time.
+        recrule = re.sub(
+            r"EXDATE:([^\n\s]+)",
+            lambda m: re.sub(
+                r"T[0-9]{6}(Z?)",
+                rf"T{start.hour:02}{start.minute:02}{start.second:02}\1",
+                m.group(0),
+            ),
+            recrule,
+        )
+
         # RFC2445 string
         # forceset: always return a rruleset
         # dtstart: optional used when no dtstart is in RFC2445 string

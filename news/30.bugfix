@@ -1,0 +1,4 @@
+Set the rrule's EXDATE to the same time as the event's start time.
+In our implementation we want the rrule's EXDATE property to have the same time as the event's start time.
+Otherwise recurrence dates might be included where they should not due to an user-undefined EXDATE time.
+[mamico]
