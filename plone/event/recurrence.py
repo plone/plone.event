@@ -103,8 +103,8 @@ def recurrence_sequence_ical(
             recrule = re.sub(r"T000000", t0str, recrule)
         # Then, replace each until times with the end of the day
         recrule = re.sub(
-            r"(UNTIL[^T]*[0-9]{8})T([0-9]{6}Z?)",
-            r"\1T235959",
+            r"(UNTIL[^T]*[0-9]{8})T([0-9]{6})(Z?)",
+            r"\1T235959\3",
             recrule,
         )
 
