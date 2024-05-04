@@ -72,39 +72,40 @@ def recurrence_sequence_ical(
         duration = datetime.timedelta(0)
 
     if recrule:
-        # We want the recurrence be calculated ignoring the DTSTART,
-        # which is defined by the event's own start.
-        # ‌ Also set the UNTIL time to the end of the day to include the last
-        # occurrence for sure.
-        #
-        # start is a mandatory parameter for this function, remove DTSTART
-        # from recrule
-        recrule = re.sub(r"DTSTART:[^;\n]*[;\n]", "", recrule, re.MULTILINE)
-        # TODO BUGFIX WRONG TIME DEFINITIONS
-        # THIS HACK ensures, that UNTIL, RDATE and EXDATE definitions with
-        # incorrect time (currently always set to 0:00 by the recurrence
-        # widget) are handled correctly.
-        #
-        # Following fixes are made:
-        # - The UNTIL date should be included in the recurrence set, as defined
-        #   by RFC5545 (fix sets it to the end of the day)
-        # - RDATE definitions should have the same time as the start date.
-        # - EXDATE definitions should exclude occurrences on the specific date
-        #   only the same time as the start date.
-        # In the long term ,the recurrence widget should be able to set the
-        # time for UNTIL, RDATE and EXDATE.
-        t0 = start.time()  # set initial time information.
-        # First, replace all times in the recurring rule with starttime
+        # The event's start time.
+        t0 = start.time()
+        # The event's start time as RFC8601 string
         t0str = f"T{t0.hour:02d}{t0.minute:02d}{t0.second:02d}"
-        # Replace any times set to 000000 with start time, not all
-        # rrules are set by a specific broken widget.  Don't waste time
-        # subbing if the start time is already 000000.
+
+        # 1) Remove DTSTART from the recurrence rule
+        # The start date is always included and therefore removed from the
+        # recurrence rule.
+        recrule = re.sub(r"DTSTART:[^;\n]*[;\n]", "", recrule, re.MULTILINE)
+
+        # 2) Set all RDATE (actually any) time definitions to the start date of
+        # the event, except for those explicitly set to 00:00:00 which might
+        # come from recurrence rule widgets which explicitly set it to that
+        # time.
         if t0str != "T000000":
             recrule = re.sub(r"T000000", t0str, recrule)
-        # Then, replace each until times with the end of the day
+
+        # 3) Set the UNTIL times to the end of the day to make sure to include
+        # any possible occurrence on that date.
         recrule = re.sub(
-            r"(UNTIL[^T]*[0-9]{8})T([0-9]{6}Z?)",
-            r"\1T235959",
+            r"(UNTIL[^T]*[0-9]{8})T([0-9]{6})(Z?)",
+            r"\1T235959\3",
+            recrule,
+        )
+
+        # 4) Set the EXDATE properties to the same start time as the event's
+        # start time to make sure to really exclude those occurrences.
+        recrule = re.sub(
+            r"EXDATE:([^\n\s]+)",
+            lambda m: re.sub(
+                r"T[0-9]{6}(Z?)",
+                rf"{t0str}\1",
+                m.group(0),
+            ),
             recrule,
         )
 
