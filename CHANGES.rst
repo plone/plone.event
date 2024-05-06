@@ -8,6 +8,20 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.2 (2024-05-06)
+------------------
+
+Bug fixes:
+
+
+- Keep the rrule UNTIL property UTC specifier, if defined.
+  [mamico] (30-2)
+- Set the rrule's EXDATE to the same time as the event's start time.
+  In our implementation we want the rrule's EXDATE property to have the same time as the event's start time.
+  Otherwise recurrence dates might be included where they should not due to an user-undefined EXDATE time.
+  [mamico] (#30)
+
+
 2.0.1 (2023-10-07)
 ------------------
 
