@@ -555,12 +555,8 @@ def dt2int(dt):
     # TODO: unit test me
     if value > MAX32:
         # value must be integer fitting in the 32bit range
-        raise OverflowError(
-            """{} is not within the range of indexable dates,<<
-            exceeding 32bit range.""".format(
-                dt
-            )
-        )
+        raise OverflowError("""{} is not within the range of indexable dates,<<
+            exceeding 32bit range.""".format(dt))
     return value
 
 
