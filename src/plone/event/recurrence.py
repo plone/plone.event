@@ -9,7 +9,6 @@ from plone.event.utils import utcoffset_normalize
 import datetime
 import re
 
-
 # TODO: make me configurable
 MAXCOUNT = 1000  # Maximum number of occurrences
 
