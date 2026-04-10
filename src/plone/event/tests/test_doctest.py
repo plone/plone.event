@@ -4,7 +4,6 @@ import doctest
 import os.path
 import unittest
 
-
 OPTIONFLAGS = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
 DOCFILES = [
     "recurrence.rst",
