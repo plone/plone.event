@@ -79,7 +79,7 @@ def recurrence_sequence_ical(
         # 1) Remove DTSTART from the recurrence rule
         # The start date is always included and therefore removed from the
         # recurrence rule.
-        recrule = re.sub(r"DTSTART:[^;\n]*[;\n]", "", recrule, re.MULTILINE)
+        recrule = re.sub(r"DTSTART:[^;\n]*[;\n]", "", recrule, flags=re.MULTILINE)
 
         # 2) Set all RDATE (actually any) time definitions to the start date of
         # the event, except for those explicitly set to 00:00:00 which might
