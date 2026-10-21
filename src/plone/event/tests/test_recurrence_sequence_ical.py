@@ -196,6 +196,25 @@ RDATE:20111129T000000"""
         self.assertEqual(seq[0], at.localize(datetime(2023, 9, 4, 1, 0)))
         self.assertEqual(seq[1], at.localize(datetime(2023, 9, 5, 1, 0)))
 
+    def test_recrule_with_many_dtstart_lines(self):
+        from datetime import datetime
+        from plone.event.recurrence import recurrence_sequence_ical
+
+        import pytz
+
+        # Every DTSTART line is removed. re.MULTILINE used to be passed as the
+        # count argument of re.sub, which capped the removal at 8 matches and
+        # left the ninth DTSTART to override the given start.
+        at = pytz.timezone("Europe/Vienna")
+        start = at.localize(datetime(2023, 9, 4, 1, 0))
+        recrule = "DTSTART:20230903T180000Z\n" * 9 + (
+            "RRULE:FREQ=DAILY;UNTIL=20230905T230000Z"
+        )
+        seq = list(recurrence_sequence_ical(start, recrule=recrule))
+        self.assertEqual(len(seq), 2)
+        self.assertEqual(seq[0], at.localize(datetime(2023, 9, 4, 1, 0)))
+        self.assertEqual(seq[1], at.localize(datetime(2023, 9, 5, 1, 0)))
+
     def test_recrule_with_exclude(self):
         from datetime import datetime
         from plone.event.recurrence import recurrence_sequence_ical
