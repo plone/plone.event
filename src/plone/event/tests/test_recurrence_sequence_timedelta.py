@@ -9,7 +9,7 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         start = datetime(2011, 11, 23)
         until = datetime(2011, 11, 24)
         td = recurrence_sequence_timedelta(start, until=until)
-        results = [res for res in td]
+        results = [*td]
         self.assertEqual(len(results), 1)
 
     def test_delta_zero(self):
@@ -20,7 +20,7 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         delta = 0
         until = datetime(2011, 11, 24)
         td = recurrence_sequence_timedelta(start, delta=delta, until=until)
-        results = [res for res in td]
+        results = [*td]
         self.assertEqual(len(results), 1)
 
     def test_until_None(self):
@@ -30,7 +30,7 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         start = datetime(2011, 11, 23)
         delta = 1
         td = recurrence_sequence_timedelta(start, delta=delta)
-        results = [res for res in td]
+        results = [*td]
         self.assertEqual(len(results), 1)
 
     def test_delta_an_hour_until_next_day(self):
@@ -41,7 +41,7 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         delta = 60
         until = datetime(2011, 11, 24)
         td = recurrence_sequence_timedelta(start, delta=delta, until=until)
-        results = [res for res in td]
+        results = [*td]
         self.assertEqual(len(results), 25)
 
     def test_recur_more_than_MAXCOUNT(self):
@@ -52,7 +52,7 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
         delta = 1
         until = datetime(2012, 11, 23)
         td = recurrence_sequence_timedelta(start, delta=delta, until=until)
-        results = [res for res in td]
+        results = [*td]
         self.assertEqual(len(results), 1001)
 
     def test_recur_more_than_count(self):
@@ -69,5 +69,5 @@ class TestRecurrenceSequenceTimedelta(unittest.TestCase):
             until=until,
             count=count,
         )
-        results = [res for res in td]
+        results = [*td]
         self.assertEqual(len(results), 21)

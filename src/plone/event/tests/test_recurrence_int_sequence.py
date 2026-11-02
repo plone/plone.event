@@ -10,5 +10,5 @@ class TestRecurrenceIntSequence(unittest.TestCase):
 
         sequence = [1, 2, 3]
         dt2int.return_value = "a"
-        res = [a for a in recurrence_int_sequence(sequence)]
+        res = [*recurrence_int_sequence(sequence)]
         self.assertEqual(res, ["a", "a", "a"])
