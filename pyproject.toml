@@ -10,7 +10,7 @@ requires = ["setuptools>=68.2,<83", "wheel"]
 
 [project]
 name = "plone.event"
-version = "3.0.1"
+version = "3.0.2.dev0"
 description = "Event and calendaring related tools not bound to Plone"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
