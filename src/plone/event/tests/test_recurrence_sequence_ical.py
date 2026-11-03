@@ -8,7 +8,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
 
         start = datetime(2011, 11, 23)
         seq = recurrence_sequence_ical(start)
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 1)
 
     def test_recrule_str(self):
@@ -18,7 +18,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         start = datetime(2011, 11, 23)
         recrule = "FREQ=DAILY;INTERVAL=10;COUNT=5"
         seq = recurrence_sequence_ical(start, recrule=recrule)
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 5)
 
     def test_recrule_str_rdate(self):
@@ -32,7 +32,7 @@ class TestRecurrenceSequenceIcal(unittest.TestCase):
         recrule = """FREQ=DAILY;INTERVAL=1;COUNT=3
 RDATE:20111129T000000"""
         seq = recurrence_sequence_ical(start, recrule=recrule)
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 4)
         self.assertEqual(results[0].time(), results[-1].time())
 
@@ -47,7 +47,7 @@ RDATE:20111129T000000"""
         start = at.localize(datetime(2013, 6, 29, 10, 10))
         recrule = "RRULE:FREQ=DAILY;COUNT=4\r\nEXDATE:20130630T000000,20130701T000000\r\nRDATE:20130706T000000,20130809T000000"  # noqa
         seq = recurrence_sequence_ical(start, recrule=recrule)
-        res = [res for res in seq]
+        res = [*seq]
         res_test = [
             at.localize(datetime(2013, 6, 29, 10, 10)),
             at.localize(datetime(2013, 7, 2, 10, 10)),
@@ -70,7 +70,7 @@ RDATE:20111129T000000"""
         start = at.localize(datetime(2013, 6, 29, 10, 10))
         recrule = "RRULE:FREQ=DAILY;UNTIL=20130702T000000"
         seq = recurrence_sequence_ical(start, recrule=recrule)
-        res = [res for res in seq]
+        res = [*seq]
         res_test = [
             at.localize(datetime(2013, 6, 29, 10, 10)),
             at.localize(datetime(2013, 6, 30, 10, 10)),
@@ -94,7 +94,7 @@ RDATE:20111129T000000"""
             from_=from_,
             until=until,
         )
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 1)
 
     def test_recrule_str_more_than_MAXCOUNT(self):
@@ -104,7 +104,7 @@ RDATE:20111129T000000"""
         start = datetime(2011, 11, 23)
         recrule = "FREQ=DAILY;INTERVAL=10;COUNT=1001"
         seq = recurrence_sequence_ical(start, recrule=recrule)
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 1000)
 
     def test_recrule_str_more_than_count(self):
@@ -115,7 +115,7 @@ RDATE:20111129T000000"""
         recrule = "FREQ=DAILY;INTERVAL=10;COUNT=10"
         count = 5
         seq = recurrence_sequence_ical(start, recrule=recrule, count=count)
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 5)
 
     def test_recrule_from(self):
@@ -132,7 +132,7 @@ RDATE:20111129T000000"""
             from_=from_,
             until=until,
         )
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 3)
 
     def test_recrule_until(self):
@@ -149,7 +149,7 @@ RDATE:20111129T000000"""
             from_=from_,
             until=until,
         )
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 4)
 
     def test_recrule_from_until_with_duration(self):
@@ -169,7 +169,7 @@ RDATE:20111129T000000"""
             until=until,
             duration=timedelta(days=2),
         )
-        results = [res for res in seq]
+        results = [*seq]
         self.assertEqual(len(results), 4)
 
     def test_recrule_until_with_timezone(self):
