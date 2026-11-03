@@ -8,6 +8,23 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.1 (2026-11-03)
+------------------
+
+Bug fixes:
+
+
+- Pass ``re.MULTILINE`` to ``re.sub`` as ``flags`` instead of as the positional ``count`` argument, which is deprecated since Python 3.13.
+  [syahra712]
+
+
+Internal:
+
+
+- Move package metadata from ``setup.py`` to ``pyproject.toml``.
+  [plone devs]
+
+
 3.0.0 (2026-05-16)
 ------------------
 
